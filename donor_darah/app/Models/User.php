@@ -21,7 +21,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'telepon', // Tambahkan kolom telepon ke fillable
+        'golongan_darah', // Tambahkan kolom golongan_darah ke fillable
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.

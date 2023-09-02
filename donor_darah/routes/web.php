@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\FonnteController;
+use App\Http\Controllers\API\FonnteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,3 +18,7 @@ Route::get('/', function () {
 });
 Route::get('/fonntee', [FonnteController::class, 'index'])->name('fonntee');
 Route::post('/fonntee', [FonnteController::class, 'sendFonnteMessage'])->name('fonntee');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

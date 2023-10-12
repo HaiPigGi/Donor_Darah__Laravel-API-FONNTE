@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDistrictTable extends Migration
+class CreateProvinceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateDistrictTable extends Migration
      */
     public function up()
     {
-        Schema::create('district', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::create('provinsi', function (Blueprint $table) {
+            $table->uuid('id')->primary(); // Menggunakan UUID sebagai primary key
+            $table->string('nama');
         });
     }
 
@@ -26,6 +26,6 @@ class CreateDistrictTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('district');
+        Schema::dropIfExists('provinsi');
     }
 }

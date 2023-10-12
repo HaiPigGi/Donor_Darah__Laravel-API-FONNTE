@@ -8,6 +8,11 @@ use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\maps\ProvinsiController;
+use App\Http\Controllers\maps\kecamatanController;
+use App\Http\Controllers\maps\kelurahanController;
+use App\Http\Controllers\maps\kabupatenController;
+use App\Models\provinsi;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +34,7 @@ Route::post('/fonntee', [FonnteController::class, 'sendFonnteMessage'])->name('f
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Rute untuk menampilkan halaman edit profil
-Route::get('/profile/edit', [AvatarController::class,'edit'])->name('profile.edit');
+Route::get('/profile/edit', [AvatarController::class, 'edit'])->name('profile.edit');
 
 // Rute untuk mengupdate avatar pengguna
 Route::match(['post', 'put'], '/profile/update-avatar', [AvatarController::class, 'updateAvatar'])->name('profile.update.avatar');
@@ -42,13 +47,20 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+// Tambahkan route untuk menampilkan form registrasi dengan middleware CORS
 
-// Tambahkan route untuk menampilkan form registrasi
-Route::get('/register/auth', [App\Http\Controllers\Auth\RegisterController::class, 'index'])->name('register');
-Route::post('/register/auth', [RegisterController::class, 'verify'])->name('register.verify');
-Route::get('/register/auth/verify', [VerificationController::class, 'index'])->name('verify');
-Route::post('/register/auth/verify', [RegisterController::class, 'validateCheck'])->name('verification.verify');
+Route::middleware('cors')->group(function () {
 
+    Route::get('/register/auth', [ProvinsiController::class, 'getProvinsiData'])->name('provinsi');
+    Route::get('/get/kabupaten', [kabupatenController::class, 'getKabupatenData'])->name('kabupaten');
+    Route::get('/get/kecamatan', [kecamatanController::class, 'getKecamatanData'])->name('kecamatan');
+    Route::get('/get/kelurahan', [kelurahanController::class, 'getKelurahanData'])->name('kelurahan');
+
+    Route::get('/register/auth', [RegisterController::class, 'index'])->name('register');
+    Route::post('/register/auth', [RegisterController::class, 'verify'])->name('register.verify');
+    Route::get('/register/auth/verify', [VerificationController::class, 'index'])->name('verify');
+    Route::post('/register/auth/verify', [RegisterController::class, 'validateCheck'])->name('verification.verify');
+});
 Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
 
     Route::get('/berita', [PostController::class, 'index'])->name('posts.index');
@@ -57,5 +69,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/berita/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
     Route::put('/berita/{post}', [PostController::class, 'update'])->name('posts.update');
     Route::delete('/berita/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
-
 });
+
+Route::post('/send-verification-code', [RegisterController::class, 'sendVerificationCode']);
+

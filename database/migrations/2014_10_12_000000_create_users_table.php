@@ -13,12 +13,9 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('password');
-            $table->string('Avatar')->nullable();
+            $table->uuid('id')->primary()->unique()->index(); // Menentukan kolom 'id' sebagai UUID dan primary key
+            $table->string('nama');
             $table->string('telepon')->unique()->nullable(false);
-            $table->string('golongan_darah')->nullable(false);
             $table->string('role')->default('user');
             $table->rememberToken();
             $table->timestamps();

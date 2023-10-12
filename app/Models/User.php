@@ -1,8 +1,8 @@
 <?php
 
+
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,40 +12,32 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
-        'name',
-        'password',
-        'telepon', // Tambahkan kolom telepon ke fillable
-        'golongan_darah', // Tambahkan kolom golongan_darah ke fillable
-        'Avatar',
+        'id',
+        'nama',
+        'telepon',
+        // tambahkan kolom lain yang ingin di-mass assignable
     ];
-    public function updateStatus($newStatus)
-    {
-        $this->update(['status' => $newStatus]);
-    }
 
-
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    // User.php
+public function profile()
+{
+    return $this->hasOne(Profile::class);
+}
+
+
+
+    // Definisikan relasi "one-to-one" dengan tabel data_diri
+    public function dataDiri()
+    {
+        return $this->hasOne(DataDiri::class);
+    }
 }

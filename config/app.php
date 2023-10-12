@@ -232,6 +232,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Fonnte' => GuzzleHttp\Client::class, // Gunakan alias jika perlu
 
+
     ],
 
 ];

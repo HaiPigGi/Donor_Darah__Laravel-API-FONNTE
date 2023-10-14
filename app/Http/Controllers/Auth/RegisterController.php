@@ -141,7 +141,6 @@ class RegisterController extends Controller
             ]);
             $userCode = $request->input('code');
 
-
             $getSession = SessionModels::all();
 
             // Log semua ID sesi ke file log

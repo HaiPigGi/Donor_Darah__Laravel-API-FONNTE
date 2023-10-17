@@ -1,0 +1,97 @@
+
+###
+GET http://localhost:8000/api/get/provinsi
+
+###
+GET http://localhost:8000/api/get/kabupaten/3
+
+###
+GET http://localhost:8000/api/get/kecamatan/
+
+###
+GET http://localhost:8000/api/get/kelurahan/1101010002
+
+### CreateUser Endpoint
+
+# Mengirim request POST untuk membuat user baru
+POST http://localhost:8000/api/register/auth
+Content-Type: application/json
+
+{
+  "nama": "John Doe",
+  "telepon": "081256518211",
+  "golongan_darah": "A",
+  "provinsi_id": "64",     // Ganti dengan ID provinsi yang valid
+  "kabupaten_id": "6472",   // Ganti dengan ID kabupaten yang valid
+  "kecamatan_id": "6472021",   // Ganti dengan ID kecamatan yang valid
+  "kelurahan_id": "6472021001"    // Ganti dengan ID kelurahan yang valid
+}
+
+
+###
+curl -X POST http://localhost:8000/send-verification-code \
+-H "Content-Type: application/json" \
+-d '{"phoneNumber": "081234567890", "verificationCode": "123456"}'
+
+###
+POST http://localhost:8000/api/send-verification-code
+Content-Type: application/json
+
+{
+  "telepon": "081256518211",
+  "verificationCode": "557889"
+}
+
+###
+POST http://localhost:8000/api/register/auth
+Content-Type: application/json,
+withCredentials: true,
+{
+  "nama": "John Doe",
+  "telepon": "081256518211",
+  "golongan_darah": "A+",
+  "provinsi_id": "64",     // Ganti dengan ID provinsi yang valid
+  "kabupaten_id": "6472",   // Ganti dengan ID kabupaten yang valid
+  "kecamatan_id": "6472021",   // Ganti dengan ID kecamatan yang valid
+  "kelurahan_id": "6472021001",    // Ganti dengan ID kelurahan yang valid
+}
+
+###
+POST http://localhost:8000/api/register/auth
+Content-Type: application/json
+withCredentials: true,
+{
+  "nama": "John Doe",
+  "telepon": "081256518211",
+  "golongan_darah": "A+",
+  "provinsi_id": 64,
+  "kabupaten_id": 6472,
+  "kecamatan_id": 6472021,
+  "kelurahan_id": 6472021001
+}
+###
+POST http://localhost:8000/api/register/auth
+Content-Type: application/json,
+X-CSRF-TOKEN: your-csrf-token-here,
+
+{
+    "nama": "Tan",
+    "telepon": "082157041190",
+    "golongan_darah": "O",
+    "provinsi_id": 64,
+    "kabupaten_id": 6402,
+    "kecamatan_id": 6402060,
+    "kelurahan_id": 6402060004
+}
+
+
+###
+POST http://localhost:8000/api/register/auth/verify
+Content-Type: application/json
+X-CSRF-TOKEN: your-csrf-token-here
+
+{
+     "code": "878328"
+}
+
+

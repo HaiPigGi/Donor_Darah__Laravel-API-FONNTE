@@ -76,7 +76,7 @@ X-CSRF-TOKEN: your-csrf-token-here,
 
 {
     "nama": "Tan",
-    "telepon": "082157041190",
+    "telepon": "08565008622",
     "golongan_darah": "O",
     "provinsi_id": 64,
     "kabupaten_id": 6402,
@@ -91,7 +91,15 @@ Content-Type: application/json
 X-CSRF-TOKEN: your-csrf-token-here
 
 {
-     "code": "878328"
+     "code": "311091"
 }
 
+###
+POST http://localhost:8000login
+Content-Type: application/json
+X-CSRF-TOKEN: your-csrf-token-here
+
+{
+    "telepon": "08565008622"
+}
 

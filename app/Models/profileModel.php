@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
-class profile extends Model
-{
 
+class profileModel extends Model
+{
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'profiles';
     protected $fillable = [
         'id_user',
         'nama',
-        'Avatar',
         'telepon',
         'golongan_darah',
         'provinsi_id',
@@ -30,7 +29,7 @@ public function user()
     }
     public function provinsi()
     {
-        return $this->belongsTo(Provinsi::class, 'provinsi_id');
+        return $this->belongsTo(provinsiModel::class, 'provinsi_id');
     }
 
     public function kabupaten()

@@ -10,11 +10,6 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use App\Models\Kelurahan;
-use App\Models\Kecamatan;
-use App\Models\Kabupaten;
-use App\Models\Provinsi;
-use App\Models\Profile;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\maps\ProvinsiController;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +17,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Cache;
 use App\Models\SessionModels;
+use App\Models\profileModel;
+use App\Models\Kelurahan;
+use App\Models\Kecamatan;
+use App\Models\Kabupaten;
+use App\Models\provinsiModel;
 
 class RegisterController extends Controller
 {
@@ -40,67 +40,66 @@ class RegisterController extends Controller
     }
 
     public function createUser(array $data)
-    {
-        // Store the validated data in the session
-        // Retrieve validated data from session
-        $validatedData = session('validated_data');
-        $session_id = session('session_id');
-        Log::info("isi data semua dari create User : " . json_encode($data)); // Log the data as a JSON string
-        Log::info("isi session ID : " . $session_id); // Log the session ID
+{
+    // Retrieve the validated data from the session
+    $validatedData = session('validated_data');
+    $session_id = session('session_id');
+    Log::info("isi data semua dari create User : " . json_encode($data)); // Log the data as a JSON string
+    Log::info("isi nomer telepon : " . $validatedData['telepon']); // Log the telephone number from validated data
+    Log::info("isi session ID : " . $session_id); // Log the session ID
 
-        try {
-            // Generate UUID for id_user column
-            $id_user = Str::uuid();
+    try {
+        // Generate UUID for id_user column
+        $id_user = Str::uuid();
 
-            // Begin database transaction
-            DB::beginTransaction();
+        // Begin database transaction
+        DB::beginTransaction();
 
-            // Create user record with explicitly setting the 'id' field
-            $user = User::create([
-                'id' => $id_user,
-                'nama' => $validatedData['nama'], // Menggunakan $validatedData['nama'] bukan $data['nama']
-                'telepon' => $validatedData['telepon'],
-            ]);
+        // Create user record with explicitly setting the 'id' field
+        $user = User::create([
+            'id' => $id_user,
+            'nama' => $validatedData['nama'],
+            'telepon' => $validatedData['telepon'],
+        ]);
 
-            // Retrieve validated data from session
-            $validatedData = session('validated_data');
+        // Create profile record with user_id and other validated data
+        $profile = new profileModel([
+            'id_user' => $id_user,
+            'nama' => $validatedData['nama'],
+            'telepon' => $validatedData['telepon'],
+            'golongan_darah' => $validatedData['golongan_darah'],
+        ]);
 
-            // Create profile record with user_id and other validated data
-            $profile = new Profile([
-                'id_user' => $id_user,
-                'nama' => $validatedData['nama'],
-                'telepon' => $validatedData['telepon'],
-                'golongan_darah' => $validatedData['golongan_darah'],
-            ]);
+        // Get kabupaten, kecamatan, and kelurahan IDs from validated data
+        $provinsiId = $validatedData['provinsi_id'];
+        $kabupatenId = $validatedData['kabupaten_id'];
+        $kecamatanId = $validatedData['kecamatan_id'];
+        $kelurahanId = $validatedData['kelurahan_id'];
 
-            // Get kabupaten, kecamatan, and kelurahan IDs from validated data
-            $provinsiId = $validatedData['provinsi_id'];
-            $kabupatenId = $validatedData['kabupaten_id'];
-            $kecamatanId = $validatedData['kecamatan_id'];
-            $kelurahanId = $validatedData['kelurahan_id'];
-            // Associate kabupaten, kecamatan, and kelurahan with the profile
-            $profile->provinsi()->associate(Provinsi::find($provinsiId));
-            $profile->kabupaten()->associate(Kabupaten::find($kabupatenId));
-            $profile->kecamatan()->associate(Kecamatan::find($kecamatanId));
-            $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
-            $profile->save();
+        // Associate kabupaten, kecamatan, and kelurahan with the profile
+        $profile->provinsi()->associate(provinsiModel::find($provinsiId));
+        $profile->kabupaten()->associate(Kabupaten::find($kabupatenId));
+        $profile->kecamatan()->associate(Kecamatan::find($kecamatanId));
+        $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
+        $profile->save();
 
-            // Delete data from sessionModel based on ID
-            // Assuming your sessionModel has a column 'id' for primary key
-            // Delete data from sessionModel based on ID
-            sessionModels::where('session_id', $session_id)->delete();
+        // Delete data from sessions table based on the telephone number
+        $teleponToDelete = $validatedData['telepon'];
+        sessionModels::where('data', 'LIKE', '%"telepon":"'.$teleponToDelete.'"%')->delete();
 
-            // Commit the database transaction
-            DB::commit();
+        // Commit the database transaction
+        DB::commit();
 
-            return $user;
-        } catch (\Exception $e) {
-            // Rollback the database transaction in case of an exception
-            DB::rollback();
-            Log::error("Error creating user: " . $e->getMessage()); // Log the error
-            throw $e; // Re-throw the exception for further handling, if needed
-        }
+        return $user;
+    } catch (\Exception $e) {
+        // Rollback the database transaction in case of an exception
+        DB::rollback();
+        Log::error("Error creating user: " . $e->getMessage()); // Log the error
+        throw $e; // Re-throw the exception for further handling, if needed
     }
+}
+
+    
 
 
     public function verify(Request $request)
@@ -132,6 +131,7 @@ class RegisterController extends Controller
             return response()->json(['message' => 'Failed to send verification code. Please try again.', 'error' => $e->getMessage()], 500);
         }
     }
+
     public function validateCheck(Request $request)
     {
         try {
@@ -139,135 +139,130 @@ class RegisterController extends Controller
             $request->validate([
                 'code' => 'required|digits:6',
             ]);
+    
             $userCode = $request->input('code');
-
-
-            $getSession = SessionModels::all();
-
-            // Log semua ID sesi ke file log
-            Log::info("All Data : " . json_encode($getSession));
-
-            if ($getSession !== null) {
-                Log::info("All Data jika tidak null: " . json_encode($getSession));
-                $sessionModel = SessionModels::first();
-                // Ambil code dari objek tunggal
-                $sessionCode = $sessionModel->code;
-
-                // Log the session code
-                Log::info("Session Code from Database: $sessionCode");
-
-                if ($userCode === strval($sessionCode)) {
-
-                    Log::info("User code : " . $userCode);
-                    // Kode yang dimasukkan oleh pengguna cocok dengan kode sesi
-                    $sessionDataArray = json_decode($sessionModel->data, true);
-
-                    // Periksa apakah dekoding berhasil
-                    if ($sessionDataArray === null && json_last_error() !== JSON_ERROR_NONE) {
-                        // Penanganan kesalahan jika dekoding gagal
-                        Log::error("Failed to decode JSON data: " . json_last_error_msg());
-                        return response()->json([
-                            'error' => 'Failed to decode JSON data.',
-                        ], 500); // Kode status 500 menunjukkan kesalahan server
-                    }
-
-                    // Simpan session ID ke dalam sesi
-                    session()->put('session_id', $sessionModel->session_id);
-                    // Simpan validated_data ke dalam sesi
-                    session()->put('validated_data', $sessionDataArray);
-
-                    // Log data ke dalam file log
-                    Log::info("Data Session Database: " . json_encode($sessionDataArray));
-                    $user = $this->createUser($sessionDataArray);
-                    // Log the successful creation of the user
-                    Log::info("User has been verified and created. User ID: $user->id");
-
-                    return response()->json([
-                        'message' => 'User has been verified and created.',
-                        'user' => $user,
-                    ]);
-                } else {
-                    // Kode yang dimasukkan oleh pengguna tidak cocok dengan kode sesi
-                    Log::info("Invalid verification code received: $userCode");
-
-                    throw ValidationException::withMessages([
-                        'code' => ['Invalid verification code. Please try again.'],
-                    ]);
+    
+            // Fetch all session models
+            $sessionModels = SessionModels::all();
+    
+            // Log all session data
+            Log::info("All Data: " . json_encode($sessionModels));
+    
+            $matchingSession = null;
+    
+            foreach ($sessionModels as $sessionModel) {
+                $sessionCode = strval($sessionModel->code);
+    
+                if ($userCode === $sessionCode) {
+                    // Found a matching session
+                    $matchingSession = $sessionModel;
+                    break;
                 }
+            }
+    
+            if ($matchingSession !== null) {
+                // Matching session found
+                $sessionDataArray = json_decode($matchingSession->data, true);
+    
+                // Check if decoding was successful
+                if ($sessionDataArray === null && json_last_error() !== JSON_ERROR_NONE) {
+                    Log::error("Failed to decode JSON data: " . json_last_error_msg());
+                    throw new \Exception("Failed to decode JSON data.");
+                }
+    
+                // Save session ID and validated data to the session
+                session()->put('session_id', $matchingSession->session_id);
+                session()->put('validated_data', $sessionDataArray);
+    
+                // Log data to the log file
+                Log::info("Data Session Database: " . json_encode($sessionDataArray));
+    
+                // Create the user
+                $user = $this->createUser($sessionDataArray);
+    
+                // Log the successful creation of the user
+                Log::info("User has been verified and created. User ID: $user->id");
+    
+                return response()->json([
+                    'message' => 'User has been verified and created.',
+                    'user' => $user,
+                ]);
             } else {
-                // Log the invalid verification code
-                Log::info("Invalid session ID received: $getSession");
-
+                // No matching session found
+                Log::info("Invalid verification code received: $userCode");
+    
                 throw ValidationException::withMessages([
-                    'session_id' => ['Invalid session ID. Please try again.'],
+                    'code' => ['Invalid verification code. Please try again.'],
                 ]);
             }
         } catch (\Exception $e) {
             // Handle general errors
             Log::error("Error during verification: " . $e->getMessage());
-
+    
             return response()->json([
                 'error' => 'An error occurred during verification. Please try again later.',
             ], 500);
         }
     }
 
-
     public function sendVerify(Request $request)
-    {
-        try {
-            $request->validate([
-                'telepon' => 'required|string', // Add validation for the phone number
-            ]);
+{
+    try {
+        // // Regenerate the session ID to create a new session
+        // $request->session()->regenerate();
 
-            // Generate a verification code (e.g., a random 6-digit code)
-            $verificationCode = mt_rand(100000, 999999);
+        $request->validate([
+            'telepon' => 'required|string', // Add validation for the phone number
+        ]);
 
-            // Store the verification code and expiration time as an array in the session
-            $verificationData = [
-                'code' => $verificationCode,
-                'session_id' => session()->getId(),
-                'data' => json_encode(session('validated_data')),
-            ];
+        // Generate a verification code (e.g., a random 6-digit code)
+        $verificationCode = mt_rand(100000, 999999);
 
-            session()->put('verification_data', $verificationData);
-            session()->save();
+        // Store the verification code and expiration time as an array in the session
+        $verificationData = [
+            'code' => $verificationCode,
+            'data' => json_encode(session('validated_data')),
+        ];
 
-            SessionModels::create($verificationData);
+        // session()->put('verification_data', $verificationData);
+        // session()->save();
 
-            // Log the generated verification code and session data
-            Log::info("Generated Verification Code: $verificationCode");
-            Log::info("Session Data Pada Saat Kirim Kode : ", session()->all());
+        SessionModels::create($verificationData);
 
-            // Send the verification code via WhatsApp
-            $phoneNumber = $request->input('telepon');
-            $result = $this->sendVerificationCode($phoneNumber, $verificationCode);
+        // Log the generated verification code and session data
+        Log::info("Generated Verification Code: $verificationCode");
+        //Log::info("Session Data Pada Saat Kirim Kode : ", session()->all());
 
-            // Check if $result is an array
-            if (is_array($result)) {
-                $responseArray = $result; // $result is already an array, no need to decode
+        // Send the verification code via WhatsApp
+        $phoneNumber = $request->input('telepon');
+        $result = $this->sendVerificationCode($phoneNumber, $verificationCode);
 
-                // Sekarang, Anda bisa mengakses properti dari array respons
-                if (isset($responseArray['status']) && $responseArray['status'] === true) {
-                    // Pengiriman berhasil
+        // Check if $result is an array
+        if (is_array($result)) {
+            $responseArray = $result; // $result is already an array, no need to decode
 
-                    $sessionId = session()->getId();
-                    return response()->json(['status' => 'success', 'session_id' => $sessionId]);
-                } else {
-                    // Pengiriman gagal, kirim respons JSON error dengan alasan yang diberikan oleh layanan WhatsApp
-                    $reason = isset($responseArray['reason']) ? $responseArray['reason'] : 'Unknown error';
-                    return response()->json(['status' => 'error', 'message' => 'Failed to send verification code: ' . $reason], 500);
-                }
+            // Sekarang, Anda bisa mengakses properti dari array respons
+            if (isset($responseArray['status']) && $responseArray['status'] === true) {
+                // Pengiriman berhasil
+
+                $sessionId = session()->getId();
+                return response()->json(['status' => 'success', 'session_id' => $sessionId]);
             } else {
-                // Handle the case where $result is not an array (possibly an error occurred during the API call)
-                return response()->json(['status' => 'error', 'message' => 'Failed to send verification code. Please try again.'], 500);
+                // Pengiriman gagal, kirim respons JSON error dengan alasan yang diberikan oleh layanan WhatsApp
+                $reason = isset($responseArray['reason']) ? $responseArray['reason'] : 'Unknown error';
+                return response()->json(['status' => 'error', 'message' => 'Failed to send verification code: ' . $reason], 500);
             }
-        } catch (\Exception $e) {
-            // Handle exceptions and return an error response
-            Log::error("Error during verification: " . $e->getMessage());
-            return response()->json(['status' => 'error', 'message' => 'An error occurred during verification. Please try again later.'], 500);
+        } else {
+            // Handle the case where $result is not an array (possibly an error occurred during the API call)
+            return response()->json(['status' => 'error', 'message' => 'Failed to send verification code. Please try again.'], 500);
         }
+    } catch (\Exception $e) {
+        // Handle exceptions and return an error response
+        Log::error("Error during verification: " . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'An error occurred during verification. Please try again later.'], 500);
     }
+}
+
 
 
     /**

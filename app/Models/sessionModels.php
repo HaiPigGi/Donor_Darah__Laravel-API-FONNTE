@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SessionModels extends Model
+class sessionModels extends Model
 {
     use HasFactory;
 
-    protected $table = 'sessions'; // Specify the table name associated with this model
-
+    protected $table = 'sessions'; // Sesuaikan dengan nama tabel yang benar
     protected $fillable = ['code', 'session_id', 'data'];
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
 class HomeController extends Controller
 {
     /**
@@ -16,13 +16,14 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
+     public function getUserById($id)
     {
-        return view('home');
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['error' => 'User ID not found'], 404);
+        }
+
+        return response()->json(['user' => $user], 200);
     }
 }

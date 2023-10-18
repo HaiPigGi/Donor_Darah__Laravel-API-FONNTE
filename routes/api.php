@@ -22,17 +22,25 @@ use App\Http\Controllers\SessionController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Login Routes
-Route::get('/login', [LoginController::class, 'index'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // Tambahkan route untuk menampilkan form registrasi dengan middleware CORS
 Route::middleware(['cors', 'web'])->group(function () {
+    //rediect to Home
+    Route::get('/home/{id}', [HomeController::class, 'index'])->name('home');
+// Menambahkan rute untuk validateCheck\
+    // Login Routes
+    Route::get('/login', [LoginController::class, 'index'])->name('login');
+    Route::post('/verify/login', [LoginController::class, 'login']);
+    Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
+    // Logout Route
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
     // Registrasi
     Route::get('/register/auth', [RegisterController::class, 'index'])->name('register');
     Route::post('/register/auth', [RegisterController::class, 'verify'])->name('register.verify');
@@ -51,4 +59,3 @@ Route::middleware(['cors', 'web'])->group(function () {
         return response()->json(['message' => 'CSRF cookie set']);
     });
 });
-

@@ -12,7 +12,10 @@ GET http://localhost:8000/api/get/kecamatan/
 GET http://localhost:8000/api/get/kelurahan/1101010002
 
 ### CreateUser Endpoint
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5604af65b1483be5fa990e1bdf8bba8563d8ff06
 # Mengirim request POST untuk membuat user baru
 POST http://localhost:8000/api/register/auth
 Content-Type: application/json
@@ -69,6 +72,7 @@ withCredentials: true,
   "kecamatan_id": 6472021,
   "kelurahan_id": 6472021001
 }
+<<<<<<< HEAD
 ###
 POST http://localhost:8000/api/register/auth
 Content-Type: application/json,
@@ -77,6 +81,18 @@ X-CSRF-TOKEN: your-csrf-token-here,
 {
     "nama": "Tan",
     "telepon": "08565008622",
+=======
+
+
+
+###
+POST http://localhost:8000/api/register/auth
+Content-Type: application/json
+
+{
+    "nama": "Kapi",
+    "telepon": "082253739918",
+>>>>>>> 5604af65b1483be5fa990e1bdf8bba8563d8ff06
     "golongan_darah": "O",
     "provinsi_id": 64,
     "kabupaten_id": 6402,
@@ -84,6 +100,7 @@ X-CSRF-TOKEN: your-csrf-token-here,
     "kelurahan_id": 6402060004
 }
 
+<<<<<<< HEAD
 
 ###
 POST http://localhost:8000/api/register/auth/verify
@@ -103,3 +120,34 @@ X-CSRF-TOKEN: your-csrf-token-here
     "telepon": "08565008622"
 }
 
+=======
+###
+POST http://localhost:8000/api/register/auth/verify
+Content-Type: application/json
+
+{
+     "code": "446549"
+}
+
+
+###
+POST http://localhost:8000/api/verify/login
+Content-Type: application/json
+
+{
+    "telepon" : "081256518211"
+}
+
+
+###
+POST http://localhost:8000/api/verify/otp/login
+Content-Type: application/json
+
+{
+     "code": "478895"
+}
+
+###
+POST http://localhost:8000/api/logout
+Content-Type: application/json
+>>>>>>> 5604af65b1483be5fa990e1bdf8bba8563d8ff06

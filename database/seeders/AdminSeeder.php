@@ -18,7 +18,7 @@ class AdminSeeder extends Seeder
         DB::table('users')->insert([
             'id' => 'generated-uuid', // Sesuaikan UUID yang sesuai
             'nama' => 'Admin',
-            'telepon' => '12345678',
+            'telepon' => '082157041190',
             'role' => 'admin',
             'created_at' => now(),
             'updated_at' => now(),

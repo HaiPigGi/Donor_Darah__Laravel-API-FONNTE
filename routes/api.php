@@ -10,7 +10,7 @@ use App\Http\Controllers\maps\kecamatanController;
 use App\Http\Controllers\maps\kelurahanController;
 use App\Http\Controllers\maps\kabupatenController;
 use App\Http\Controllers\SessionController;
-
+use App\Http\Controllers\Admin\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,13 +32,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware(['cors', 'web'])->group(function () {
     //rediect to Home
     Route::get('/home/{id}', [HomeController::class, 'index'])->name('home');
-// Menambahkan rute untuk validateCheck\
+    // Menambahkan rute untuk validateCheck\
     // Login Routes
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/verify/login', [LoginController::class, 'login']);
     Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
     // Logout Route
-        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 
     // Registrasi
@@ -52,6 +52,18 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::get('/get/kabupaten/{id}', [kabupatenController::class, 'getKabupatenData'])->name('kabupaten');
     Route::get('/get/kecamatan/{id}', [kecamatanController::class, 'getKecamatanData'])->name('kecamatan');
     Route::get('/get/kelurahan/{id}', [kelurahanController::class, 'getKelurahanData'])->name('kelurahan');
+
+
+    Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+
+        Route::get('/', [PostController::class, 'index'])->name('home.index');
+        Route::get('/berita', [PostController::class, 'index'])->name('posts.index');
+        Route::get('/berita/create', [PostController::class, 'create'])->name('posts.create');
+        Route::post('/berita', [PostController::class, 'store'])->name('posts.store');
+        Route::get('/berita/{post}/edit', [PostController::class, 'edit'])->name('posts.edit');
+        Route::put('/berita/{post}', [PostController::class, 'update'])->name('posts.update');
+        Route::delete('/berita/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    });
 
     Route::get('/get-session-data', [SessionController::class, 'getSessionData']);
     // CSRF Cookie

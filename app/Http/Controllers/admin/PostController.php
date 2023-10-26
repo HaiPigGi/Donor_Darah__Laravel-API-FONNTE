@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 class PostController extends Controller
 {
@@ -66,10 +67,10 @@ class PostController extends Controller
 
         // Upload image
         $image = $request->file('image');
-        $image->storeAs('public/img', $image);
+        $image->storeAs('public/posts', $image->hashName());
 
         // Create post
-        Post::create([
+        $post = Post::create([
             'image'     => $image->hashName(),
             'title'     => $request->title,
             'content'   => $request->content,
@@ -78,6 +79,8 @@ class PostController extends Controller
 
         // Redirect to index
         return redirect()->route('posts.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        // Redirect to index or send a response
+        Log::info('New post created: ' . $post->title);
     }
 
     /**

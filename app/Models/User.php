@@ -28,10 +28,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     // User.php
-public function profile()
-{
-    return $this->hasOne(Profile::class);
-}
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+    public function profile()
+    {
+        return $this->hasOne(Profile::class);
+    }
 
 
 

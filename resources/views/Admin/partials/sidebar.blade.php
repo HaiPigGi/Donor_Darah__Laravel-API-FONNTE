@@ -7,6 +7,12 @@
                   Berita
               </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link {{ Request::is('dashboard/la*') ? 'active' : '' }}" href="/dashboard/lapangan">
+              <span data-feather="shopping-cart " class="align-text-bottom"></span>
+              Berita
+            </a>
+          </li>
           <!-- Tambahkan item-item sidebar lainnya sesuai kebutuhan -->
       </ul>
   </div>

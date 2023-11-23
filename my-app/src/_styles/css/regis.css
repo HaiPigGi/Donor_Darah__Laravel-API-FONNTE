@@ -1,0 +1,99 @@
+.my-bg {
+    height: 100vh;
+    background: url("/img/bgHero.png");
+    background-size: cover;
+    /* background-position: center; */
+}
+
+.rectangle-37,
+.rectangle-37 * {
+  box-sizing: border-box;
+}
+
+.rectangle-37 {
+  position: relative;
+  display: flex;
+  background: #ffffff;
+  border-radius: 30px;
+  width: 100vh;
+  height: 75vh;
+  margin: auto;
+  text-align: center;
+}
+
+.tombol5 {
+  width: 6.5rem;
+  height: 1.5rem;
+  /* margin: 1px; */
+  margin-right: 2rem;
+}
+
+.animateFull{
+  animation-name: progresBarAnimate;
+  animation-duration: 1000ms;
+}
+
+@keyframes progresBarAnimate{
+  from {width:50%;}
+  to{width:100%;}
+}
+
+.animateHalf{
+  animation-name:progresBarAnimate1;
+  animation-duration:1000ms;
+}
+@keyframes progresBarAnimate1{
+  from{width:0%;}
+  to{width:50%;}
+}
+
+.animateFullHalf{
+  animation-name:progressBarFulHalf;
+  animation-duration:1000ms;
+}
+
+@keyframes progressBarFulHalf{
+  from{width:100%;}
+  to{width:50%;}
+}
+
+/* Add this to your CSS */
+.custom-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid pink;
+  background-color: #9ADE7B;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  width: 80%;
+  max-width: 800px; /* Set the maximum width */
+  max-height: 600px; /* Set the maximum height */
+  margin: 0 auto; /* Center the modal horizontally */
+}
+.custom-modal .modal-content {
+  width: 100%;
+  height: 100%;
+}
+.custom-modal .modal-content .p {
+  color: white; /* Set the text color to white */
+}
+
+/* Add this to your CSS */
+.custom-close-button {
+  background-color: #618264; /* Red background color, you can change this */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Adjust padding based on your design */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px; /* Adjust font size based on your design */
+}
+
+.custom-close-button:hover {
+  background-color: #186F65; /* Darker red on hover, you can change this */
+}
+
+

@@ -20,12 +20,6 @@ class CreateDataDiriTable extends Migration
             $table->string('Avatar')->nullable();
             $table->string('telepon')->unique()->nullable(false);
             $table->string('golongan_darah')->nullable(false);
-            $table->uuid('provinsi_id')->nullable();
-            $table->foreign('provinsi_id')->references('id')->on('provinsi');
-            $table->uuid('kabupaten_id')->nullable();
-            $table->foreign('kabupaten_id')->references('id')->on('kabupaten');
-            $table->uuid('kecamatan_id')->nullable();
-            $table->foreign('kecamatan_id')->references('id')->on('kecamatan');
             $table->uuid('kelurahan_id')->nullable();
             $table->foreign('kelurahan_id')->references('id')->on('kelurahan');
             $table->timestamps();

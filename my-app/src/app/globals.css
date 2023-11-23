@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face{
+    font-family:"Montserrat";
+    src:url("../_styles/fonts/Montserrat/Montserrat-ExtraBold.ttf");
+}
+@font-face{
+    font-family:"Poppins";
+    src:url("../_styles/fonts/poppins/Poppins-Regular.ttf");
+}

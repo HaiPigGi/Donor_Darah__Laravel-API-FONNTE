@@ -1,79 +1,77 @@
 <?php
-
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Http\Controllers\Auth\RegisterController;
+use Tests\TestCase;
+
 class RegisterControllerTest extends TestCase
 {
-    use RefreshDatabase; // Untuk mengatur ulang database setelah setiap pengujian
+    use DatabaseTransactions; // Using DatabaseTransactions to run tests
 
     /** @test */
     public function it_can_send_verification_code_and_redirect_to_verify_page()
     {
-        // Simulasikan data yang akan dikirim dalam permintaan
+        // Simulate data to be sent in the request
         $data = [
             'name' => 'John Doe',
             'telepon' => '1234567890',
             'golongan_darah' => 'A',
         ];
 
-        // permintaan POST ke metode 'verify' pada controller
+        // Request POST to the 'verify' method on the controller
         $response = $this->post(route('register.verify'), $data);
 
-        // Periksa bahwa respons adalah redirect
+        // Check that the response is a redirect
         $response->assertRedirect(route('verify'));
 
-        // Periksa bahwa pesan sukses ada dalam sesi
+        // Check that the success message is in the session
         $this->assertTrue(session()->has('success'));
     }
- /** @test */
-public function it_can_create_a_user()
-{
-    // Buat instance controller
-    $controller = new RegisterController();
 
-    // Data pengguna yang akan dibuat
-    $userData = [
-        'name' => 'John Doe',
-        'telepon' => '1234567890',
-        'golongan_darah' => 'A',
-    ];
+    /** @test */
+    public function it_can_create_a_user()
+    {
+        // Create controller instance
+        $controller = new RegisterController();
 
-    // Simpan data pengguna ke dalam sesi
-    session(['validated_data' => $userData]);
+        // User data to be created
+        $userData = [
+            'name' => 'John Doe',
+            'telepon' => '1234567890',
+            'golongan_darah' => 'A',
+        ];
 
-    // Simulasi random password
-    $randomPassword = Str::random(8);
-    session(['random_password' => $randomPassword]);
+        // Save user data into session
+        session(['validated_data' => $userData]);
 
-    // Panggil metode createUser menggunakan "call"
-    $user = $this->callPrivateMethod($controller, 'createUser', [$userData]);
+        // Simulate a random password
+        $randomPassword = Str::random(8);
+        session(['random_password' => $randomPassword]);
 
-    // Verifikasi bahwa pengguna telah dibuat dalam database
-    $this->assertDatabaseHas('users', [
-        'name' => $userData['name'],
-        'telepon' => $userData['telepon'],
-        'golongan_darah' => $userData['golongan_darah'],
-    ]);
+        // Call the createUser method using "call"
+        $user = $this->callPrivateMethod($controller, 'createUser', [$userData]);
 
-    // Verifikasi bahwa password telah di-hash dengan benar
-    $this->assertTrue(Hash::check($randomPassword, $user->password));
+        // Verify that the user has been created in the database
+        $this->assertDatabaseHas('users', [
+            'name' => $userData['name'],
+            'telepon' => $userData['telepon'],
+            'golongan_darah' => $userData['golongan_darah'],
+        ]);
+
+        // Verify that the password has been hashed correctly
+        $this->assertTrue(Hash::check($randomPassword, $user->password));
+    }
+
+    // Function to call private method
+    private function callPrivateMethod($object, $method, $parameters = [])
+    {
+        $reflection = new \ReflectionClass($object);
+        $method = $reflection->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
+    }
 }
-
-// Fungsi untuk memanggil metode private
-private function callPrivateMethod($object, $method, $parameters = [])
-{
-    $reflection = new \ReflectionClass($object);
-    $method = $reflection->getMethod($method);
-    $method->setAccessible(true);
-
-    return $method->invokeArgs($object, $parameters);
-}
-
-}
-

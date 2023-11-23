@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Classes\HelperSession;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
@@ -10,18 +9,18 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\maps\ProvinsiController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Cache;
-use App\Models\SessionModels;
+use App\Models\sessionMod;
 use App\Models\profileModel;
 use App\Models\Kelurahan;
 use App\Models\Kecamatan;
 use App\Models\Kabupaten;
 use App\Models\provinsiModel;
+use Carbon\Carbon;
 
 class RegisterController extends Controller
 {
@@ -34,20 +33,41 @@ class RegisterController extends Controller
         // $this->middleware('web'); // Adds session middleware to the controller
     }
 
-    public function index()
+    /**
+     * Send the verification code via Fontee API to the user's WhatsApp number.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function verifyCreateUser(Request $request)
     {
-        return view('auth.register');
+        try {
+            Log::info('Request data:', is_array($request->all()) ? $request->all() : []);   
+            $validatedData = $request->validate([
+                'pekerjaan' => ['required', 'string', 'max:255'],
+                'golongan_darah' => ['required', 'string'],
+                'last_donor' => ['required', 'date', 'date_format:Y-m-d'],
+                'kelurahan_id' => ['exists:kelurahan,id'],
+            ]);         
+    
+            // Check if the session data with the key 'validated_data' exists before logging
+            // Check if the session data with the key 'validated_data' exists before logging
+            $sessionData = Session::get('validated_data');
+            Log::info('tes session Verify:'.json_encode($sessionData));
+
+            $this->createUser($validatedData);
+            return response()->json(['message' => 'Successfully Validate']);
+        } catch (ValidationException $e) {
+            // Handle any exceptions that occurred during the createUser process
+            return response()->json(['message' => 'Failed to create user. Please try again.', 'error' => $e->getMessage()], 500);
+        }
     }
 
-    public function createUser(array $data)
+    
+    
+public function createUser(array $data)
 {
     // Retrieve the validated data from the session
     $validatedData = session('validated_data');
-    $session_id = session('session_id');
-    Log::info("isi data semua dari create User : " . json_encode($data)); // Log the data as a JSON string
-    Log::info("isi nomer telepon : " . $validatedData['telepon']); // Log the telephone number from validated data
-    Log::info("isi session ID : " . $session_id); // Log the session ID
-
     try {
         // Generate UUID for id_user column
         $id_user = Str::uuid();
@@ -55,6 +75,13 @@ class RegisterController extends Controller
         // Begin database transaction
         DB::beginTransaction();
 
+
+        $tanggal_lahir = Carbon::createFromFormat('Y-m-d', $validatedData['tanggal_lahir'])->format('Y-m-d');
+        Log::info("Date of Birth : " . $tanggal_lahir);
+        // Ensure 'last_donor' key exists in $data
+         // Parse and format the date
+        $last_donor = Carbon::createFromFormat('Y-m-d', $data['last_donor'])->format('Y-m-d');
+          Log::info("Last Donor Date : " . $last_donor);
         // Create user record with explicitly setting the 'id' field
         $user = User::create([
             'id' => $id_user,
@@ -67,25 +94,22 @@ class RegisterController extends Controller
             'id_user' => $id_user,
             'nama' => $validatedData['nama'],
             'telepon' => $validatedData['telepon'],
-            'golongan_darah' => $validatedData['golongan_darah'],
+            'golongan_darah' => $data['golongan_darah'],
+            'tanggal_lahir' => $tanggal_lahir,
+            'last_donor' => $last_donor,
+            'pekerjaan' => $data['pekerjaan'],
         ]);
 
-        // Get kabupaten, kecamatan, and kelurahan IDs from validated data
-        $provinsiId = $validatedData['provinsi_id'];
-        $kabupatenId = $validatedData['kabupaten_id'];
-        $kecamatanId = $validatedData['kecamatan_id'];
-        $kelurahanId = $validatedData['kelurahan_id'];
+        // Get kelurahan IDs from validated data
+        $kelurahanId = $data['kelurahan_id'];
 
-        // Associate kabupaten, kecamatan, and kelurahan with the profile
-        $profile->provinsi()->associate(provinsiModel::find($provinsiId));
-        $profile->kabupaten()->associate(Kabupaten::find($kabupatenId));
-        $profile->kecamatan()->associate(Kecamatan::find($kecamatanId));
+        // Associate kelurahan with the profile
         $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
         $profile->save();
 
         // Delete data from sessions table based on the telephone number
         $teleponToDelete = $validatedData['telepon'];
-        sessionModels::where('data', 'LIKE', '%"telepon":"'.$teleponToDelete.'"%')->delete();
+        sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
 
         // Commit the database transaction
         DB::commit();
@@ -98,10 +122,6 @@ class RegisterController extends Controller
         throw $e; // Re-throw the exception for further handling, if needed
     }
 }
-
-    
-
-
     public function verify(Request $request)
     {
         try {
@@ -110,18 +130,15 @@ class RegisterController extends Controller
             $validatedData = $request->validate([
                 'nama' => ['required', 'string', 'max:255'],
                 'telepon' => ['required', 'string', 'max:255'],
-                'golongan_darah' => ['required', 'string'],
-                'provinsi_id' => ['exists:provinsi,id'],
-                'kabupaten_id' => ['exists:kabupaten,id'],
-                'kecamatan_id' => ['exists:kecamatan,id'],
-                'kelurahan_id' => ['exists:kelurahan,id'],
+                'tanggal_lahir' => ['required', 'date_format:Y-m-d'],
             ]);
+            
 
             // Store the validated data in the session
             session()->put(['validated_data' => $validatedData]);
             session()->save();
 
-            Log::info('tes session:', Session::get('validated_data'));
+            Log::info('tes session :', Session::get('validated_data'));
 
             // Send the verification code
             $this->sendVerify($request);
@@ -131,7 +148,6 @@ class RegisterController extends Controller
             return response()->json(['message' => 'Failed to send verification code. Please try again.', 'error' => $e->getMessage()], 500);
         }
     }
-
     public function validateCheck(Request $request)
     {
         try {
@@ -143,14 +159,14 @@ class RegisterController extends Controller
             $userCode = $request->input('code');
     
             // Fetch all session models
-            $sessionModels = SessionModels::all();
+            $sessionMod = sessionMod::all();
     
             // Log all session data
-            Log::info("All Data: " . json_encode($sessionModels));
+            Log::info("All Data: " . json_encode($sessionMod));
     
             $matchingSession = null;
     
-            foreach ($sessionModels as $sessionModel) {
+            foreach ($sessionMod as $sessionModel) {
                 $sessionCode = strval($sessionModel->code);
     
                 if ($userCode === $sessionCode) {
@@ -171,22 +187,14 @@ class RegisterController extends Controller
                 }
     
                 // Save session ID and validated data to the session
+                // session()->put('session_id', $matchingSession->session_id);
                 session()->put('session_id', $matchingSession->session_id);
-                session()->put('validated_data', $sessionDataArray);
+                session()->put(['validated_data', $sessionDataArray]);
+                session()->save();
     
                 // Log data to the log file
                 Log::info("Data Session Database: " . json_encode($sessionDataArray));
-    
-                // Create the user
-                $user = $this->createUser($sessionDataArray);
-    
-                // Log the successful creation of the user
-                Log::info("User has been verified and created. User ID: $user->id");
-    
-                return response()->json([
-                    'message' => 'User has been verified and created.',
-                    'user' => $user,
-                ]);
+                return response()->json(['message' => 'Successfully OTP Verification.',]);
             } else {
                 // No matching session found
                 Log::info("Invalid verification code received: $userCode");
@@ -198,7 +206,6 @@ class RegisterController extends Controller
         } catch (\Exception $e) {
             // Handle general errors
             Log::error("Error during verification: " . $e->getMessage());
-    
             return response()->json([
                 'error' => 'An error occurred during verification. Please try again later.',
             ], 500);
@@ -227,7 +234,8 @@ class RegisterController extends Controller
         // session()->put('verification_data', $verificationData);
         // session()->save();
 
-        SessionModels::create($verificationData);
+        
+        sessionMod::create($verificationData);
 
         // Log the generated verification code and session data
         Log::info("Generated Verification Code: $verificationCode");
@@ -262,9 +270,6 @@ class RegisterController extends Controller
         return response()->json(['status' => 'error', 'message' => 'An error occurred during verification. Please try again later.'], 500);
     }
 }
-
-
-
     /**
      * Send the verification code via Fontee API to the user's WhatsApp number.
      *
@@ -285,7 +290,7 @@ class RegisterController extends Controller
         $target = $phoneNumber;
 
         try {
-            $response = $client->post('https://api.fonnte.com/send', [
+            $response = $client->post(env("FONNTE_API_LINK"), [
                 'headers' => [
                     'Authorization' => $fonteeApiToken,
                 ],
@@ -297,7 +302,7 @@ class RegisterController extends Controller
 
             // Log the request and complete response for debugging
             Log::info('Fontee API Request:', [
-                'url' => 'https://api.fonnte.com/send',
+                'url' => env("FONNTE_API_LINK"),
                 'headers' => [
                     'Authorization' => $fonteeApiToken,
                 ],

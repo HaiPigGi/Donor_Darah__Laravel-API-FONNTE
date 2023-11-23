@@ -1,0 +1,84 @@
+.my-bg {
+  height: 100vh;
+  background: url("/img/bgHero.png");
+  background-size: cover;
+  /* background-position: center; */
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+}
+
+.rectangle-36,
+.rectangle-36 * {
+  box-sizing: border-box;
+}
+
+.rectangle-36 {
+  display: flex;
+  background: #ffffff;
+  border-radius: 30px;
+  width: 100vh;
+  height: 65vh;
+  margin: auto;
+  text-align: center;
+  /* position: relative; */
+}
+
+.wraper,
+wraper* {
+  box-sizing: border-box;
+}
+
+.wraper {
+  display:flex;
+  justify-content: center;
+  align-items:center;
+  color: black;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+
+.input-container {
+  display:flex;
+  /* position:relative; */
+  justify:center;
+  width: 100%;
+}
+
+.rectangle-36,
+.rectangle-36 * {
+  box-sizing: border-box;
+}
+
+.rectangle-36 {
+  display: flex;
+  background: #ffffff;
+  border-radius: 30px;
+  width: 100vh;
+  height: 50vh;
+  margin: auto;
+  text-align: center;
+  /* position: relative; */
+}
+.kotak-baru {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ff0000; /* Warna background kotak baru */
+  border-radius: 10px; /* Contoh border-radius */
+  width: 500px; /* Lebar kotak baru */
+  height: 100px; /* Tinggi kotak baru */
+  margin-top: -12rem; /* Menghilangkan jarak atas */
+  margin-bottom: 6rem; /* Menghilangkan jarak bawah */
+  text-align: center;
+}

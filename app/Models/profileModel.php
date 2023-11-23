@@ -16,9 +16,9 @@ class profileModel extends Model
         'nama',
         'telepon',
         'golongan_darah',
-        'provinsi_id',
-        'kabupaten_id',
-        'kecamatan_id',
+        'tanggal_lahir',
+        'last_donor',
+        'pekerjaan',
         'kelurahan_id',
     ];
     // Profile.php
@@ -41,7 +41,7 @@ public function user()
     {
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
-
+    
     public function kelurahan()
     {
         return $this->belongsTo(Kelurahan::class, 'kelurahan_id');

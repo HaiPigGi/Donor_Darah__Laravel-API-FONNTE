@@ -2,22 +2,22 @@
 
 namespace Tests\Feature;
 
-use App\Models\Provinsi;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\provinsiModel;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class ProvinsiControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /** @test */
     public function it_can_get_provinsi_data()
     {
         // Arrange
-        $provinsi = Provinsi::factory()->create();
+        $provinsi = provinsiModel::factory()->create();
 
         // Act
-        $response = $this->get('/get/provinsi');
+        $response = $this->get('api/get/provinsi');
 
         // Assert
         $response->assertStatus(200);

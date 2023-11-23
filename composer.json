@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "barryvdh/laravel-cors": "^3.0",
+        "doctrine/dbal": "^3.7",
         "fruitcake/laravel-cors": "^3.0",
         "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^8.75",

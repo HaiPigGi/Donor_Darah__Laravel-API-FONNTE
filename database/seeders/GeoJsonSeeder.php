@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\Provinsi;
+use App\Models\provinsiModel;
 use App\Models\Kabupaten;
 use App\Models\Kecamatan;
 use App\Models\Kelurahan;
@@ -17,6 +17,7 @@ class GeoJsonSeeder extends Seeder
      */
     public function run()
     {
+        
         $jsonUrl = url('json/Maps.json');
         $jsonData = file_get_contents($jsonUrl);
         $data = json_decode($jsonData, true);
@@ -25,7 +26,7 @@ class GeoJsonSeeder extends Seeder
             // Seed Provinsi
             foreach ($data['provinsi'] as $provinsiData) {
                 //dd($data['provinsi']);
-                Provinsi::updateOrCreate(
+                provinsiModel::updateOrCreate(
                     ['id' => $provinsiData['id']],
                     ['nama' => $provinsiData['nama']]
                 );

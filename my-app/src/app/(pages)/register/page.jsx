@@ -20,71 +20,62 @@ export default function Register() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [modalContent, setModalContent] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState({
-    nama: "",
-    telepon: "",
-    tanggal_lahir: "",
-    code: "",
-  });
+
   const [session, setSession] = useState({});
   const [buttonNext, setButtonNext] = useState(0);
 
-  useEffect(() => {
-    // Retrieve data from sessionStorage when the component mounts
-    const nama = sessionStorage.getItem("nama") || "";
-    const telepon = sessionStorage.getItem("telepon") || "";
-    const tanggal_lahir = sessionStorage.getItem("tanggal_lahir") || "";
-    const codeFromStorage = sessionStorage.getItem("code") || "";
-    const golongan_darah = sessionStorage.getItem("golongan_darah") || "";
-    const last_donor = sessionStorage.getItem("last_donor") || "";
-    const pekerjaan = sessionStorage.getItem("pekerjaan") || "";
-    const kelurahan_id=sessionStorage.getItem("kelurahan_id") || "";
+  const [data, setData] = useState({
+    nama: "",
+    telepon: "",
+    ktp: "",
+    code: "",
+    golongan_darah: "",
+    pekerjaan: "",
+    kelurahan_id: "",
+  });
 
-    setData({
-      nama,
-      telepon,
-      tanggal_lahir,
-      code: codeFromStorage,
-      golongan_darah,
-      last_donor,
-      pekerjaan,
-      kelurahan_id,
-    });
-
-    // If you want to call SendCode when the component mounts, uncomment the line below
-    // SendCode();
-  }, []); 
-
+  // useEffect(() => {
+  //   // Check if sessionStorage is available
+  //   if (typeof window !== 'undefined') {
+  //     // Retrieve data from sessionStorage when the component mounts
+  //     setData((prevData) => ({
+  //       ...prevData,
+  //       nama: sessionStorage.getItem("nama") || "",
+  //       telepon: sessionStorage.getItem("telepon") || "",
+  //       ktp: sessionStorage.getItem("ktp") || "",
+  //       code: sessionStorage.getItem("code") || "",
+  //       golongan_darah: sessionStorage.getItem("golongan_darah") || "",
+  //       pekerjaan: sessionStorage.getItem("pekerjaan") || "",
+  //       kelurahan_id: sessionStorage.getItem("kelurahan_id") || "",
+  //     }));
+  //   }
+  // }, []);
+ 
   
-  let form;
-  let nextBtn;
-
   const SendCode = async () => {
     try {
       const response = await axios.post(
         "http://localhost:8000/api/register/auth",
         {
-          nama: data.nama,
-          telepon: data.telepon,
-          tanggal_lahir: moment(data.tanggal_lahir).format('YYYY-MM-DD'),
+          nama: String(data.nama), // Convert to string
+          telepon: String(data.telepon), // Convert to string
+          ktp: String(data.ktp),
         },
         {
           headers: {
             csrf_token: session.csrf_token,
-            session_data: session.session_data,
+            // session_data: session.session_data,
           },
         }
       );
-
+  
       if (response.status === 200) {
         // Registration successful
-        setModalContent("Code Send Successfully");
+        setModalContent("Code Sent Successfully");
         setModalIsOpen(true);
-
+  
         // Clear values from sessionStorage
-        sessionStorage.removeItem("nama");
-        sessionStorage.removeItem("telepon");
-        sessionStorage.removeItem("tanggal_lahir");
+
       } else {
         // Registration failed, show an error message
         setErrorMessage("Code Send failed. Please try again.");
@@ -95,7 +86,6 @@ export default function Register() {
       console.error(error); // Log the detailed error to the console
     }
   };
-
   
 
   const verifyCode = async () => {
@@ -109,7 +99,6 @@ export default function Register() {
       {
         headers: {
           csrf_token: session.csrf_token,
-          session_data: session.session_data,
         },
       }
     );
@@ -117,9 +106,6 @@ export default function Register() {
       // Verification successful
       setModalContent("Code Verified Successfully");
       setModalIsOpen(true);
-
-      // Clear values from sessionStorage
-      sessionStorage.removeItem("code");
     } else {
       // Verification failed, show an error message
       setErrorMessage("Code Verification failed. Please try again.");
@@ -140,25 +126,46 @@ useState(
 );
 
 
+const clearSession = () => {
+  // Clear values from sessionStorage
+  const keysToRemove = [
+    "nama",
+    "telepon",
+    "ktp",
+    "code",
+    "golongan_darah",
+    "pekerjaan",
+    "kelurahan_id",
+  ];
+
+  keysToRemove.forEach((key) => sessionStorage.removeItem(key));
+};
+
 const finalVerifyData = async () => {
   console.log('Data before axios request:', data);
 
   try {
-    // Format 'tanggal_lahir' and 'last_donor' using moment
     const formattedData = {
       golongan_darah: data.golongan_darah,
-      last_donor: moment(data.last_donor).format('YYYY-MM-DD'),
       pekerjaan: data.pekerjaan,
-      kelurahan_id: data.kelurahan_id,
+      kelurahan_id: parseInt(data.kelurahan_id),
     };
+    console.log()
 
     const response = await axios.post(
       "http://localhost:8000/api/register/auth/create",
-      formattedData, // Use the formatted data
+      {
+        nama: String(data.nama), // Convert to string
+        telepon: String(data.telepon), // Convert to string
+        ktp: String(data.ktp),
+        golongan_darah: String(data.golongan_darah),
+        pekerjaan: String(data.pekerjaan),
+        kelurahan_id: parseInt(data.kelurahan_id),
+      },
       {
         headers: {
           csrf_token: session.csrf_token,
-          session_data: session.session_data,
+          // session_data: session.session_data,
         },
       }
     );
@@ -166,31 +173,20 @@ const finalVerifyData = async () => {
     console.log('Axios response:', response);
 
     if (response.status === 200) {
-      // Verification successful
       setModalContent("Account Successfully Created");
       setModalIsOpen(true);
 
-      // Clear values from sessionStorage
-      sessionStorage.removeItem("golongan_darah");
-      sessionStorage.removeItem("last_donor");
-      sessionStorage.removeItem("pekerjaan");
-      sessionStorage.removeItem("kelurahan_id");
+      // clearSession();
     } else {
-      // Verification failed, show an error message
-      setErrorMessage("Code Verification failed. Please try again.");
+      setErrorMessage("Account Verification failed. Please try again.");
+      // clearSession();
     }
   } catch (error) {
-    // Log the detailed error to the console
     console.error("AxiosError:", error);
-    // An error occurred during the registration process
     setErrorMessage("An error occurred. Please try again later.");
+    // clearSession();
   }
 };
-
-  
-
-
-  
 
   const getcsrf = async () => {
     let cookie = await axios.get("http://localhost:8000/api/get-session-data");
@@ -327,7 +323,7 @@ const finalVerifyData = async () => {
     }else if(buttonNext == 3){
       document.getElementById("title").classList.remove("hidden");
       document.getElementById("title").classList.add("block");
-      return <Alamat />;
+      return <Alamat data={data} action={(newValue)=>{setData(newValue)}}/>;
     }
   }
 

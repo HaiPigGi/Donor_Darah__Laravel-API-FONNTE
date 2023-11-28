@@ -26,7 +26,7 @@ export default function Otp() {
   async function verification(){
     try{
       setData({
-        "code" : parseInt(document.getElementById("kodeOTP").value)
+        "code" :  (document.getElementById("kodeOTP").value)
       })
       console.log(data)
       console.log(session.csrf_token)
@@ -43,9 +43,6 @@ export default function Otp() {
       alert(e.message);
     };
   }
-
-
-
 
   return (
     <main>

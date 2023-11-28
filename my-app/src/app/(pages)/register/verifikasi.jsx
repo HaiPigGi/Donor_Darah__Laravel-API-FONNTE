@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 export default function Verifikasi({ data, action }) {
   const [code, setCode] = useState(""); // State to manage OTP code input
+  console.log(data);
 
   // Function to handle input change and save to sessionStorage
   const handleInputChange = (event) => {

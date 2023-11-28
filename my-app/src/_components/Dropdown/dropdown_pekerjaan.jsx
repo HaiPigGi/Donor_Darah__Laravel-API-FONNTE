@@ -2,15 +2,17 @@ import { useState, useEffect } from "react";
 
 export let pekerjaan = "";
 
-export default function Pekerjaan() {
+export default function Pekerjaan({sendToParent}) {
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleDropdownChange = (e) => {
     setSelectedOption(e.target.value);
     pekerjaan = e.target.value;
+    sendToParent(e.target.value);
 
     // Store the selected pekerjaan in session storage
     sessionStorage.setItem("pekerjaan", pekerjaan);
+    console.log("session dari pekerjaan : ",pekerjaan)
 
     // If the selected pekerjaan is "lain-lain", store the custom input value
     if (e.target.value === "lain-lain") {

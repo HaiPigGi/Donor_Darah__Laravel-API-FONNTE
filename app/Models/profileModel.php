@@ -11,22 +11,22 @@ class profileModel extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
     protected $table = 'profiles';
+
     protected $fillable = [
         'id_user',
         'nama',
         'telepon',
         'golongan_darah',
-        'tanggal_lahir',
-        'last_donor',
+        'ktp',
         'pekerjaan',
         'kelurahan_id',
     ];
     // Profile.php
 
-public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    public function user()
+        {
+            return $this->belongsTo(User::class);
+        }
     public function provinsi()
     {
         return $this->belongsTo(provinsiModel::class, 'provinsi_id');

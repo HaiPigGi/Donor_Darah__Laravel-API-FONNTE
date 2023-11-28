@@ -2,16 +2,18 @@ import React, { useState } from "react";
 
 export let golongan_darah = "";
 
-export default function DropDownGolonganDarah() {
+export default function DropDownGolonganDarah({sendToParent}) {
   const [selectedOption, setSelectedOption] = useState("");
 
   const handleDropdownChange = (e) => {
     setSelectedOption(e.target.value);
     golongan_darah = e.target.value;
-
+    sendToParent(e.target.value);
     // Store the selected golongan darah in session storage
     sessionStorage.setItem("golongan_darah", golongan_darah);
+    console.log("Golongan Darah in sessionStorage:", golongan_darah);
   };
+  
 
   return (
     <select

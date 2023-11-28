@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\sessionModels;
-
+use GuzzleHttp\Client;
+use App\Models\sessionMod;
 class LoginController extends Controller
 {
+
+   // use AuthenticatesUsers;
 
     protected $redirectTo = RouteServiceProvider::HOME;
 
@@ -25,52 +28,58 @@ class LoginController extends Controller
     }
 
     public function login(Request $request)
-    {
-        try {
-            // Validate phone number
-            $request->validate([
-                'telepon' => 'required|string',
-            ]);
+{
+    try {
+        // Validate phone number
+        $request->validate([
+            'telepon' => 'required|string',
+        ]);
 
-            // Check if the user with the phone number exists in the database
-            $user = User::where('telepon', $request->telepon)->first();
+        // Check if the user with the phone number exists in the database
+        $user = User::where('telepon', $request->telepon)->first();
 
-            if ($user) {
-                // Generate a verification code
-                $verificationCode = mt_rand(100000, 999999);
-
-                // Create a new session record in the SessionModels table
-                $sessionUserLogin = SessionModels::create([
-                    'code' => $verificationCode,
-                    'data' => json_encode(['telepon' => $request->input('telepon'), 'id' => $user->id]),
-                ]);
-
-                // Store the verification data in the session
-                session()->put('verification_data', $sessionUserLogin);
-                session()->save();
-
-                // Log the generated verification code and session data
-                Log::info("Generated Verification Code for Login: $verificationCode");
-                Log::info("Session Data for Login: ", session()->all());
-
-                return response()->json([
-                    'message' => 'A verification code has been sent to your WhatsApp number.',
-                    'user_id' => $user->id,
-                    'verification_code' => $verificationCode,
-                ], 200);
-            } else {
-                // If user not found
-                return response()->json(['message' => 'Invalid phone number.'], 401);
-            }
-        } catch (\Exception $e) {
-            // Handle exceptions and return an error response
-            Log::error("Error during login: " . $e->getMessage());
-            return response()->json(['status' => 'error', 'message' => 'Failed to send verification code. Please try again later.'], 500);
+        if (!$user) {
+            return response()->json(['message' => 'Invalid phone number.'], 401);
         }
-    } 
-    
 
-    public function validateCheck(Request $request)
+        // Extract user ID
+        $userId = $user->id;
+        Log::info("cek user id dari database : ".json_encode($userId));
+
+        // Generate a verification code
+        $verificationCode = mt_rand(100000, 999999);
+
+        // Create a new session record in the SessionModels table
+        $sessionUserLogin = SessionModels::create([
+            'code' => $verificationCode,
+            'data' => json_encode(['telepon' => $request->input('telepon'), 'id' => $userId]),
+        ]);
+        
+
+        // Store the verification data in the session
+        session()->put('verification_data', $sessionUserLogin);
+        session()->save();
+
+        // Log the generated verification code and session data
+        Log::info("Generated Verification Code for Login: $verificationCode");
+        Log::info("Session Data for Login: ", session()->all());
+
+        // Send verification code
+        $this->sendVerificationCode($user->telepon, $verificationCode);
+
+        return response()->json([
+            'message' => 'A verification code has been sent to your WhatsApp number.',
+            'user_id' => $userId, // Include the user ID in the response
+            'verification_code' => $verificationCode,
+        ], 200);
+    } catch (\Exception $e) {
+        // Handle exceptions and return an error response
+        Log::error("Error during login: " . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'Failed to send verification code. Please try again later.'], 500);
+    }
+}
+
+    protected function validateCheck(Request $request)
 {
     try {
         // Validate the request data
@@ -78,47 +87,53 @@ class LoginController extends Controller
             'code' => 'required|digits:6',
         ]);
         $userCode = $request->input('code');
+        
+         // Fetch all session models
+         $sessionMod = sessionMod::all();
 
-        // Retrieve verification data from the session
-        $sessionUserLogin = session()->get('verification_data');
+          // Log all session data
+          Log::info("All Data From Database : " . json_encode($sessionMod));
+    
+          $matchingSession = null;
+  
+          foreach ($sessionMod as $sessionModel) {
+              $sessionCode = strval($sessionModel->code);
+  
+              if ($userCode === $sessionCode) {
+                  // Found a matching session
+                  $matchingSession = $sessionModel;
+                  break;
+              }
+          }
 
-        if ($sessionUserLogin !== null) {
-            // Decode session data
-            $sessionDataArray = json_decode($sessionUserLogin->data, true);
+          if ($matchingSession !== null) {
+            // Matching session found
+            $sessionDataArray = json_decode($matchingSession->data, true);
 
-            // Verify the user input with the stored verification code
-            if ($userCode === strval($sessionUserLogin->code)) {
-                // Kode yang dimasukkan oleh pengguna cocok dengan kode sesi
-
-                // Retrieve the user ID from the session data
-                $userId = $sessionDataArray['id'];
-
-                // Perform the login action
-                Auth::loginUsingId($userId);
-
-                // Clear the verification data from the session
-                session()->forget('verification_data');
-
-                return response()->json([
-                    'message' => 'Login Successful',
-                    'user_id' => $userId,
-                ]);
-            } else {
-                // Kode yang dimasukkan oleh pengguna tidak cocok dengan kode sesi
-                Log::info("Invalid verification code received: $userCode");
-
-                throw ValidationException::withMessages([
-                    'code' => ['Invalid verification code. Please try again.'],
-                ]);
+            // Check if decoding was successful
+            if ($sessionDataArray === null && json_last_error() !== JSON_ERROR_NONE) {
+                Log::error("Failed to decode JSON data: " . json_last_error_msg());
+                throw new \Exception("Failed to decode JSON data.");
             }
+
+             // Retrieve the user ID from the session data
+             $userId = $sessionDataArray['id'];
+             Log::info("Cek User Id Untuk login : ".json_encode($userId));
+
+             // Perform the login action
+             Auth::loginUsingId($userId);
+            // Log data to the log file
+            Log::info("Data Session Database: " . json_encode($sessionDataArray));
+            return response()->json(['message' => 'Successfully OTP Verification.',]);
         } else {
-            // Invalid session data
-            Log::info("Invalid session data received");
+            // No matching session found
+            Log::info("Invalid verification code received: $userCode");
 
             throw ValidationException::withMessages([
-                'session_id' => ['Invalid session data. Please try again.'],
+                'code' => ['Invalid verification code. Please try again.'],
             ]);
         }
+
     } catch (\Exception $e) {
         // Handle general errors
         Log::error("Error during verification: " . $e->getMessage());
@@ -129,44 +144,94 @@ class LoginController extends Controller
     }
 }
 
-    public function logout(Request $request)
+    public function logout($userId)
 {
     try {
-        // Pastikan pengguna sudah terautentikasi
-        if (Auth::check()) {
-            // Dapatkan ID pengguna yang terautentikasi sebelum logout
-            $userId = Auth::id();
+        // Check if the user with the provided ID exists
+        $user = User::find($userId);
 
-            // Logout pengguna
-            Auth::logout();
+        if (!$user) {
+            return response()->json(['message' => 'User not found.'], 404);
+        }
 
-            // Cari sessionModel berdasarkan ID pengguna
-            $sessionData = sessionModels::where('data', 'like', '%"id":' . $userId . '%')->first();
+        // Logout user
+        Auth::logout();
 
-            if ($sessionData) {
-                // Hapus sessionModel dari database
-                $sessionData->delete();
+        // Find and delete the session record associated with the user
+        $sessionData = SessionModels::where('data', 'LIKE', '%"id":"' . $userId . '"%')->first();
 
-                // Invalidate sesi dan regenerasi token CSRF
-                $request->session()->invalidate();
-                $request->session()->regenerateToken();
+        if ($sessionData) {
+            $sessionData->delete();
 
-                // Return ID pengguna bersama dengan respons logout
-                return response()->json(['message' => 'User Logout', 'user_id' => $userId], 200);
-            } else {
-                // Jika sessionModel tidak ditemukan, tangani sesuai kebutuhan (misalnya, arahkan ulang ke halaman login)
-                return response()->json(['message' => 'Invalid session data'], 401);
-            }
+            // Invalidate session and regenerate CSRF token
+            session()->invalidate();
+            session()->regenerateToken();
+
+            return response()->json(['message' => 'User logged out successfully.'], 200);
         } else {
-            // Jika pengguna belum terautentikasi, tangani sesuai kebutuhan (misalnya, arahkan ulang ke halaman login)
-            return response()->json(['message' => 'User not authenticated'], 401);
+            // If session record not found, handle accordingly (e.g., redirect to login page)
+            return response()->json(['message' => 'Session data not found.'], 401);
         }
     } catch (\Exception $e) {
-        // Tangani pengecualian dan kembalikan respons kesalahan
+        // Handle exceptions and return an error response
         Log::error("Error during logout: " . $e->getMessage());
         return response()->json(['status' => 'error', 'message' => 'Failed to logout. Please try again later.'], 500);
     }
 }
+
+private function sendVerificationCode($phoneNumber, $verificationCode)
+    {
+        $fonteeApiToken = env('FONNTE_API_TOKEN');
+        $client = new Client();
+
+        if (empty($fonteeApiToken)) {
+            return response()->json(['error' => 'Invalid API token'], 401);
+        }
+
+        // Define the message and target phone number
+        $message = "Your verification code: $verificationCode"; // Corrected message string
+        $target = $phoneNumber;
+
+        try {
+            $response = $client->post(env("FONNTE_API_LINK"), [
+                'headers' => [
+                    'Authorization' => $fonteeApiToken,
+                ],
+                'json' => [
+                    'message' => $message,
+                    'target' => $target,
+                ],
+            ]);
+
+            // Log the request and complete response for debugging
+            Log::info('Fontee API Request:', [
+                'url' => env("FONNTE_API_LINK"),
+                'headers' => [
+                    'Authorization' => $fonteeApiToken,
+                ],
+                'body' => [
+                    'message' => $message,
+                    'target' => $target,
+                ],
+            ]);
+            Log::info('Fontee API Response:', json_decode($response->getBody(), true)); // Log complete response
+
+            // Handle the response from Fontee API
+            $body = $response->getBody();
+            $result = json_decode($body);
+
+            if ($result->status === true) {
+                // Pengiriman berhasil
+                return ['status' => 'success'];
+            } else {
+                // Pengiriman gagal, kirim respons JSON error dengan alasan yang diberikan oleh layanan WhatsApp
+                return ['status' => 'error', 'reason' => $result->reason ?? 'Unknown error'];
+            }
+        } catch (\Exception $e) {
+            // Tangani kesalahan yang mungkin terjadi selama pengiriman
+            return ['status' => 'error', 'message' => $e->getMessage()];
+        }
+    }
 
 }
 

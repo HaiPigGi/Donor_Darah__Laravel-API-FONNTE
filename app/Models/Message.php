@@ -17,7 +17,9 @@ class Message extends Model
         'tagar_model_id',
         'message_id',
         'content',
+        
     ];
+
 
     public function user(): BelongsTo
     {

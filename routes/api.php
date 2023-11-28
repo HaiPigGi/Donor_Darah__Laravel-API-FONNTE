@@ -12,7 +12,8 @@ use App\Http\Controllers\maps\kabupatenController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\API\Akseptor;
 use App\Http\Controllers\admin\verifyAkseptorController;
-
+use App\Http\Controllers\tagar\TagarController;
+use App\Http\Controllers\Forum\ChatMessageSend;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,13 +31,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Tambahkan route untuk menampilkan form registrasi dengan middleware CORS
 Route::middleware(['cors', 'web'])->group(function () {
-// Menambahkan rute untuk validateCheck\
     // Login Routes
     Route::get('/login', [LoginController::class, 'index'])->name('login');
     Route::post('/verify/login', [LoginController::class, 'login']);
     Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
-    // Logout Route
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::delete('/logout/{userId}', [LoginController::class, 'logout']);
 
     Route::post('/form/akseptor-send',[Akseptor::class,'validateData'])->name('index');
 
@@ -66,6 +65,23 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::get('/admin/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptors'])->name('verify_akseptor');
     Route::put('/admin/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse'])->name('verify_akseptor.update');
     Route::get('/admin/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse'])->name('verify_akseptor.edit');
+
+
+    // Untuk Tagar
+    Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
+    Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);
+
+    //its for sendMessage
+    Route::post('/send-message/{tagarId}', [ChatMessageSend::class, 'sendMessage']);
+
+    Route::post('/tagars/{tagarId}/user-messages/associate', [ChatMessageSend::class, 'associateMessageWithTagar']);
+
+    // Get messages associated with a tagar
+    Route::get('/tagars/{tagarId}/messages', [ChatMessageSend::class, 'getMessagesForTagar']);
+
+
+
+
 //     Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
 
     

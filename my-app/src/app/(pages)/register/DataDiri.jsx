@@ -3,6 +3,7 @@ import ErrorMessage from "@/_components/errorMessage";
 
 export default function DataDiri({ action, data }) {
   const [errorMessage, setErrorMessage] = useState("");
+  console.log("data : ",data);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,7 +23,7 @@ export default function DataDiri({ action, data }) {
       if (detectNonNumber !== null) {
         setErrorMessage(
           <ErrorMessage
-            message="Harap Masukkan Nomor telpon dengan Nomor"
+            message="Harap Masukkan Nomor telepon dengan Nomor"
             kelas="w-[400px] h-auto bg-red text-white absolute left-[-1px] bottom-[-50px] rounded-xl p-2"
           />
         );
@@ -41,7 +42,9 @@ export default function DataDiri({ action, data }) {
     });
 
     // Store data in sessionStorage
-    sessionStorage.setItem(name, value);
+    sessionStorage.setItem("nama", data.nama || ""); // Store "nama" in sessionStorage
+    sessionStorage.setItem("telepon", data.telepon || ""); // Store "telepon" in sessionStorage
+    sessionStorage.setItem("ktp", data.ktp || ""); // Store "ktp" in sessionStorage
   };
 
   return (
@@ -83,9 +86,7 @@ export default function DataDiri({ action, data }) {
             onChange={handleChange}
           />
         </div>
-        <label htmlFor="" className="pe-[24rem] text-left">
-          Tanggal Lahir :
-        </label>
+ 
         <div className="h-auto flex justify-start relative font-Subtitle">
           <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
             <img
@@ -97,10 +98,10 @@ export default function DataDiri({ action, data }) {
             />
           </div>
           <input
-            className="border border-black rounded-xl w-[250px] h-14 ps-[4rem] text-[20px]"
-            type="date"
-            name="tanggal_lahir" // Use a unique identifier for each field
-            placeholder="Tanggal Lahir"
+            className="border border-black rounded-xl w-[370px] h-14 ps-[4rem] text-[20px]"
+            type="text"
+            placeholder="Masukan nomor KTP (16 digit)"
+            name="ktp"
             onChange={handleChange}
           />
         </div>

@@ -38,33 +38,29 @@ class RegisterController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function verifyCreateUser(Request $request)
+    protected function verifyCreateUser(Request $request)
     {
         try {
             Log::info('Request data:', is_array($request->all()) ? $request->all() : []);   
             $validatedData = $request->validate([
+                'nama' => ['required', 'string', 'max:255'],
+                'ktp' => ['required', 'string','max:255'],
                 'pekerjaan' => ['required', 'string', 'max:255'],
                 'golongan_darah' => ['required', 'string'],
-                'last_donor' => ['required', 'date', 'date_format:Y-m-d'],
                 'kelurahan_id' => ['exists:kelurahan,id'],
+                'telepon' => ['required', 'string', 'max:255'],
             ]);         
     
-            // Check if the session data with the key 'validated_data' exists before logging
-            // Check if the session data with the key 'validated_data' exists before logging
-            $sessionData = Session::get('validated_data');
-            Log::info('tes session Verify:'.json_encode($sessionData));
 
             $this->createUser($validatedData);
-            return response()->json(['message' => 'Successfully Validate']);
+            return response()->json(['message' => 'Successfully Validate'],200);
         } catch (ValidationException $e) {
             // Handle any exceptions that occurred during the createUser process
             return response()->json(['message' => 'Failed to create user. Please try again.', 'error' => $e->getMessage()], 500);
         }
     }
 
-    
-    
-public function createUser(array $data)
+private function createUser(array $data)
 {
     // Retrieve the validated data from the session
     $validatedData = session('validated_data');
@@ -75,28 +71,19 @@ public function createUser(array $data)
         // Begin database transaction
         DB::beginTransaction();
 
-
-        $tanggal_lahir = Carbon::createFromFormat('Y-m-d', $validatedData['tanggal_lahir'])->format('Y-m-d');
-        Log::info("Date of Birth : " . $tanggal_lahir);
-        // Ensure 'last_donor' key exists in $data
-         // Parse and format the date
-        $last_donor = Carbon::createFromFormat('Y-m-d', $data['last_donor'])->format('Y-m-d');
-          Log::info("Last Donor Date : " . $last_donor);
-        // Create user record with explicitly setting the 'id' field
         $user = User::create([
             'id' => $id_user,
-            'nama' => $validatedData['nama'],
-            'telepon' => $validatedData['telepon'],
+            'nama' => $data['nama'],
+            'telepon' => $data['telepon'],
         ]);
 
         // Create profile record with user_id and other validated data
         $profile = new profileModel([
             'id_user' => $id_user,
-            'nama' => $validatedData['nama'],
-            'telepon' => $validatedData['telepon'],
+            'nama' => $data['nama'],
+            'telepon' => $data['telepon'],
             'golongan_darah' => $data['golongan_darah'],
-            'tanggal_lahir' => $tanggal_lahir,
-            'last_donor' => $last_donor,
+            'ktp' => $data['ktp'],
             'pekerjaan' => $data['pekerjaan'],
         ]);
 
@@ -108,7 +95,7 @@ public function createUser(array $data)
         $profile->save();
 
         // Delete data from sessions table based on the telephone number
-        $teleponToDelete = $validatedData['telepon'];
+        $teleponToDelete = $data['telepon'];
         sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
 
         // Commit the database transaction
@@ -118,7 +105,6 @@ public function createUser(array $data)
     } catch (\Exception $e) {
         // Rollback the database transaction in case of an exception
         DB::rollback();
-        Log::error("Error creating user: " . $e->getMessage()); // Log the error
         throw $e; // Re-throw the exception for further handling, if needed
     }
 }
@@ -128,12 +114,9 @@ public function createUser(array $data)
             Log::info('Request data:', $request->all());
             // Validate the input data
             $validatedData = $request->validate([
-                'nama' => ['required', 'string', 'max:255'],
                 'telepon' => ['required', 'string', 'max:255'],
-                'tanggal_lahir' => ['required', 'date_format:Y-m-d'],
             ]);
             
-
             // Store the validated data in the session
             session()->put(['validated_data' => $validatedData]);
             session()->save();
@@ -148,7 +131,7 @@ public function createUser(array $data)
             return response()->json(['message' => 'Failed to send verification code. Please try again.', 'error' => $e->getMessage()], 500);
         }
     }
-    public function validateCheck(Request $request)
+    protected function validateCheck(Request $request)
     {
         try {
             // Validate the request data
@@ -212,7 +195,7 @@ public function createUser(array $data)
         }
     }
 
-    public function sendVerify(Request $request)
+    private function sendVerify(Request $request)
 {
     try {
         // // Regenerate the session ID to create a new session
@@ -233,7 +216,6 @@ public function createUser(array $data)
 
         // session()->put('verification_data', $verificationData);
         // session()->save();
-
         
         sessionMod::create($verificationData);
 
@@ -275,8 +257,8 @@ public function createUser(array $data)
      *
      * @param  string  $phoneNumber
      * @param  string  $verificationCode
-     */
-    public function sendVerificationCode($phoneNumber, $verificationCode)
+     */ 
+    private function sendVerificationCode($phoneNumber, $verificationCode)
     {
         $fonteeApiToken = env('FONNTE_API_TOKEN');
         $client = new Client();
@@ -330,16 +312,4 @@ public function createUser(array $data)
         }
     }
 
-
-    public function getExpectedVerificationCode()
-    {
-        $verificationData = session('verification_data');
-
-        if ($verificationData && isset($verificationData['code'])) {
-            return $verificationData['code'];
-        } else {
-            // Kembalikan nilai default atau pesan error sesuai kebutuhan aplikasi Anda
-            return null;
-        }
-    }
 }

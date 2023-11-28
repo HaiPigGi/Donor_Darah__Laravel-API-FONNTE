@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Events\MessageCreated; // Make sure to import your custom event
+use App\Listeners\SendMessageNotification; // Make sure to import your custom listener
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +20,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        MessageCreated::class => [ // Add your custom event and listener mapping
+            SendMessageNotification::class,
+        ],
     ];
 
     /**
@@ -27,6 +32,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        parent::boot();
     }
 }

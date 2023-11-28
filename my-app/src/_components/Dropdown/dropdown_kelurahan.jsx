@@ -18,7 +18,7 @@ function setidKelurahan(id) {
   idKelu = id;
 }
 
-export default function DropDownKelurahan() {
+export default function DropDownKelurahan({sendToParent}) {
   const [selectedOption, setSelectedOption] = useState("");
   const [kelurahanList, setKelurahanList] = useState([]);
 
@@ -39,6 +39,7 @@ export default function DropDownKelurahan() {
         setidKelurahan(e.target.value);
         setKelurahanList(response);
         console.log("kelurahan id : ", response);
+        sendToParent(e.target.value);
       });
     } catch (e) {}
   };

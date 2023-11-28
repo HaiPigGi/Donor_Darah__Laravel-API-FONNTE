@@ -7,37 +7,36 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\TagarUserMod;
+use App\Models\Message;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'users';
+
+
+    protected $primaryKey = 'id';
+
+    protected $keyType = 'string';
+
+    public $incrementing = false;
     protected $fillable = [
         'id',
         'nama',
         'telepon',
-        // tambahkan kolom lain yang ingin di-mass assignable
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public function tagarUsers(): HasMany
+    {
+        return $this->hasMany(TagarUserMod::class, 'id_user', 'id');
+    }
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-    // User.php
-public function profile()
+    public function messages(): HasMany
 {
-    return $this->hasOne(Profile::class);
+    return $this->hasMany(Message::class, 'id_user', 'id');
 }
 
 
-
-    // Definisikan relasi "one-to-one" dengan tabel data_diri
-    public function dataDiri()
-    {
-        return $this->hasOne(DataDiri::class);
-    }
 }

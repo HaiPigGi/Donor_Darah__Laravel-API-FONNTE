@@ -68,9 +68,6 @@ withCredentials: true,
   "kecamatan_id": 6472021,
   "kelurahan_id": 6472021001
 }
-
-
-
 ###
 POST http://localhost:8000/api/register/auth
 Content-Type: application/json
@@ -90,7 +87,7 @@ POST http://localhost:8000/api/register/auth/verify
 Content-Type: application/json
 
 {
-     "code": "446549"
+     "code": "446590774949"
 }
 
 
@@ -108,9 +105,59 @@ POST http://localhost:8000/api/verify/otp/login
 Content-Type: application/json
 
 {
-     "code": "478895"
+     "code": "907749"
 }
 
 ###
 POST http://localhost:8000/api/logout
 Content-Type: application/json
+
+
+###
+POST http://localhost:8000/api/verify/login
+Content-Type: application/json
+
+{
+    "telepon" : "081256518211"
+}
+
+###
+POST http://localhost:8000/api/verify/login
+Content-Type: application/json
+
+{
+    "telepon" : "082253739918"
+}
+
+###
+POST http://localhost:8000/api/verify/otp/login
+Content-Type: application/json
+
+{
+    "code" : "408808"
+}
+
+###
+POST http://localhost:8000/api/tagars/5/choose
+
+
+###
+DELETE http://localhost:8000/api/logout/b365f695-1cf0-4111-bb1e-6202226ab468
+
+###
+DELETE http://localhost:8000/api/logout/fb928ac6-7256-4dd0-aa33-2e7f66d6034f
+
+###
+POST http://localhost:8000/api/tagars/1/user-messages/associate
+Content-Type: application/json
+
+{
+  "content": "Hello, this is a test message in cel" 
+}
+###
+POST http://localhost:8000/api/send-message/2
+Content-Type: application/json
+
+{
+  "content": "halo" 
+}

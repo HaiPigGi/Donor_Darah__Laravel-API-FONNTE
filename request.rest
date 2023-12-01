@@ -134,12 +134,11 @@ POST http://localhost:8000/api/verify/otp/login
 Content-Type: application/json
 
 {
-    "code" : "408808"
+    "code" : "834629"
 }
 
 ###
 POST http://localhost:8000/api/tagars/5/choose
-
 
 ###
 DELETE http://localhost:8000/api/logout/b365f695-1cf0-4111-bb1e-6202226ab468
@@ -155,9 +154,15 @@ Content-Type: application/json
   "content": "Hello, this is a test message in cel" 
 }
 ###
-POST http://localhost:8000/api/send-message/2
+POST http://localhost:8000/api/send-message/3
 Content-Type: application/json
 
 {
-  "content": "halo" 
+  "content": " halo gess" 
 }
+###
+GET http://localhost:8000/api/tagars/messages
+
+
+###
+GET http://localhost:8000/api/users/fb928ac6-7256-4dd0-aa33-2e7f66d6034f

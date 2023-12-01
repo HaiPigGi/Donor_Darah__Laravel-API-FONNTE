@@ -21,6 +21,7 @@
     "next": "13.5.2",
     "next-auth": "^4.23.2",
     "postcss": "8.4.30",
+    "pusher-js": "^8.4.0-rc1",
     "react": "18.2.0",
     "react-bootstrap": "^2.9.1",
     "react-datepicker": "^4.21.0",

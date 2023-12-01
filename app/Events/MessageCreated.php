@@ -15,6 +15,7 @@ use App\Models\Message;
 class MessageCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
     /**
      * User that sent the message
      *
@@ -30,16 +31,24 @@ class MessageCreated implements ShouldBroadcast
     public $message;
 
     /**
+     * Tagar ID
+     *
+     * @var int
+     */
+    public $tagarId;
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-
-     public function __construct(User $user, Message $message)
+    public function __construct(User $user, Message $message, $tagarId)
     {
         $this->user = $user;
         $this->message = $message;
+        $this->tagarId = $tagarId;
     }
+
     /**
      * Get the channels the event should broadcast on.
      *
@@ -47,6 +56,11 @@ class MessageCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('tagar');
+        return new Channel('tagar.' . $this->tagarId);
     }
-}   
+
+    // public function broadcastAs()
+    // {
+    //     return 'my-event';
+    // }
+}

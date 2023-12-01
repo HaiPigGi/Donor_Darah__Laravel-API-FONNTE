@@ -40,7 +40,12 @@ return [
                 'useTLS' => true,
             ],
         ],
-
+        'channels' => [
+            'tagar' => [
+                'driver' => 'private',
+                'model' => App\Models\User::class,
+            ],
+        ],
         'ably' => [
             'driver' => 'ably',
             'key' => env('ABLY_KEY'),

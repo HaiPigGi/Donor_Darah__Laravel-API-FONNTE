@@ -14,6 +14,7 @@ use App\Http\Controllers\API\Akseptor;
 use App\Http\Controllers\admin\verifyAkseptorController;
 use App\Http\Controllers\tagar\TagarController;
 use App\Http\Controllers\Forum\ChatMessageSend;
+use App\Http\Controllers\User\UserController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -79,8 +80,9 @@ Route::middleware(['cors', 'web'])->group(function () {
     // Get messages associated with a tagar
     Route::get('/tagars/{tagarId}/messages', [ChatMessageSend::class, 'getMessagesForTagar']);
 
+    Route::get('/tagars/messages', [ChatMessageSend::class,'getAllMessagesFromTagar']);
 
-
+    Route::get('/users/{userId}', [UserController::class, 'getUserDetails']);
 
 //     Route::middleware(['auth:sanctum', 'verified', 'admin'])->group(function () {
 

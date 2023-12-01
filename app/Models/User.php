@@ -28,7 +28,23 @@ class User extends Authenticatable
         'telepon',
     ];
 
+
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
+    // User.php
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
     public function tagarUsers(): HasMany
+
     {
         return $this->hasMany(TagarUserMod::class, 'id_user', 'id');
     }
@@ -37,6 +53,5 @@ class User extends Authenticatable
 {
     return $this->hasMany(Message::class, 'id_user', 'id');
 }
-
 
 }

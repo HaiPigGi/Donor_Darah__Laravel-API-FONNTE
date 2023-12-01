@@ -1,0 +1,62 @@
+.my-bg {
+    height: 100vh;
+    background: url("/img/bgHero.png");
+    background-size: cover;
+    /* background-position: center; */
+}
+
+
+.rectangle-36 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border-radius: 30px;
+    width: 50rem;
+    height: 20rem;
+    margin: auto;
+    text-align: center;
+    border-color: red;
+  }
+  
+  @media (max-width: 768px) {
+    .rectangle-36 {
+      width: 90%; /* Adjust the width for smaller screens */
+      height: auto; /* Allow height to adjust based on content */
+    }
+  
+    .flex-container {
+      flex-direction: column; /* Change to column layout for smaller screens */
+    }
+  
+    .button,
+    .select {
+      margin-top: 1rem; /* Add spacing between button and select */
+    }
+    .select {
+        width: 100%; /* Make the select element full width on smaller screens */
+      }
+  }
+  
+
+  .textarea-container {
+    max-width: 35rem;
+    width: 100%;
+    margin: auto;
+  }
+  
+  .textarea {
+    border: 1px solid #31304D;
+    border-radius: 8px;
+    padding: 8px;
+    width: 100%;
+    max-width: 35rem;
+    height: 20rem;
+    overflow-y: auto;
+    resize: vertical;
+    margin-top: 5px;
+  }
+
+  
+  

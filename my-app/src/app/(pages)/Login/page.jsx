@@ -1,41 +1,49 @@
 "use client";
-import { useState } from "react";
+// Import the necessary modules
+import { useState, useEffect } from "react";
 import axios from 'axios';
 import "@/_styles/css/login.css";
 import Navbar from "@/_components/navbar";
-
+import { useRouter } from 'next/navigation'
+ 
+// Define your component
 export default function Login() {
+  // Initialize state
   const [session, setSession] = useState({});
   const [modalContent, setModalContent] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const router = useRouter();
+  
+  // Function to handle code submission
   const sendCodeLogin = async () => {
     try {
-      const telepon = document.getElementsByName("noTelp")[0].value;
       console.log("Nomer telpon : ", telepon);
 
       const response = await axios.post("http://localhost:8000/api/verify/login", {
-        telepon: telepon,  // Corrected variable name
+        telepon: telepon,  
       }, {
         headers: {
           csrf_token: session.csrf_token,
         },
       });
-
-      if (response.status === 200) {
-        // Verification successful
-        setModalContent("Code Verified Successfully");
-        setModalIsOpen(true);
-      } else {
-        // Verification failed, show an error message
-        setErrorMessage("Code Verification failed. Please try again.");
-      }
+      // Verification successful
+      setModalContent("Code Verified Successfully");
+      setModalIsOpen(true);
+      console.log('berhasil Kirim');
+      router.push('/OTP');
     } catch (error) {
       console.error("Error sending code:", error);
     }
   };
 
+  // useEffect to ensure that the component is mounted before fetching CSRF token
+  useEffect(() => {
+    // Call the function to get CSRF token
+    getcsrf();
+  }, []); 
+
+  // Function to get CSRF token
   const getcsrf = async () => {
     try {
       const cookie = await axios.get("http://localhost:8000/api/get-session-data");
@@ -45,6 +53,7 @@ export default function Login() {
     }
   };
 
+  // Return JSX for rendering the component
   return (
     <main>
       <div className="my-bg">
@@ -70,14 +79,14 @@ export default function Login() {
                         className="border-2 border-black rounded w-[23rem] h-14 ps-[4rem] text-[25px]"
                         type="text"
                         placeholder="Masukkan No Anda"
-                        name="noTelp"
+                        name="telepon"
                       />
                     </div>
                     <p className="text-l text-left mt-2 col-start-1 col-span-3 my-auto mx-auto w-full">Kode OTP dikirim via Whatsapp</p>
                     <div className="absolute right-0 bottom-0 flex items-center justify-end space-x-5 p-5">
                       <a href="/register" className="text-l font-bold text-red border-b border-red">Daftar Akun</a>
                       <button onClick={sendCodeLogin} className="font-bold text-l text-white rounded-lg px-3 py-2 h-12 w-40 bg-red">
-                        <a href="/OTP">Kirim Kode OTP</a>
+                        <a>Kirim Kode OTP</a>
                       </button>
                     </div>
                   </div>

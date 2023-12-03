@@ -18,7 +18,7 @@
     "eslint-config-next": "13.5.2",
     "leaflet": "^1.9.4",
     "moment": "^2.29.4",
-    "next": "13.5.2",
+    "next": "^14.0.3",
     "next-auth": "^4.23.2",
     "postcss": "8.4.30",
     "pusher-js": "^8.4.0-rc1",

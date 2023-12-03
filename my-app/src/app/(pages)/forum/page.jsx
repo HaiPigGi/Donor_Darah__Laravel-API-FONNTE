@@ -50,7 +50,6 @@ export default function Forum() {
           csrf_token: session.csrf_token,
         },
       });
-  
       // Assuming the server responds with the newly created message
       const dataMsg = response.data;
   
@@ -73,7 +72,6 @@ export default function Forum() {
       console.error("Error getting CSRF token:", error);
     }
   };
-
    const handleTagarChange = async (e) => {
     const selectedTagarId = e.target.value;
 

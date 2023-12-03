@@ -1,0 +1,27 @@
+/* loading.css */
+
+.circle-loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .circle-progress {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    border: 8px solid #ddd;
+    position: relative;
+  }
+  
+  .progress-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFFBF5;
+  }
+  

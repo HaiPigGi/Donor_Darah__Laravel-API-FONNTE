@@ -5,12 +5,12 @@ import "leaflet/dist/leaflet.css";
 
 function Map(){
     return(
-        <MapContainer className="w-full h-full rounded-3xl" center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false} height={"50rem"}>
+        <MapContainer className="w-full h-full rounded-3xl" center={[-0.502183, 117.153801]} zoom={13} scrollWheelZoom={false} height={"50rem"}>
             <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[51.505, -0.09]}>
+            <Marker position={[-0.502183, 117.153801]}>
             <Popup>
                 A pretty CSS3 popup. <br /> Easily customizable.
             </Popup>

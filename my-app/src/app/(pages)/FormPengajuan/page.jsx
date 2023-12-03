@@ -6,8 +6,11 @@ import "@/_styles/css/regis.css";
 import { useState } from "react";
 import Hal1 from "./hal1";
 import Hal2 from "./hal2";
+import { useEffect } from "react";
+import Loading from "@/_components/Loading/Loading";
+import withAuth from "@/_components/Auth/WithAuth";
 
-export default function FormPengajuan() {
+const FormPengajuan = () => {
   const [data, setData] = useState({
     "nama" : "",
   "telepon" : "",
@@ -19,6 +22,26 @@ export default function FormPengajuan() {
   const [session, setSession] = useState({});
   const [buttonNext, setButtonNext] = useState(0);
 
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    // Simulate a delay (e.g., API request)
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 4500);
+
+    // Update progress every 50ms until it reaches 100%
+    const progressInterval = setInterval(() => {
+      setProgress(prevProgress => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
+    }, 50);
+
+    // Cleanup the timeout and interval to avoid memory leaks
+    return () => {
+      clearTimeout(delay);
+      clearInterval(progressInterval);
+    };
+  }, []);
   
   async function registrasi() {
     try{
@@ -110,6 +133,11 @@ export default function FormPengajuan() {
   return (
     <section>
       <div className="my-bg">
+      <div>
+          {loading ? (
+            <Loading progress={progress} />
+          ) : (
+            <div>
         <Navbar itemsColor="text-white" />
         <div className="row">
             <div className="w-[70%] h-[80%] bg-white rounded-xl">
@@ -130,7 +158,12 @@ export default function FormPengajuan() {
               </div>
             </div>
           </div>
+          </div>
+          )}
+        </div>
         </div>
     </section>
   );
 }
+
+export default withAuth(FormPengajuan);

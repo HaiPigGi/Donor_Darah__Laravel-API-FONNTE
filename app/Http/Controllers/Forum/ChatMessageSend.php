@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Message;
+use App\Models\User;
 
 class ChatMessageSend extends Controller
 {
@@ -44,10 +45,18 @@ class ChatMessageSend extends Controller
  *
  * @param  \Illuminate\Http\Request  $request
  */
-protected function sendMessage(Request $request, $tagarId)
+protected function sendMessage(Request $request, $tagarId,$userId)
 {
     // Get the authenticated user
-    $user = Auth::user();
+    $user=User::find($userId);
+
+
+
+   // Ensure the user is authenticated
+    if (!$user) {
+        return response()->json(['error' => 'User not authenticated Or Not Found.'], 401);
+    }
+
 
     // Get the tagar based on the provided tagarId
     $tagar = TagarModel::find($tagarId);
@@ -88,7 +97,12 @@ protected function sendMessage(Request $request, $tagarId)
         // Broadcast the message
         broadcast(new MessageCreated($user, $message,$tagarId));
         // You can return a response if needed
-        return response()->json(['success' => 'Message sent successfully', 'message' => $message], 200);
+        return response()->json([
+        'success' => 'Message sent successfully',
+         'message' => $message,
+         'name'=>$user->nama
+        ],
+         200);
 
     } catch (\Exception $e) {
         // Rollback the transaction in case of an exception

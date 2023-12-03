@@ -115,14 +115,25 @@ class LoginController extends Controller
                 Log::error("Failed to decode JSON data: " . json_last_error_msg());
                 throw new \Exception("Failed to decode JSON data.");
             }
-
              // Retrieve the user ID from the session data
              $userId = $sessionDataArray['id'];
-             Log::info("Cek User Id Untuk login : ".json_encode($userId));
 
-             // Perform the login action
-             Auth::loginUsingId($userId);
-            // Log data to the log file
+              // Ensure the user exists
+            $user = User::find($userId);
+
+            if (!$user) {
+                return response()->json([
+                    'error' => 'User not found.',
+                ], 404);
+            }
+
+            // Perform the login action
+            Auth::login($user);
+            Log::info("Cek User Id Untuk login : ".json_encode($userId));
+
+            //  // Perform the login action
+            //  Auth::loginUsingId($userId);
+            // // Log data to the log file
             Log::info("Data Session Database: " . json_encode($sessionDataArray));
             return response()->json([
                 'message' => 'Successfully OTP Verification.',

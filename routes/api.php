@@ -67,13 +67,12 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::put('/admin/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse'])->name('verify_akseptor.update');
     Route::get('/admin/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse'])->name('verify_akseptor.edit');
 
-
     // Untuk Tagar
     Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
     Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);
 
     //its for sendMessage
-    Route::post('/send-message/{tagarId}', [ChatMessageSend::class, 'sendMessage']);
+    Route::post('/send-message/{tagarId}/{userId}', [ChatMessageSend::class, 'sendMessage']);
 
     Route::post('/tagars/{tagarId}/user-messages/associate', [ChatMessageSend::class, 'associateMessageWithTagar']);
 

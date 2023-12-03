@@ -1,0 +1,22 @@
+/* Add this to your CSS file */
+
+.running-loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .running-person {
+    width: 40px;
+    height: 60px;
+    background: url('/img/running.jpg') no-repeat;
+    background-size: contain;
+    animation: run 1s linear infinite;
+  }
+  
+  @keyframes run {
+    0% { background-position: 0 0; }
+    100% { background-position: -120px 0; } /* Adjust based on your sprite image size */
+  }
+  

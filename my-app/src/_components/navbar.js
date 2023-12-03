@@ -8,7 +8,6 @@ export default function Navbar(props) {
   useEffect(() => {
     // Check if userId exists in sessionStorage
     const storedUserId = sessionStorage.getItem('userId');
-    console.log("id user : ",storedUserId);
 
     if (storedUserId) {
       // userId exists, update your state
@@ -25,12 +24,17 @@ export default function Navbar(props) {
       sessionStorage.removeItem('userId');
       // Update the state to reflect the user is now logged out
       setUserId(null);
+      redirectToOtherPage();
     } catch (error) {
       // Handle errors if the DELETE request fails
       console.error("Error during logout:", error);
     }
   };
-  
+
+  const redirectToOtherPage = () => {
+    window.location.href = '/'; 
+  };
+
 
   return (
     <nav className="absolute top-0 w-[100%] z-50">

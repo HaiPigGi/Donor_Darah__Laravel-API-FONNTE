@@ -124,7 +124,11 @@ class LoginController extends Controller
              Auth::loginUsingId($userId);
             // Log data to the log file
             Log::info("Data Session Database: " . json_encode($sessionDataArray));
-            return response()->json(['message' => 'Successfully OTP Verification.',]);
+            return response()->json([
+                'message' => 'Successfully OTP Verification.',
+                'id' => $userId, // Assuming you have the user ID stored in $userId
+            ]);
+            
         } else {
             // No matching session found
             Log::info("Invalid verification code received: $userCode");

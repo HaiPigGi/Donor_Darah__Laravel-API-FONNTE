@@ -33,20 +33,23 @@ export default function Otp() {
           },
         }
       );
-
+  
+      console.log("Response from server:", response); // Log the entire response for debugging
+  
       if (response.status === 200) {
         // Verification successful
         console.log("Verification is successful");
-
-        // Extract user ID from the response data (adjust accordingly based on your API response structure)
-        const userIdFromResponse = response.data.user_id;
-
+  
+        // Extract user ID from the response data
+        const userIdFromResponse = response.data.id;
+        console.log("User ID from response:", userIdFromResponse);
+  
+        // Save user ID in sessionStorage
         sessionStorage.setItem('userId', userIdFromResponse);
-
+  
         // Set user ID in the state
         setUserId(userIdFromResponse);
-
-
+  
         // Redirect to another page
         redirectToOtherPage();
       } else {
@@ -57,6 +60,8 @@ export default function Otp() {
       console.error("AxiosError:", error);
     }
   };
+  
+  
 
   const redirectToOtherPage = () => {
     // Use Next.js router for navigation

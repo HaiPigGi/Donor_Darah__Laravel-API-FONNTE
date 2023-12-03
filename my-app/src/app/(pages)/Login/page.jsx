@@ -1,47 +1,52 @@
 "use client";
-// Import the necessary modules
+// Import necessary modules
 import { useState, useEffect } from "react";
 import axios from 'axios';
-import "@/_styles/css/login.css";
 import Navbar from "@/_components/navbar";
-import { useRouter } from 'next/navigation'
- 
+import "@/_styles/css/login.css";
+
 // Define your component
 export default function Login() {
   // Initialize state
   const [session, setSession] = useState({});
-  const [modalContent, setModalContent] = useState("");
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-  const router = useRouter();
-  
+  const [telepon, setTelepon] = useState("");
   // Function to handle code submission
-  const sendCodeLogin = async () => {
+  const sendCodeLogin = async (e) => {
+    e.preventDefault(); // Prevent default form submission behavior
     try {
-      console.log("Nomer telpon : ", telepon);
-
-      const response = await axios.post("http://localhost:8000/api/verify/login", {
-        telepon: telepon,  
-      }, {
-        headers: {
-          csrf_token: session.csrf_token,
+      const response = await axios.post(
+        "http://localhost:8000/api/verify/login",
+        {
+          telepon: telepon,
         },
-      });
-      // Verification successful
-      setModalContent("Code Verified Successfully");
-      setModalIsOpen(true);
-      console.log('berhasil Kirim');
-      router.push('/OTP');
+        {
+          headers: {
+            csrf_token: session.csrf_token,
+          },
+        }
+      );
+      
+      if (response.status === 200) {
+        console.log('berhasil Kirim');
+        redirectToOtherPage();
+      } else {
+        console.log("Code Send failed. Please try again.");
+      }
     } catch (error) {
-      console.error("Error sending code:", error);
+      handleApiError(error);
     }
   };
-
-  // useEffect to ensure that the component is mounted before fetching CSRF token
-  useEffect(() => {
-    // Call the function to get CSRF token
-    getcsrf();
-  }, []); 
+  
+  // Function to handle API errors
+  const handleApiError = (error) => {
+    if (error.response) {
+      console.error("Server responded with error status:", error.response.status);
+    } else if (error.request) {
+      console.error("No response received from the server");
+    } else {
+      console.error("Error setting up the request:", error.message);
+    }
+  };
 
   // Function to get CSRF token
   const getcsrf = async () => {
@@ -52,6 +57,11 @@ export default function Login() {
       console.error("Error getting CSRF token:", error);
     }
   };
+
+  const redirectToOtherPage = () => {
+    window.location.href = '/Login/OTP'; 
+  };
+
 
   // Return JSX for rendering the component
   return (
@@ -80,14 +90,18 @@ export default function Login() {
                         type="text"
                         placeholder="Masukkan No Anda"
                         name="telepon"
+                        value={telepon}
+                        onChange={(e) => setTelepon(e.target.value)}
                       />
                     </div>
                     <p className="text-l text-left mt-2 col-start-1 col-span-3 my-auto mx-auto w-full">Kode OTP dikirim via Whatsapp</p>
                     <div className="absolute right-0 bottom-0 flex items-center justify-end space-x-5 p-5">
-                      <a href="/register" className="text-l font-bold text-red border-b border-red">Daftar Akun</a>
-                      <button onClick={sendCodeLogin} className="font-bold text-l text-white rounded-lg px-3 py-2 h-12 w-40 bg-red">
-                        <a>Kirim Kode OTP</a>
-                      </button>
+                      <a href="/register" className="text-l font-bold text-red border-b border-red">Register</a>
+                      <button 
+                      type="button"
+                      className="font-bold text-l text-white rounded-lg px-3 py-2 h-12 w-40 bg-red" onClick={sendCodeLogin} > 
+                      Send OTP
+                     </button>
                     </div>
                   </div>
                 </div>

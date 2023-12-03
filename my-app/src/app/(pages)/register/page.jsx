@@ -34,24 +34,7 @@ export default function Register() {
     kelurahan_id: "",
   });
 
-  // useEffect(() => {
-  //   // Check if sessionStorage is available
-  //   if (typeof window !== 'undefined') {
-  //     // Retrieve data from sessionStorage when the component mounts
-  //     setData((prevData) => ({
-  //       ...prevData,
-  //       nama: sessionStorage.getItem("nama") || "",
-  //       telepon: sessionStorage.getItem("telepon") || "",
-  //       ktp: sessionStorage.getItem("ktp") || "",
-  //       code: sessionStorage.getItem("code") || "",
-  //       golongan_darah: sessionStorage.getItem("golongan_darah") || "",
-  //       pekerjaan: sessionStorage.getItem("pekerjaan") || "",
-  //       kelurahan_id: sessionStorage.getItem("kelurahan_id") || "",
-  //     }));
-  //   }
-  // }, []);
  
-  
   const SendCode = async () => {
     try {
       const response = await axios.post(

@@ -12,6 +12,7 @@ import Verfikasi from "./verifikasi";
 import ErrorMessage from "@/_components/errorMessage";
 import { Modal } from "react-bootstrap";
 import moment from 'moment';
+import Loading from "@/_components/Loading/Loading";
 
 export default function Register() {
 
@@ -33,6 +34,28 @@ export default function Register() {
     pekerjaan: "",
     kelurahan_id: "",
   });
+
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    // Simulate a delay (e.g., API request)
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 3500);
+
+    // Update progress every 50ms until it reaches 100%
+    const progressInterval = setInterval(() => {
+      setProgress(prevProgress => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
+    }, 50);
+
+    // Cleanup the timeout and interval to avoid memory leaks
+    return () => {
+      clearTimeout(delay);
+      clearInterval(progressInterval);
+    };
+  }, []);
+
 
  
   const SendCode = async () => {
@@ -313,6 +336,11 @@ const finalVerifyData = async () => {
   return (
     <section>
       <div className="my-bg">
+      <div>
+          {loading ? (
+            <Loading progress={progress} />
+          ) : (
+            <div>
         <Navbar itemsColor="text-white"/>
         <div className="row">
           <div className="rectangle-37">
@@ -332,10 +360,11 @@ const finalVerifyData = async () => {
                   { nextButton() }
                 </div>
               </form>
-
-             
             </div>
           </div>
+        </div>
+        </div>
+        )}
         </div>
       </div>
         {/* Modal for success message */}

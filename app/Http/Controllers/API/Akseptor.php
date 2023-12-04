@@ -69,7 +69,6 @@ class Akseptor extends Controller
              // Parse the date using Carbon
             $tanggal_lahir = Carbon::createFromFormat('m/d/Y', $request->input('tanggal_lahir'));
 
-
             // Create the akseptor model instance
             $user = akseptor_model::create([
                 'nama' => $validateData['nama'],

@@ -37,44 +37,47 @@ export default function Navbar(props) {
 
 
   return (
-    <nav className="absolute top-0 w-[100%] z-50">
-      <div className="container mx-auto flex py-5 items-center justify-between">
-        <div id="brand">
+    <nav className="absolute top-0 w-full z-50">
+       <div className="md:container mx-auto flex flex-col md:flex-row py-5 items-center justify-start   md:justify-between">
+        <div id="brand" className="mb-4 md:mb-0 border-2">
           <a href="/" className="text-red text-3xl font-black font-Title">
             Dondar
           </a>
         </div>
         <div
           id="items"
-          className={["font-Subtitle font-regular", props.itemsColor].join(
+          className={["font-Subtitle font-regular md:visible collapse", props.itemsColor].join(
             " "
           )}
         >
           <a
             href="/FormPengajuan"
-            className="px-[15px] py-[15px] relative after:absolute hover:after:border-b-2 after:border-red after:w-full after:h-full after:left-0 after:bottom-0"
+            className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
           >
             Kebutuhan
           </a>
           <a
             href="/forum"
-            className="px-[15px] py-[15px] relative after:absolute hover:after:border-b-2 after:border-red after:w-full after:h-full after:left-0 after:bottom-0"
+            className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
           >
             Forum
           </a>
           <a
             href=""
-            className="px-[15px] py-[15px] relative after:absolute hover:after:border-b-2 after:border-red after:w-full after:h-full after:left-0 after:bottom-0"
+            className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
           >
             Tentang
           </a>
           {userId ? (
-            // Render Logout button or whatever you need for logged-in state
-            <button onClick={handleLogout}>Logout</button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red text-white font-bold rounded-full ml-4"
+            >
+              Logout
+            </button>
           ) : (
-            // Render Login button or whatever you need for logged-out state
             <Link href="/Login" passHref legacyBehavior>
-              <a className="px-[20px] py-2 bg-red text-white font-bold rounded-full">
+              <a className="px-4 py-2 bg-red text-white font-bold rounded-full ml-4">
                 Login
               </a>
             </Link>

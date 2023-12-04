@@ -143,7 +143,6 @@ const  Forum= () => {
     setSelectedTagar(selectedTagarId);
   };
   
-  
   const fetchAllTagars = async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/tagars/messages');

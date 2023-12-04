@@ -26,8 +26,8 @@ export default function TutorialSingkatSection() {
 
       }
       return(
-        <section className="w-full h-screen flex items-center">
-            <div className="container mx-auto my-auto">
+        <section className="w-full h-screen flex items-center w-[100%] border overflow-hidden">
+            <div className="md:container mx-auto my-auto">
               <roleContext.Provider value={category}>
                 <roleDispatchContext.Provider value={dispatch}>
                   <div className="flex items-center mb-14">

@@ -3,6 +3,9 @@
 GET http://localhost:8000/api/get/provinsi
 
 ###
+GET http://localhost:8000/api/admin/getUser
+
+###
 GET http://localhost:8000/api/get/kabupaten/3
 
 ###

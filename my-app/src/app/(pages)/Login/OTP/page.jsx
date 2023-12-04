@@ -61,13 +61,18 @@ export default function Otp() {
       if (response.status === 200) {
         console.log("Verification is successful");
         const userIdFromResponse = response.data.id;
+        const userRoleFromResponse = response.data.role; // Get the user role
         console.log("User ID from response:", userIdFromResponse);
-
+        console.log("User role from response:", userRoleFromResponse);
         sessionStorage.setItem('userId', userIdFromResponse);
-
+         // Redirect based on user role
+      if (userRoleFromResponse === "admin") {
         setUserId(userIdFromResponse);
-
+        redirectToOtherPageAdmin();
+      } else {
+        setUserId(userIdFromResponse);
         redirectToOtherPage();
+      }
       } else {
         console.log("Verification failed");
       }
@@ -78,6 +83,9 @@ export default function Otp() {
 
   const redirectToOtherPage = () => {
     window.location.href = "/";
+  };
+  const redirectToOtherPageAdmin = () => {
+    window.location.href = "/admin";
   };
 
   return (

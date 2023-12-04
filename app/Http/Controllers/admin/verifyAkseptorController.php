@@ -10,15 +10,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 class verifyAkseptorController extends Controller
 {
-    public function showDataAkseptor (Request $request) {
-        $akseptor=akseptor_model::all();
+
+
+
+    
+    public function showDataA () {
+        $akseptor = akseptor_model::all();
         return response()->json($akseptor);
     }
-    public function showDataAkseptors(Request $request) {
-        $akseptor = akseptor_model::all();
-        return view('adminAkseptor', compact('akseptor'));
-    }
-    
      /**
      * Store a newly created resource in storage.
      *

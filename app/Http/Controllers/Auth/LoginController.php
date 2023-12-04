@@ -138,6 +138,7 @@ class LoginController extends Controller
             return response()->json([
                 'message' => 'Successfully OTP Verification.',
                 'id' => $userId, // Assuming you have the user ID stored in $userId
+                'role' =>$user->role,
             ]);
             
         } else {

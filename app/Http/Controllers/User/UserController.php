@@ -148,7 +148,7 @@ class UserController extends Controller
         
             if ($existingUser) {
                 // Phone number already exists for another user
-                return response()->json(['message' => 'Phone number is already in use by another user'], 422);
+                return response()->json(['message' => 'Phone number is already in use by another user'], 200);
             }
         
             // Phone number is available    

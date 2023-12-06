@@ -23,6 +23,8 @@ const  Forum= () => {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [userId, setUserId] = useState(null);
+
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   useEffect(() => {
    // Check if userId exists in sessionStorage
    const storedUserId = sessionStorage.getItem('userId');
@@ -73,7 +75,7 @@ const  Forum= () => {
   const sendMessageUser = async () => {
     try {
       // Send the new message to the server
-      const response = await axios.post(`http://localhost:8000/api/send-message/${tagarId}/${userId}`, {
+      const response = await axios.post(`${apiUrl}api/send-message/${tagarId}/${userId}`, {
         content: messages,
       }, {
         headers: {
@@ -99,7 +101,7 @@ const  Forum= () => {
   
   const getcsrf = async () => {
     try {
-      const cookie = await axios.get("http://localhost:8000/api/get-session-data");
+      const cookie = await axios.get(`${apiUrl}/api/get-session-data`);
       setSession(cookie);
     } catch (error) {
       console.error("Error getting CSRF token:", error);
@@ -110,13 +112,13 @@ const  Forum= () => {
 
     try {
       // Fetch messages for the selected tagar
-      const responseMessages = await axios.get(`http://localhost:8000/api/tagars/${selectedTagarId}/messages`);
+      const responseMessages = await axios.get(`${apiUrl}/api/tagars/${selectedTagarId}/messages`);
       const dataMessages = responseMessages.data;
 
       // Fetch user details for all messages
       const usersData = await Promise.all(
         dataMessages.messages.map((message) =>
-          axios.get(`http://localhost:8000/api/users/${message.id_user}`)
+          axios.get(`${apiUrl}/api/users/${message.id_user}`)
         )
       );
 
@@ -145,7 +147,7 @@ const  Forum= () => {
   
   const fetchAllTagars = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/tagars/messages');
+      const response = await axios.get(`${apiUrl}/api/tagars/messages`);
       setTagarOptions(response.data.tagars);
     } catch (error) {
       console.error('Error fetching tagars:', error);

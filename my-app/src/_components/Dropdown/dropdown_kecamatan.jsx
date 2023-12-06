@@ -7,7 +7,7 @@ export let idKec = ""
 async function getKecamatanData() {
   let idKabupaten = idKab
   try{
-    let kecamatanResponse = await axios.get(`http://localhost:8000/api/get/kecamatan/${idKabupaten}`)
+    let kecamatanResponse = await axios.get(`${apiUrl}/api/get/kecamatan/${idKabupaten}`)
     console.log(kecamatanResponse);
     return kecamatanResponse.data.kecamatan 
   }catch(e){

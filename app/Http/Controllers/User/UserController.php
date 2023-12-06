@@ -130,12 +130,36 @@ class UserController extends Controller
             return response()->json(['error' => 'An error occurred. Please try again.'], 500);
         }
     }
-
-    // public function checkNumber ($telepon) {
-    //     $user= User::where('telepon', $userProfile->telepon)->first();
     
+    protected function checkNumber(Request $request) {
 
-    // }
+        try {
+            Log::info('Request data:', $request->all());
+    
+            // Validate the request data
+            $validatedData = $request->validate([
+                'telepon' => ['required', 'string', 'max:255'],
+            ]);
+        
+            // Check if the phone number already exists in the database (excluding the current user)
+            $existingUser = User::where('telepon', $validatedData['telepon'])
+                ->where('id', '!=', optional($request->user())->id)
+                ->first();
+        
+            if ($existingUser) {
+                // Phone number already exists for another user
+                return response()->json(['message' => 'Phone number is already in use by another user'], 422);
+            }
+        
+            // Phone number is available    
+            return response()->json(['message' => 'Phone number is available'], 200);
+        } catch (\Throwable $th) {
+            return response()->json(['message'=>'error Server ',500]);
+            //throw $th;
+        }
+       
+    }
+    
     
 
 

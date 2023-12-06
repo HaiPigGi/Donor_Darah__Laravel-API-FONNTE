@@ -20,12 +20,19 @@ class TagarModel extends Model
         'jumlah_pengguna',
     ];
 
-    public function users(): BelongsToMany
+    // public function users(): BelongsToMany
+    // {
+    //     return $this->belongsToMany(User::class, 'profiles', 'tagar_id');
+    // }
+     public function messages()
+        {
+         return $this->hasMany(Message::class);
+      }
+      public function profiles()
     {
-        return $this->belongsToMany(User::class, 'tagar_user', 'tagar_id', 'id_user');
+        return $this->hasMany(profileModel::class, 'tagar_id'); // Update the model name and foreign key
     }
-        public function messages()
-            {
-                return $this->hasMany(Message::class);
-            }
+
+
+
 }

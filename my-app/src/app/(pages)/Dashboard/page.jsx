@@ -39,25 +39,21 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className='w-[100%] border border-red overflow-x-hidden'> 
-      <DashboardLayout>
-        {/* <div>
-          {loading ? (
-            <Loading progress={progress} />
-          ) : (
-            sections.map((section, index) => (
-              <React.Fragment key={index}>
-              {section}
-              </React.Fragment>
-              ))
-              )}
-            </div> */}
-        <HeroSection />
-      <TutorialSingkatSection />
-      <InformasiPendonorSection />
-      <ArticleSection />
-      <Footer />
-      </DashboardLayout>`
+    <DashboardLayout>
+  <div className='w-[100%] border border-red overflow-x-hidden'> 
+    <div>
+      {loading ? (
+        <Loading progress={progress} />
+      ) : (
+        sections.map((section, index) => (
+          <React.Fragment key={index}>
+            {section}
+          </React.Fragment>
+        ))
+      )}
     </div>
+  </div>
+</DashboardLayout>
+
   );
 }

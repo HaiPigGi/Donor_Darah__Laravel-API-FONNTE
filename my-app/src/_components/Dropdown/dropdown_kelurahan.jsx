@@ -6,7 +6,7 @@ export let idKelu = "";
 
 export async function getKelurahanData() {
   try {
-    let responseKelurahan = await axios.get(`http://localhost:8000/api/get/kelurahan/${idKec}`);
+    let responseKelurahan = await axios.get(`${apiUrl}/api/get/kelurahan/${idKec}`);
     return responseKelurahan.data.kelurahan;
   } catch (e) {
     console.log(e.message);

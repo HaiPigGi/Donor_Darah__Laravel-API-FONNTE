@@ -8,7 +8,7 @@ export let idKab = "";
 const getKabupatenData = async () => {
   let idProvince = idProv
   try{
-    let kabResponse = axios.get(`http://localhost:8000/api/get/kabupaten/${idProvince}`)
+    let kabResponse = axios.get(`${apiUrl}/api/get/kabupaten/${idProvince}`)
     console.log(await kabResponse)
     return (await kabResponse).data.kabupaten
 

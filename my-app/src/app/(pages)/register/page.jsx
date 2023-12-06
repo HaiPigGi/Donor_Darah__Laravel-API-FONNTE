@@ -211,7 +211,33 @@ const finalVerifyData = async () => {
       pagi.classList.add("bg-red");
     }
   };
+
+  const clear = () => {
+    if(buttonNext == 1){
+      setData({
+        nama: "",
+        telepon: "",
+        ktp: "",
+        code: "",
+        golongan_darah: "",
+        pekerjaan: "",
+        kelurahan_id: "",
+      })
+    }else if(buttonNext == 3){
+
+    }
+  };
   
+  const check = () => {
+    if(data.nama == "" || data.telepon == "" || data.ktp == ""){
+      setErrorMessage("terdapat data yang belum diisi");
+      console.log("Terdapat data yang belum diisi")
+    }else{
+      setErrorMessage("");
+      SendCode();
+      handleButton();
+    }
+  };
   
   const handleKembali = () => {
     const pagi = document.getElementById("pagination").childNodes[buttonNext];
@@ -226,8 +252,7 @@ const finalVerifyData = async () => {
       return <button
                     type="button"
                     onClick={() => {
-                      handleButton();
-                      SendCode(); // Invoke the registrasi function when the button is clicked
+                      check();
                     }}
                     className="border-2 bg-red text-l font-bold p-3 text-white rounded-e-[25px] rounded-s-[5px] flex justify-center items-center font-Subtitle"
                   >
@@ -240,7 +265,10 @@ const finalVerifyData = async () => {
         <div className="flex justify-between w-full mx-2">
           <button
             type="button"
-            onClick={handleKembali}
+            onClick={() => {
+              handleKembali();
+              clear();
+            }}
             className="border-2 border-red bg-transparent text-l font-bold p-3 text-red rounded-l-[25px] rounded-s-[5px] flex justify-center items-center "
           >
             <img src="/img/Vector (1).svg" alt="" className="ps-2 mr-2" />
@@ -252,6 +280,7 @@ const finalVerifyData = async () => {
             onClick={() => {
               handleButton();
               verifyCode(); 
+              check();
             }}
             className="border-2 bg-red text-l font-bold p-3 text-white rounded-e-[25px] rounded-s-[5px] flex justify-center items-center"
           >
@@ -263,16 +292,7 @@ const finalVerifyData = async () => {
     }else if(buttonNext == 2){
       // registrasi();
       return(
-        <div className="flex justify-between w-full mx-2">
-          <button
-            type="button"
-            onClick={handleKembali}
-            className="border-2 border-red bg-transparent text-l font-bold p-3 text-red rounded-l-[25px] rounded-s-[5px] flex justify-center items-center "
-          >
-            <img src="/img/Vector (1).svg" alt="" className="ps-2 mr-2" />
-            Kembali
-          </button>
-
+        <div className="flex justify-end   w-full mx-2">
           <button
             type="button"
             onClick={handleButton}
@@ -294,7 +314,7 @@ const finalVerifyData = async () => {
             }}
             className="border-2 border-red bg-transparent text-l font-bold p-3 text-red rounded-l-[25px] rounded-s-[5px] flex justify-center items-center "
           >
-            <img src="/img/Vector (1).svg" alt="" className="ps-2 mr-2" />
+            <img src="/img/Vector (1).svg" alt="" className="ps-2 mr-2"/>
             Kembali
           </button>
     
@@ -361,6 +381,13 @@ const finalVerifyData = async () => {
                 </div>
               </form>
             </div>
+            {/* Error message */}
+          {errorMessage ? (
+            <ErrorMessage
+              message={errorMessage}
+              kelas="w-full h-auto bg-red text-white absolute left-[-1px] bottom-[-50px] rounded-xl p-2 text-2xl"
+            />
+          ):""}
           </div>
         </div>
         </div>
@@ -382,16 +409,10 @@ const finalVerifyData = async () => {
         >
           Close
         </button>
+        
         </Modal.Footer>
       </Modal>
 
-      {/* Error message */}
-      {errorMessage && (
-        <ErrorMessage
-          message={errorMessage}
-          kelas="w-full h-auto bg-red text-white absolute left-[-1px] bottom-[-50px] rounded-xl p-2"
-        />
-      )}
     </section>
   );
 }

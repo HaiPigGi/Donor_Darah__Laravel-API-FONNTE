@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import "@/_styles/css/navbarStyle.css";
 export default function Navbar(props) {
   const [userId, setUserId] = useState(null);
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function Navbar(props) {
         </div>
         <div
           id="items"
-          className={["font-Subtitle font-regular md:visible collapse", props.itemsColor].join(
+          className={["font-Subtitle font-regular", props.itemsColor].join(
             " "
           )}
         >

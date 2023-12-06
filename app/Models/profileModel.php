@@ -14,12 +14,13 @@ class profileModel extends Model
 
     protected $fillable = [
         'id_user',
-        'nama',
+        'nama',  // Add this line
         'telepon',
         'golongan_darah',
         'ktp',
         'pekerjaan',
         'kelurahan_id',
+        'tagar_id', // Update this line
     ];
     // Profile.php
 
@@ -46,6 +47,13 @@ class profileModel extends Model
     {
         return $this->belongsTo(Kelurahan::class, 'kelurahan_id');
     }
+
+  public function tagar()
+    {
+        return $this->belongsTo(TagarModel::class);
+    }
+
+    
 
 
 }

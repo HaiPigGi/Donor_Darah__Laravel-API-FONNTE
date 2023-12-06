@@ -43,15 +43,21 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    public function tagarUsers(): HasMany
+    // public function tagarUsers(): HasMany
 
-    {
-        return $this->hasMany(TagarUserMod::class, 'id_user', 'id');
-    }
+    // {
+    //     return $this->hasMany(TagarUserMod::class, 'id_user', 'id');
+    // }
 
     public function messages(): HasMany
 {
     return $this->hasMany(Message::class, 'id_user', 'id');
 }
+// Inside User.php model
+public function profile()
+{
+    return $this->belongsTo(profileModel::class, 'tagar_id', 'id');
+}
+
 
 }

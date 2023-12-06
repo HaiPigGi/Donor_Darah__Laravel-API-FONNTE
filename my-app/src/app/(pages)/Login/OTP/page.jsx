@@ -13,6 +13,7 @@ export default function Otp() {
 
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
   useEffect(() => {
     // Simulate a delay (e.g., API request)
@@ -34,7 +35,7 @@ export default function Otp() {
 
   const getcsrf = async () => {
     try {
-      let csrf = await axios.get("http://localhost:8000/api/get-session-data");
+      let csrf = await axios.get(`${apiUrl}/api/get-session-data`);
       console.log(csrf.data);
       setSession(csrf.data);
     } catch (e) {
@@ -45,7 +46,7 @@ export default function Otp() {
   const checkVerification = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/verify/otp/login",
+        `${apiUrl}/api/verify/otp/login`,
         {
           code: code,
         },

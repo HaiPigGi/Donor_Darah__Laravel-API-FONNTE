@@ -50,7 +50,6 @@ class RegisterController extends Controller
                 'kelurahan_id' => ['exists:kelurahan,id'],
                 'telepon' => ['required', 'string', 'max:255'],
             ]);         
-    
 
             $this->createUser($validatedData);
             return response()->json(['message' => 'Successfully Validate'],200);

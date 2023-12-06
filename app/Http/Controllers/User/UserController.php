@@ -130,6 +130,12 @@ class UserController extends Controller
             return response()->json(['error' => 'An error occurred. Please try again.'], 500);
         }
     }
+
+    // public function checkNumber ($telepon) {
+    //     $user= User::where('telepon', $userProfile->telepon)->first();
+    
+
+    // }
     
 
 

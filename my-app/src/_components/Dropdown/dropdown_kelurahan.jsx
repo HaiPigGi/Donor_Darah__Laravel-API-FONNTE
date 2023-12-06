@@ -5,15 +5,13 @@ import axios from "axios";
 export let idKelu = "";
 
 export async function getKelurahanData() {
-    try {
-        let responseKelurahan = await axios.get(
-            `http://localhost:8000/api/get/kelurahan/${idKec}`
-        );
-        return responseKelurahan.data.kelurahan;
-    } catch (e) {
-        console.log(e.message);
-        alert(e.message);
-    }
+  try {
+    let responseKelurahan = await axios.get(`${apiUrl}/api/get/kelurahan/${idKec}`);
+    return responseKelurahan.data.kelurahan;
+  } catch (e) {
+    console.log(e.message);
+    alert(e.message);
+  }
 }
 
 function setidKelurahan(id) {

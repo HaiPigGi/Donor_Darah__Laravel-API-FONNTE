@@ -5,7 +5,7 @@ export let idProv = "";
 
 export async function getProvinsiData(){
   try{
-    var response = await axios.get("http://localhost:8000/api/get/provinsi")
+    var response = await axios.get(`${apiUrl}/api/get/provinsi`)
     return  response.data.provinsi;
   }catch(e){
     console.log("Error at Provinsi DD : "+e.message);

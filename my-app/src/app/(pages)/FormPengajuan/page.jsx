@@ -46,7 +46,7 @@ const FormPengajuan = () => {
   async function registrasi() {
     try{
       await axios.post(
-        "http://localhost:8000/api/register/auth",
+        `${apiUrl}/api/register/auth`,
         data,{
           headers: {
             "csrf_token" : session.csrf_token,
@@ -64,7 +64,7 @@ const FormPengajuan = () => {
     },[])
 
   const getcsrf = async () => {
-    let cookie = await axios.get("http://localhost:8000/api/senctum/csrf-cookie")
+    let cookie = await axios.get(`${apiUrl}/api/senctum/csrf-cookie`)
     setSession(cookie)
   }
 
@@ -166,4 +166,4 @@ const FormPengajuan = () => {
   );
 }
 
-export default withAuth(FormPengajuan);
+export default FormPengajuan;

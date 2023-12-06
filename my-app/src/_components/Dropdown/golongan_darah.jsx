@@ -14,7 +14,6 @@ export default function DropDownGolonganDarah({sendToParent}) {
     console.log("Golongan Darah in sessionStorage:", golongan_darah);
   };
   
-
   return (
     <select
       className="border-2 border-stone-950 text-left rounded-md text-[20px] ps-[4rem] w-full h-14"

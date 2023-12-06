@@ -10,6 +10,7 @@ export default function Login() {
   const [telepon, setTelepon] = useState("");
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
   useEffect(() => {
     // Simulate a delay (e.g., API request)
@@ -27,14 +28,15 @@ export default function Login() {
       clearTimeout(delay);
       clearInterval(progressInterval);
     };
+
   }, []);
 
   const sendCodeLogin = async (e) => {
-    e.preventDefault(); // Prevent default form submission behavior
+    e.preventDefault(); // Prevent default form submission behavior  
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/verify/login",
+        `${apiUrl}/api/verify/login`,
         {
           telepon: telepon,
         },
@@ -72,7 +74,7 @@ export default function Login() {
 
   const getcsrf = async () => {
     try {
-      const cookie = await axios.get("http://localhost:8000/api/get-session-data");
+      const cookie = await axios.get(`${apiUrl}/api/get-session-data`);
       setSession(cookie);
     } catch (error) {
       console.error("Error getting CSRF token:", error);

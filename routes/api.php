@@ -47,6 +47,7 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::get('/register/auth/verify', [VerificationController::class, 'index']);
     Route::post('/register/auth/verify', [RegisterController::class, 'validateCheck']);
     Route::post('/register/auth/create', [RegisterController::class, 'verifyCreateUser']);
+    Route::post('/check-number/telepon', [UserController::class, 'checkNumber']);
 
     // Data Provinsi, Kabupaten, Kecamatan, Kelurahan
     Route::get('/get/provinsi', [ProvinsiController::class, 'getProvinsiData'])->name('provinsi');

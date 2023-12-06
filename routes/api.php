@@ -53,7 +53,7 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::get('/get/kabupaten/{id}', [kabupatenController::class, 'getKabupatenData'])->name('kabupaten');
     Route::get('/get/kecamatan/{id}', [kecamatanController::class, 'getKecamatanData'])->name('kecamatan');
     Route::get('/get/kelurahan/{id}', [kelurahanController::class, 'getKelurahanData'])->name('kelurahan');
-    Route::get('/user/map/{userId}',[UserController::class,'getUserLocation']);
+    Route::get('/user/map',[UserController::class,'getUserLocation']);
 
     Route::get('/get-session-data', [SessionController::class, 'getSessionData']);
     // CSRF Cookie

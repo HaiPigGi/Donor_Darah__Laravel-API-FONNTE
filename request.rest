@@ -172,4 +172,4 @@ GET http://localhost:8000/api/users/fb928ac6-7256-4dd0-aa33-2e7f66d6034f
 
 
 ###
-GET http://localhost:8000/api/user/map/fb928ac6-7256-4dd0-aa33-2e7f66d6034f
+GET http://localhost:8000/api/user/map

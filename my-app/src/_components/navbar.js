@@ -46,7 +46,7 @@ export default function Navbar(props) {
         </div>
         <div
           id="items"
-          className={["font-Subtitle font-regular", props.itemsColor].join(
+          className={["font-Subtitle font-regular md:visible collapse", props.itemsColor].join(
             " "
           )}
         >

@@ -23,6 +23,8 @@ export default function Register() {
 
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
+    const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+
 
     const [data, setData] = useState({
         nama: "",
@@ -60,7 +62,7 @@ export default function Register() {
     const SendCode = async () => {
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/register/auth",
+                `${apiUrl}/api/register/auth`,
                 {
                     nama: String(data.nama), // Convert to string
                     telepon: String(data.telepon), // Convert to string
@@ -94,7 +96,7 @@ export default function Register() {
         console.log("isi dari Code : ", data.code);
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/register/auth/verify",
+                `${apiUrl}/api/register/auth/verify`,
                 {
                     code: data.code,
                 },
@@ -152,7 +154,7 @@ export default function Register() {
             console.log();
 
             const response = await axios.post(
-                "http://localhost:8000/api/register/auth/create",
+                `${apiUrl}/api/register/auth/create`,
                 {
                     nama: String(data.nama), // Convert to string
                     telepon: String(data.telepon), // Convert to string
@@ -191,7 +193,7 @@ export default function Register() {
 
     const getcsrf = async () => {
         let cookie = await axios.get(
-            "http://localhost:8000/api/get-session-data"
+            `${apiUrl}/api/get-session-data`
         );
         setSession(cookie);
     };
@@ -228,7 +230,7 @@ export default function Register() {
     const userExist = async () => {
         try {
             const response = await axios.post(
-                "http://localhost:8000/api/check-number/telepon",
+                `${apiUrl}/api/check-number/telepon`,
                 {
                     telepon: String(data.telepon), // Convert to string
                 },

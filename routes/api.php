@@ -16,6 +16,7 @@ use App\Http\Controllers\tagar\TagarController;
 use App\Http\Controllers\Forum\ChatMessageSend;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\userAdminController;
+use App\Http\Controllers\admin\beritaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,11 +68,19 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::get('/admin/akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
     Route::get('/admin/getAkseptor/{id}', [verifyAkseptorController::class, 'getAkseptorByID']);
     
+    // Routes for PostController
+    Route::prefix('admin')->group(function () {
+        Route::get('/posts/all-data', [beritaController::class, 'getAllDataStore']);
+        Route::get('/posts/all-data/{id}', [beritaController::class, 'getAllDataStoreByID']);
+        Route::post('/posts', [beritaController::class, 'store']);
+        Route::post('/posts/{post}', [beritaController::class, 'update']);
+        Route::delete('/posts/{post}', [beritaController::class, 'destroy']);
+    }); 
+
     // Route for updating Akseptor data
-    // Route::put('/admin/akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
     Route::get('/admin/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
     Route::put('/admin/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
-    Route::get('/admin/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse'])->name('verify_akseptor.edit');
+    Route::get('/admin/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse']);
     Route::get('/admin/getUserProvinsi',[verifyAkseptorController::class,'getUserProvinsi']);
     Route::get('/admin/getUserByGolongan/{golonganDarah}',[verifyAkseptorController::class,'getUserLocationsByGolonganDarah']);
     Route::get('/admin/getAkseptorProvinsi/{id}',[verifyAkseptorController::class,'getAkeptorProvinsi']);

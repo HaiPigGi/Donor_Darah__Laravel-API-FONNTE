@@ -21,6 +21,16 @@ class verifyAkseptorController extends Controller
         $akseptor = akseptor_model::all();
         return response()->json($akseptor);
     }
+    public function getAkseptorByID($id)
+{
+    try {
+        $akseptor = akseptor_model::findOrFail($id);
+        return response()->json($akseptor);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Akseptor not found.'], 404);
+    }
+}
+
 
         // Tambahkan parameter $id pada fungsi getUserProvinsi
     public function getUserProvinsi($id)

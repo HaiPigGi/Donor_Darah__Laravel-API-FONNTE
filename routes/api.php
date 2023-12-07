@@ -65,6 +65,8 @@ Route::middleware(['cors', 'web'])->group(function () {
 
     // Route for showing Akseptor data
     Route::get('/admin/akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
+    Route::get('/admin/getAkseptor/{id}', [verifyAkseptorController::class, 'getAkseptorByID']);
+    
     // Route for updating Akseptor data
     // Route::put('/admin/akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
     Route::get('/admin/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);

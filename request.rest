@@ -202,11 +202,6 @@ GET http://localhost:8000/api/admin/verify_akseptor
 
 ###
 PUT  http://localhost:8000/api/admin/verify_akseptor/1
-Content-Type: application/json
-
-{
-  "message": "Your verification message content here"
-}
 
 
 ###

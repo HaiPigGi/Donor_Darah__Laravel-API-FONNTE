@@ -50,12 +50,11 @@ Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // Tambahkan route untuk menampilkan form registrasi dengan middleware CORS
 
-Route::post('/form/akseptor-send', [Akseptor::class, 'validateData'])->name('index');
 Route::get('/akseptor', [Akseptor::class, 'index'])->name('index');
 
-Route::get('/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptors'])->name('verify_akseptor');
-Route::put('/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse'])->name('verify_akseptor.update');
-Route::get('/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse'])->name('verify_akseptor.edit');
+// Route::get('/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptors'])->name('verify_akseptor');
+// Route::put('/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse'])->name('verify_akseptor.update');
+// Route::get('/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse'])->name('verify_akseptor.edit');
 
 Route::middleware('cors')->group(function () {
 

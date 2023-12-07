@@ -175,10 +175,55 @@ GET http://localhost:8000/api/users/fb928ac6-7256-4dd0-aa33-2e7f66d6034f
 GET http://localhost:8000/api/user/map
 
 
+
 ###
 POST http://localhost:8000/api/check-number/telepon
 Content-Type: application/json
 
 {
   "telepon": " 081256518211" 
+}
+
+
+###
+GET http://localhost:8000/api/admin/getUserProvinsi
+
+###
+GET http://localhost:8000/api/admin/getAkseptorProvinsi/1
+
+
+###
+GET http://localhost:8000/api/admin/verify_akseptor
+
+
+
+
+
+
+###
+PUT  http://localhost:8000/api/admin/verify_akseptor/1
+Content-Type: application/json
+
+{
+  "message": "Your verification message content here"
+}
+
+
+###
+GET http://localhost:8000/api/admin/getUserByGolongan/O
+
+
+###
+POST  http://localhost:8000/api/form/akseptor-send
+Content-Type: application/json
+
+{
+    "nama": "John Doe",
+    "telepon": "081229745461",
+    "ktp": "1234567890123456",
+    "golongan_darah": "A",
+    "jumlah_kantong": "2",
+    "alamat": "Jl. Example No. 123",
+    "kelurahan_id": 6472050009,
+    "tujuan_Pengajuan": "Verification purpose"
 }

@@ -15,7 +15,7 @@ class Akseptor extends Controller
 {
 
     /**
-     * Send the verification code via Fontee API to the user's WhatsApp number.
+     * Validate Data For An Akseptor 
      *
      * @param  \Illuminate\Http\Request  $request
      */
@@ -26,11 +26,12 @@ class Akseptor extends Controller
             $validator = Validator::make($request->all(), [
                 'nama' => ['required', 'string', 'max:255'],
                 'telepon' => ['required', 'string', 'max:255'],
-                'tanggal_lahir' => ['required', 'date', 'date_format:m/d/Y'],
+                'ktp' => ['required', 'string','max:255'],
                 'golongan_darah' => ['required', 'string'],
+                'jumlah_kantong' => ['required', 'string'],
                 'kelurahan_id' => ['exists:kelurahan,id'],
-                'tujuan_Pengajuan' => ['required', 'string', 'max:255'], // Update the key here
-                'image'  => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'alamat' => ['string'],
+                'tujuan_Pengajuan' => ['required', 'string', 'max:255'],
             ]);
     
             if ($validator->fails()) {
@@ -48,35 +49,22 @@ class Akseptor extends Controller
         }
     }
     
+    
 
-    public function storeAkseptor(Request $request, array $validateData)
+    private function storeAkseptor(Request $request, array $validateData)
     {
         try {
             DB::beginTransaction();
-
-            $image = $request->file('image');
-
-            // Create the storage directory if it doesn't exist
-            $directory = 'akseptor';
-
-            if (!Storage::exists($directory)) {
-                Storage::makeDirectory($directory);
-            }
-
-            // Store the image in the specified directory with a unique filename
-            $imagePath = $image->storeAs($directory, $image->hashName());
-
-             // Parse the date using Carbon
-            $tanggal_lahir = Carbon::createFromFormat('m/d/Y', $request->input('tanggal_lahir'));
-
+            
             // Create the akseptor model instance
             $user = akseptor_model::create([
                 'nama' => $validateData['nama'],
                 'telepon' => $validateData['telepon'],
-                'tanggal_lahir' => $tanggal_lahir,
+                'ktp' => $validateData['ktp'],
                 'golongan_darah' => $validateData['golongan_darah'],
+                'jumlah_kantong' => $validateData['jumlah_kantong'],
                 'tujuan_Pengajuan' => $validateData['tujuan_Pengajuan'],
-                'image' => $imagePath,
+                'alamat' => $validateData['alamat'],
             ]);
 
     
@@ -91,14 +79,12 @@ class Akseptor extends Controller
 
             Log::info('Akseptor Has Been Created', ['user_id' => $user->id, 'name' => $user->nama]);
 
-
             return $user;
         } catch (\Exception $e) {
                 DB::rollback();
                 Log::error("Error creating Akseptor: " . $e->getMessage());
                 return response()->json(['message' => 'Failed to store Akseptor data. Please try again.', 'error' => $e->getMessage()], 500);
        
-            
             }
             
         }

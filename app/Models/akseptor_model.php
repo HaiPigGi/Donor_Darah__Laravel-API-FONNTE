@@ -14,10 +14,11 @@ class akseptor_model extends Model
     protected $fillable = [
         'nama',
         'telepon',
-        'tanggal_lahir',
+        'ktp',
         'golongan_darah',
+        'jumlah_kantong',
         'tujuan_Pengajuan',
-        'image',
+        'alamat',
     ];
 
     public function kelurahan()

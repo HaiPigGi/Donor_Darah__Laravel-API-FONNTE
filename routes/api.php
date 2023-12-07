@@ -39,7 +39,8 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
     Route::delete('/logout/{userId}', [LoginController::class, 'logout']);
 
-    Route::post('/form/akseptor-send',[Akseptor::class,'validateData'])->name('index');
+    //for akseptor
+    Route::post('/form/akseptor-send',[Akseptor::class,'validateData']);
 
     // Registrasi
     Route::get('/register/auth', [RegisterController::class, 'index']);
@@ -65,11 +66,13 @@ Route::middleware(['cors', 'web'])->group(function () {
     // Route for showing Akseptor data
     Route::get('/admin/akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
     // Route for updating Akseptor data
-    Route::put('/admin/akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
-    Route::get('/admin/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptors'])->name('verify_akseptor');
-    Route::put('/admin/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse'])->name('verify_akseptor.update');
+    // Route::put('/admin/akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
+    Route::get('/admin/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
+    Route::put('/admin/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
     Route::get('/admin/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse'])->name('verify_akseptor.edit');
-
+    Route::get('/admin/getUserProvinsi',[verifyAkseptorController::class,'getUserProvinsi']);
+    Route::get('/admin/getUserByGolongan/{golonganDarah}',[verifyAkseptorController::class,'getUserLocationsByGolonganDarah']);
+    Route::get('/admin/getAkseptorProvinsi/{id}',[verifyAkseptorController::class,'getAkeptorProvinsi']);
     // Untuk Tagar
     Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
     Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);
@@ -85,7 +88,6 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::get('/tagars/messages', [ChatMessageSend::class,'getAllMessagesFromTagar']);
 
     Route::get('/users/{userId}', [UserController::class, 'getUserDetails']);
-    
 
     Route::get('/admin/getUser',[userAdminController::class,'getAllUser']);
 

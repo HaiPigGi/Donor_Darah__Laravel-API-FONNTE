@@ -1,8 +1,10 @@
 "use client";
 import React from 'react';
+import axios from 'axios'; // Import axios
 import Modal from 'react-modal';
 
 const UserDetailsModal = ({ isOpen, onRequestClose, akseptorDetails }) => {
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
     const customStyles = {
         content: {
@@ -14,6 +16,22 @@ const UserDetailsModal = ({ isOpen, onRequestClose, akseptorDetails }) => {
           alignItems: 'center', // Center content horizontally
           justifyContent: 'center', // Center content vertically
         },
+      };
+
+      const verifyAkseptor = async (akseptorId) => {
+        try {
+          // Send a PUT request to update Akseptor data
+          const response = await axios.put(`${apiUrl}/api/admin/verify_akseptor/${akseptorId}`);
+      
+          // Handle the response as needed
+          console.log('Verification response:', response.data);
+          // You can update your state or perform other actions based on the response
+      
+        } catch (error) {
+          // Handle errors if the request fails
+          console.error('Error during verification:', error);
+          // You can also update state or perform other actions based on the error
+        }
       };
       
   return (
@@ -38,22 +56,20 @@ const UserDetailsModal = ({ isOpen, onRequestClose, akseptorDetails }) => {
         </div>
       )}
     <button
-        onClick={() => console.log('Verifikasi clicked')}
+        onClick={() => verifyAkseptor(akseptorDetails.id)}
         className="bg-green-500 text-white px-4 py-2 rounded mr-2"
         >
         Verifikasi
-        </button>
-        <br/>
-        <button
+    </button>
+    <button
         onClick={onRequestClose}
-        className="bg-blue-500 text-black px-4 py-2 rounded mr-2"
+        className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
         >
         Close
-        </button>
-
-
+    </button>
     </Modal>
   );
 };
+
 
 export default UserDetailsModal;

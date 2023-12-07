@@ -7,10 +7,12 @@ import { NextResponse } from "next/server";
 
 export default function Otp() {
   const [session, setSession] = useState({})
-  const [data,setData] = useState()
+  const [data,setData] = useState();
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+
   const getcsrf = async () => {
     try{
-      let csrf = await axios.get("http://localhost:8000/api/get-session-data")
+      let csrf = await axios.get(`${apiUrl}/api/get-session-data`)
       console.log(csrf.data)  
       setSession(csrf.data)
 
@@ -30,7 +32,7 @@ export default function Otp() {
       })
       console.log(data)
       console.log(session.csrf_token)
-      await axios.post("http://localhost:8000/api/register/auth/verify",
+      await axios.post(`${apiUrl}/api/register/auth/verify`,
       data,
       {
         headers:{

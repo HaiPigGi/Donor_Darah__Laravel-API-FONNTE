@@ -4,6 +4,8 @@ import Loading from '@/_components/Loading/Loading';
 import axios from 'axios';
 import withAuth from '@/_components/Auth/WithAuth';
 import UserDetailsModal from './UserDetailsModal';
+import AddPostModal from './AddPostModal';
+import EditPostModal from './EditPostModal'; 
 
 const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState('');
@@ -16,7 +18,12 @@ const Dashboard = () => {
   const [userId, setUserId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAkseptor, setSelectedAkseptor] = useState(null);
-
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+  const [isAddPostModalOpen, setIsAddPostModalOpen] = useState(false); 
+  const [posts, setPosts] = useState([]);
+  const [editingPost, setEditingPost] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  
   useEffect(() => {
     // Check if userId exists in sessionStorage
     const storedUserId = sessionStorage.getItem('userId');
@@ -29,7 +36,7 @@ const Dashboard = () => {
   const handleLogout = async () => {
     try {
       // Send a DELETE request to the server
-      const response = await axios.delete(`http://localhost:8000/api/logout/${userId}`);
+      const response = await axios.delete(`${apiUrl}/api/logout/${userId}`);
       // Clear userId from sessionStorage
       console.log("Logout Response:", response);
       sessionStorage.removeItem('userId');
@@ -48,7 +55,7 @@ const Dashboard = () => {
 
   const getAllUser = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/admin/getUser");
+      const response = await axios.get(`${apiUrl}/api/admin/getUser`);
       setUsers(response.data); // Set the retrieved user data
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -57,7 +64,7 @@ const Dashboard = () => {
 
   const getDataAkseptor = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/admin/verify_akseptor");
+      const response = await axios.get(`${apiUrl}/api/admin/verify_akseptor`);
       setDataAkseptor(response.data); // Set the retrieved dataAkseptor
     } catch (error) {
       console.error("Error fetching dataAkseptor:", error);
@@ -67,12 +74,10 @@ const Dashboard = () => {
   useEffect(() => {
     getAllUser();
     getDataAkseptor();
-    // ... other code
-  }, []);
+    getAllDataPost();
 
-  useEffect(() => {
-    // Simulate a delay (e.g., API request)
-    const delay = setTimeout(() => {
+     // Simulate a delay (e.g., API request)
+     const delay = setTimeout(() => {
       setLoading(false);
     }, 4500);
 
@@ -86,11 +91,13 @@ const Dashboard = () => {
       clearTimeout(delay);
       clearInterval(progressInterval);
     };
+  
   }, []);
+
 
   const getUserDetails = async (akseptorId) => {
     try {
-      const response = await axios.get(`http://localhost:8000/api/admin/getAkseptor/${akseptorId}`);
+      const response = await axios.get(`${apiUrl}/api/admin/getAkseptor/${akseptorId}`);
       const userDetails = response.data;
 
       // Handle the userDetails data (e.g., update state or perform any other actions)
@@ -103,6 +110,54 @@ const Dashboard = () => {
     }
   };
 
+  const handleAddPost = () => {
+    setIsAddPostModalOpen(true);
+  };
+
+  const getAllDataPost = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/admin/posts/all-data`);
+      setPosts(response.data.posts);
+      console.log("posts:", response.data.posts); // Log the response data instead of the state variable
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    }
+  };
+
+  const handleOpenEditModal = (post) => {
+    console.log('Editing post:', post);
+    setEditingPost(post);
+    console.log('isEditModalOpen before update:', isEditModalOpen);
+    setIsEditModalOpen(true);
+    console.log('isEditModalOpen after update:', isEditModalOpen);
+  };
+  
+  
+  // Function to close the EditPostModal
+  const handleCloseEditModal = () => {
+    setEditingPost(null);
+    setIsEditModalOpen(false);
+  };
+  
+  const handleDeletePost = async (postId) => {
+    try {
+      const response = await axios.delete(`${apiUrl}/api/admin/posts/${postId}`);
+      console.log("cek response : ",response.data)
+      
+      // Jika status response tidak ok, lemparkan error
+      if (response.status !== 200) {
+        throw new Error(`Failed to delete post (HTTP ${response.status})`);
+      }
+  
+      console.log(response.data.message); // Log pesan sukses dari server jika diperlukan
+  
+      // Lakukan operasi atau pembaruan UI lainnya setelah penghapusan berhasil
+    } catch (error) {
+      console.error('Error deleting post:', error.message);
+      // Tampilkan pesan kesalahan atau lakukan tindakan lain jika terjadi kesalahan saat menghapus
+    }
+  };
+    
   return (
     <div>
       {loading ? (
@@ -116,6 +171,13 @@ const Dashboard = () => {
                 <a href="#" onClick={() => setActiveMenu('users')} className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white">Lihat User</a>
                 <a href="#" onClick={() => setActiveMenu('requests')} className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white">Mengaply Permintaan</a>
                 <a href="#" onClick={() => setActiveMenu('dataAkseptor')} className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white">Data Akseptor</a>
+                <a href="#" onClick={() => setActiveMenu('posts')} className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white">Lihat Posts</a>
+                <button
+          className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white"
+          onClick={handleAddPost}
+        >
+          Tambah Post
+        </button>
                 <button
                   className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 hover:text-white"
                   onClick={handleLogout}>
@@ -186,6 +248,60 @@ const Dashboard = () => {
                     {/* Rendering code for requests can be added here */}
                   </div>
                 )}
+                {activeMenu === 'posts' && (
+              <div>
+                <h2 className="text-lg font-semibold text-gray-600 mb-2">Daftar Posts</h2>
+                {posts.length > 0 ? (
+                  <ul>
+                    {posts.map((post, index) => (
+                      <li key={index} className="border-b py-4">
+                        {/* Display post information */}
+                        <h3 className="font-semibold text-gray-800">Title: {post.title}</h3>
+                        <p className="text-sm text-gray-600">Content: {post.content}</p>
+                        <p className="text-sm text-gray-600">Event: {post.event}</p>
+
+                        {/* Display the image if the post has an 'image' property */}
+                        {post.image && (
+                          <div>
+                            <img
+                              src={post.image.url}
+                              alt={`Image for ${post.title}`}
+                              className="max-w-full mt-2"
+                              style={{ width: '150px' }} // Set your desired width here
+                            />
+                          </div>
+                        )}
+
+                        {/* Add additional details if needed */}
+                        <div className="mt-4">
+                          {/* Edit button */}
+                          <button
+                          className="mr-2 px-4 py-2 bg-green-500 text-white rounded"
+                          onClick={() => handleOpenEditModal(post)} // Pass the post object to the function
+                        >
+                          Edit
+                        </button>
+
+                          {/* Delete button */}
+                          <button
+                            className="px-4 py-2 bg-blue-500 text-white rounded"
+                            onClick={() => handleDeletePost(post.id)}  // Replace handleDeletePost with your actual delete function
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>Tidak ada post yang tersedia.</p>
+                )}
+              </div>
+            )}
+
+
+
+
               </div>
             </div>
           </div>
@@ -199,6 +315,21 @@ const Dashboard = () => {
           akseptorDetails={selectedAkseptor}
         />
       )}
+       {isAddPostModalOpen && (
+        <AddPostModal
+          isOpen={isAddPostModalOpen}
+          onRequestClose={() => setIsAddPostModalOpen(false)}
+        />
+      )}
+     {isEditModalOpen && (
+      <EditPostModal
+        isOpen={isEditModalOpen}
+        onRequestClose={handleCloseEditModal}
+        editingPost={editingPost}
+      />
+    )}
+
+      {/* ... (existing code) */} 
     </div>
   );
 };

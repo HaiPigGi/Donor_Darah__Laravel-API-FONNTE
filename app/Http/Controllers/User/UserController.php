@@ -10,6 +10,7 @@ use App\Models\profileModel;
 use App\Models\Kelurahan;
 use App\Models\Kecamatan;
 use App\Models\Kabupaten;
+use Illuminate\Support\Facades\DB;
 class UserController extends Controller
 {
     /**
@@ -19,22 +20,82 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    protected function getUserDetails($userId)
-    {
-        try {
-            // Find the user by ID
-            $user = User::findOrFail($userId);
-            Log::info("cek User : ".json_encode($user));
-            // Get the user's name
-            $userName = $user->nama;
-            // Return user details as JSON
-            return response()->json(['users' => ['id' => $user->id, 'nama' => $userName]]);
-        } catch (\Exception $e) {
-            // Handle the exception, for example, return a 404 response for not found
-            Log::error('Exception occurred while getUserDetail Message: ' . $e->getMessage());
-            return response()->json(['error' => 'User not found'], 404);
-        }
-    }
+     protected function getUserDetails($userId)
+     {
+         try {
+             // Find the user by ID
+             $user = User::findOrFail($userId);
+             
+             // Find the user's profile by ID
+             $profile = profileModel::where('id_user', $userId)->firstOrFail();
+     
+             // Get the user's details
+             $userData = [
+                 'id' => $user->id,
+                 'nama' => $user->nama,
+                 'telepon' => $user->telepon,
+                 'ktp' => $profile->ktp,
+                 'pekerjaan'=>$profile->pekerjaan,  
+                 'golongan_darah'=>$profile->golongan_darah,
+                 'kelurahan_id'=>$profile->kelurahan_id,
+                 'tagar_id'=>$profile->tagar_id
+             ];
+             // Return user details as JSON
+             return response()->json(['status' => 'success', 'user' => $userData]);
+         } catch (\Exception $e) {
+             // Handle the exception, for example, return a 404 response for not found
+             Log::error('Exception occurred while getUserDetail Message: ' . $e->getMessage());
+             return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+         }
+     }
+     
+     
+     protected function updateUser(Request $request, $userId)
+     {
+         try {
+             // Begin database transaction
+             DB::beginTransaction();
+             Log::info('Request data:', $request->all());
+     
+             // Find the user by ID
+             $user = User::findOrFail($userId);
+     
+             // Update user details
+             $user->nama = $request->input('nama');
+             $user->telepon = $request->input('telepon');
+             // Add other fields as needed
+     
+             $user->save();
+     
+             // Find the user's profile by ID
+             $profile = ProfileModel::where('id_user', $userId)->firstOrFail();
+     
+             // Update profile details
+             $profile->ktp = $request->input('ktp');
+             $profile->pekerjaan = $request->input('pekerjaan');
+             $profile->golongan_darah = $request->input('golongan_darah');
+     
+             // Get kelurahan IDs from validated data
+             $kelurahanId = $request->input('kelurahan_id');
+     
+             // Associate kelurahan with the profile
+             $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
+             $profile->save();
+     
+             // Commit the database transaction
+             DB::commit();
+     
+             return response()->json(['status' => 'success', 'message' => 'User and profile updated successfully']);
+         } catch (\Exception $e) {
+             // Rollback the database transaction in case of an exception
+             DB::rollback();
+             Log::error('Exception occurred while updating user and profile: ' . $e->getMessage());
+             return response()->json(['status' => 'error', 'message' => 'Failed to update user and profile'], 500);
+         }
+     }
+     
+            
+
 
     public function getUserLocation()
     {
@@ -116,7 +177,8 @@ class UserController extends Controller
         }
        
     }
-    
+
+        
     
 
 

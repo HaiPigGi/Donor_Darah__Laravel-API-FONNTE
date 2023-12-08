@@ -29,7 +29,7 @@ export default function ArticleSection() {
                                 src={post.image.url}
                                 alt={post.title}
                                 layout="fill"
-                                className="object-cover mx-auto rounded-md"
+                                className="object-cover mx-auto rounded-md w-full h-full"
                             />
                         </Suspense>
                         <h1 className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-black to-transparent text-white rounded-b-md text-xl font-bold flex items-center justify-center b">

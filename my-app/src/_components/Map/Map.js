@@ -42,7 +42,7 @@ function Map() {
         className="custom-marker"  // Apply the custom CSS class
       >
           <Popup>
-            User ID: {userLocation.user_id}
+            User Name: {userLocation.nama}
             <br />
             Lat: {userLocation.lat}
             <br />

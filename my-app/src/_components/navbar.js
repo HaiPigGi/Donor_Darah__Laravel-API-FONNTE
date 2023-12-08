@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 export default function Navbar(props) {
   const [userId, setUserId] = useState(null);
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   useEffect(() => {
     // Check if userId exists in sessionStorage
     const storedUserId = sessionStorage.getItem('userId');
@@ -17,7 +18,7 @@ export default function Navbar(props) {
   const handleLogout = async () => {
     try {
       // Send a DELETE request to the server
-      const response = await axios.delete(`http://localhost:8000/api/logout/${userId}`);
+      const response = await axios.delete(`${apiUrl}/api/logout/${userId}`);
       // Clear userId from sessionStorage
       console.log("Logout Response:", response);
       sessionStorage.removeItem('userId');

@@ -64,26 +64,22 @@ Route::middleware(['cors', 'web'])->group(function () {
         return response()->json(['message' => 'CSRF cookie set']);
     });
 
-    // Route for showing Akseptor data
-    Route::get('/admin/akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
-    Route::get('/admin/getAkseptor/{id}', [verifyAkseptorController::class, 'getAkseptorByID']);
-    
     // Routes for PostController
     Route::prefix('admin')->group(function () {
         Route::get('/posts/all-data', [beritaController::class, 'getAllDataStore']);
         Route::get('/posts/all-data/{id}', [beritaController::class, 'getAllDataStoreByID']);
+        Route::get('/getAkseptor/{id}', [verifyAkseptorController::class, 'getAkseptorByID']);
         Route::post('/posts', [beritaController::class, 'store']);
         Route::post('/posts/{post}', [beritaController::class, 'update']);
         Route::delete('/posts/{post}', [beritaController::class, 'destroy']);
+        // Route for updating Akseptor data
+        Route::get('/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
+        Route::put('/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
+        Route::get('/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse']);
+        Route::get('/getUserByGolongan/{golonganDarah}',[verifyAkseptorController::class,'getUserLocationsByGolonganDarah']);
     }); 
 
-    // Route for updating Akseptor data
-    Route::get('/admin/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
-    Route::put('/admin/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
-    Route::get('/admin/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse']);
-    Route::get('/admin/getUserProvinsi',[verifyAkseptorController::class,'getUserProvinsi']);
-    Route::get('/admin/getUserByGolongan/{golonganDarah}',[verifyAkseptorController::class,'getUserLocationsByGolonganDarah']);
-    Route::get('/admin/getAkseptorProvinsi/{id}',[verifyAkseptorController::class,'getAkeptorProvinsi']);
+
     // Untuk Tagar
     Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
     Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);

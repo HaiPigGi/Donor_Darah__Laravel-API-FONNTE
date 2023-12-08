@@ -21,7 +21,7 @@ class verifyAkseptorController extends Controller
         $akseptor = akseptor_model::all();
         return response()->json($akseptor);
     }
-    public function getAkseptorByID($id)
+    protected function getAkseptorByID($id)
 {
     try {
         $akseptor = akseptor_model::findOrFail($id);
@@ -31,116 +31,7 @@ class verifyAkseptorController extends Controller
     }
 }
 
-
-        // Tambahkan parameter $id pada fungsi getUserProvinsi
-    public function getUserProvinsi($id)
-    {
-        try {
-            // Retrieve all profiles
-            $profiles = profileModel::all();
-
-            // Initialize an empty array to store user locations
-            $userLocations = [];
-
-            foreach ($profiles as $profile) {
-                // Retrieve kelurahan data
-                $kelurahanData = Kelurahan::find($profile->kelurahan_id);
-
-                if (!$kelurahanData) {
-                    // Skip to the next iteration if kelurahan not found
-                    continue;
-                }
-
-                // Retrieve kecamatan data
-                $kecamatanData = Kecamatan::find($kelurahanData->kecamatan_id);
-
-                if (!$kecamatanData) {
-                    // Skip to the next iteration if kecamatan not found
-                    continue;
-                }
-
-                // Retrieve kabupaten data with latitude and longitude
-                $kabupatenData = Kabupaten::find($kecamatanData->kabupaten_id);
-
-                if (!$kabupatenData) {
-                    // Skip to the next iteration if kabupaten not found
-                    continue;
-                }
-
-                $provinsiData = provinsi::find($kabupatenData->provinsi_id);
-
-                if (!$provinsiData) {
-                    continue;
-                }
-
-                // Add the user location to the array
-                $userLocations[] = [
-                    'id' => $provinsiData->id,
-                ];
-            }
-
-            return response()->json(['provinsi_id' => $userLocations]);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred. Please try again.'], 500);
-        }
-    }
-
-    public function getAkeptorProvinsi ($id) {
-        try {
-            // Retrieve all profiles
-            $akseptor = akseptor_model::all();
-            Log::info("cek akseptor : ".json_encode($akseptor));
-
-            // Initialize an empty array to store user locations
-            $userLocations = [];
-
-            foreach ($akseptor as $akseptor) {
-                // Retrieve kelurahan data
-                $kelurahanData = Kelurahan::find($akseptor->kelurahan_id);
-
-                if (!$kelurahanData) {
-                    // Skip to the next iteration if kelurahan not found
-                    continue;
-                }
-
-                // Retrieve kecamatan data
-                $kecamatanData = Kecamatan::find($kelurahanData->kecamatan_id);
-
-                if (!$kecamatanData) {
-                    // Skip to the next iteration if kecamatan not found
-                    continue;
-                }
-
-                // Retrieve kabupaten data with latitude and longitude
-                $kabupatenData = Kabupaten::find($kecamatanData->kabupaten_id);
-
-                if (!$kabupatenData) {
-                    // Skip to the next iteration if kabupaten not found
-                    continue;
-                }
-
-                $provinsiData = provinsi::find($kabupatenData->provinsi_id);
-
-                if (!$provinsiData) {
-                    continue;
-                }
-
-                // Add the user location to the array
-                $userLocations[] = [
-                    'id' => $provinsiData->id,
-                ];
-            }
-
-
-            return response()->json(['provinsi_id' => $userLocations]);
-
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An error occurred. Please try again.'], 500);
-            
-        }
-    }
-    public function getAkeptorProvinsiByTelepon($telepon)
+    private function getAkeptorProvinsiByTelepon($telepon)
 {
     try {
         // Find the Akseptor by telephone number
@@ -183,12 +74,6 @@ class verifyAkseptorController extends Controller
             return ['error' => 'Provinsi not found'];
         }
 
-        // // Log additional information
-        // Log::info('Akseptor found for telepon ' . $telepon . ': ' . json_encode($akseptor));
-        // Log::info('Kelurahan Data: ' . json_encode($kelurahanData));
-        // Log::info('Kecamatan Data: ' . json_encode($kecamatanData));
-
-        // Return provinsi_id, telepon, and additional data if needed
         return [
             'id' => $provinsiData->id,
             'telepon' => $telepon,
@@ -200,56 +85,56 @@ class verifyAkseptorController extends Controller
     }
 }
 
-/**
- * Check users with the same provinsi_id as the given Akseptor's kelurahan_id.
- *
- * @param string $akseptorKelurahanId
- * @return array
- */
-protected function getUsersByAkseptorKelurahan($akseptorKelurahanId)
-{
-    try {
-        // Find the Akseptor's kelurahan data
-        $kelurahanData = Kelurahan::find($akseptorKelurahanId);
+        /**
+         * Check users with the same provinsi_id as the given Akseptor's kelurahan_id.
+         *
+         * @param string $akseptorKelurahanId
+         * @return array
+         */
+        private function getUsersByAkseptorKelurahan($akseptorKelurahanId)
+        {
+            try {
+                // Find the Akseptor's kelurahan data
+                $kelurahanData = Kelurahan::find($akseptorKelurahanId);
 
-        if (!$kelurahanData) {
-            return ['error' => 'Kelurahan not found'];
+                if (!$kelurahanData) {
+                    return ['error' => 'Kelurahan not found'];
+                }
+
+                // Retrieve kecamatan data
+                $kecamatanData = Kecamatan::find($kelurahanData->kecamatan_id);
+
+                if (!$kecamatanData) {
+                    // Skip to the next iteration if kecamatan not found
+                    return ['error' => 'Kecamatan not found'];
+                }
+
+                // Retrieve kabupaten data with latitude and longitude
+                $kabupatenData = Kabupaten::find($kecamatanData->kabupaten_id);
+
+                if (!$kabupatenData) {
+                    // Skip to the next iteration if kabupaten not found
+                    return ['error' => 'Kabupaten not found'];
+                }
+
+                $provinsiData = provinsi::find($kabupatenData->provinsi_id);
+
+                if (!$provinsiData) {
+                    return ['error' => 'Provinsi not found'];
+                }
+
+                // Add the user location to the array
+                $userLocations[] = [
+                    'id' => $provinsiData->id,
+                ];
+
+                Log::info("cek info Akseptor : " . json_encode($userLocations));
+                return ['provinsi_id' => $userLocations];
+
+            } catch (\Exception $e) {
+                return ['error' => 'An error occurred. Please try again.', 'message' => $e->getMessage()];
+            }
         }
-
-        // Retrieve kecamatan data
-        $kecamatanData = Kecamatan::find($kelurahanData->kecamatan_id);
-
-        if (!$kecamatanData) {
-            // Skip to the next iteration if kecamatan not found
-            return ['error' => 'Kecamatan not found'];
-        }
-
-        // Retrieve kabupaten data with latitude and longitude
-        $kabupatenData = Kabupaten::find($kecamatanData->kabupaten_id);
-
-        if (!$kabupatenData) {
-            // Skip to the next iteration if kabupaten not found
-            return ['error' => 'Kabupaten not found'];
-        }
-
-        $provinsiData = provinsi::find($kabupatenData->provinsi_id);
-
-        if (!$provinsiData) {
-            return ['error' => 'Provinsi not found'];
-        }
-
-        // Add the user location to the array
-        $userLocations[] = [
-            'id' => $provinsiData->id,
-        ];
-
-        Log::info("cek info Akseptor : " . json_encode($userLocations));
-        return ['provinsi_id' => $userLocations];
-
-    } catch (\Exception $e) {
-        return ['error' => 'An error occurred. Please try again.', 'message' => $e->getMessage()];
-    }
-}
 
 
 
@@ -258,7 +143,7 @@ protected function getUsersByAkseptorKelurahan($akseptorKelurahanId)
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    public function updateDataAkse(Request $request, $id)
+    protected function updateDataAkse(Request $request, $id)
 {
     try {
         // Begin a database transaction

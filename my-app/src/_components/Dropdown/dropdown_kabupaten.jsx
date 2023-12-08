@@ -6,6 +6,7 @@ import { idProv } from "./dropdown_provinsi";
 export let idKab = "";
 
 const getKabupatenData = async () => {
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   let idProvince = idProv
   try{
     let kabResponse = axios.get(`${apiUrl}/api/get/kabupaten/${idProvince}`)

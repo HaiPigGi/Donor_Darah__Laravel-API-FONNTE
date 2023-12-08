@@ -2,7 +2,6 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "@/_styles/css/navbarStyle.css";
 export default function Navbar(props) {
   const [userId, setUserId] = useState(null);
   useEffect(() => {
@@ -37,7 +36,7 @@ export default function Navbar(props) {
 
 
   return (
-    <nav className="absolute top-0 w-full z-50">
+    <nav className="absolute top-0 w-full z-50 ">
        <div className="md:container mx-auto flex flex-col md:flex-row py-5 items-center justify-start   md:justify-between">
         <div id="brand" className="mb-4 md:mb-0 border-2">
           <a href="/" className="text-red text-3xl font-black font-Title">

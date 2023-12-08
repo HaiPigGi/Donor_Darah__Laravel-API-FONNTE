@@ -176,7 +176,7 @@ export default function Register() {
             if (response.status === 200) {
                 setModalContent("Account Successfully Created");
                 setModalIsOpen(true);
-                window.location.href = "/Login";
+                window.location.href = "/";
                 // clearSession();
             } else {
                 setErrorMessage(

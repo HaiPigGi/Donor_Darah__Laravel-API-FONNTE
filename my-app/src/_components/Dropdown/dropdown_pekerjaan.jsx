@@ -58,7 +58,7 @@ export default function Pekerjaan({sendToParent}) {
         <option value="Petani">Petani</option>
         <option value="KaryawanSwasta">Karyawan Swasta</option>
         <option value="lain-lain">Lain-Lain</option>
-        {<Lain_Lain />}
+        {/* {<Lain_Lain />} */}
       </select>
     </>
   );

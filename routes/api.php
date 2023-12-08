@@ -40,6 +40,11 @@ Route::middleware(['cors', 'web'])->group(function () {
     Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
     Route::delete('/logout/{userId}', [LoginController::class, 'logout']);
 
+    //user profiles
+    Route::prefix('users')->group(function () {
+    Route::get('/getUser/{userId}', [UserController::class, 'getUserDetails']);
+    Route::put('/getUser/{userId}', [UserController::class, 'updateUser']);
+    });
     //for akseptor
     Route::post('/form/akseptor-send',[Akseptor::class,'validateData']);
 
@@ -94,7 +99,7 @@ Route::middleware(['cors', 'web'])->group(function () {
 
     Route::get('/tagars/messages', [ChatMessageSend::class,'getAllMessagesFromTagar']);
 
-    Route::get('/users/{userId}', [UserController::class, 'getUserDetails']);
+   
 
     Route::get('/admin/getUser',[userAdminController::class,'getAllUser']);
 

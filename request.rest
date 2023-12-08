@@ -222,3 +222,7 @@ Content-Type: application/json
     "kelurahan_id": 6472050009,
     "tujuan_Pengajuan": "Verification purpose"
 }
+
+
+### 
+GET http://localhost:8000/api/users/getUser/fb928ac6-7256-4dd0-aa33-2e7f66d6034f

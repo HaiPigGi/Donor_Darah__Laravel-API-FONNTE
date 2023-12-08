@@ -24,6 +24,7 @@
     "dependencies": {
         "laravel-echo": "^1.15.3",
         "next-router-mock": "^0.9.10",
+        "pusher": "^5.2.0",
         "pusher-js": "^8.3.0"
     }
 }

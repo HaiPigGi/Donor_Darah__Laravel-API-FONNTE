@@ -1,33 +1,50 @@
 import Image from "next/image";
 
-export default function Card({ alt, width, height, imgPath, desc}){
-    function isDescNull(){
-        if(desc == ""){
-            return(
+export default function Card({ alt, imgPath, desc, width = 200, height = 100}) {
+
+    function isDescNull() {
+        if (desc == "") {
+            return (
                 <>
-                    <img src={imgPath} alt={alt} width={"200px"} height={"100px"} />
+                    <Image
+                        src={imgPath}
+                        alt={alt}
+                        layout="fill"
+                    />
                 </>
-            )
-        }else{
-            return(
+            );
+        } else {
+            return (
                 <div className=" flex-row">
-                    <div className={` h-[20rem] flex items-center`}>
-                        <img src="/img/Frame3.png" alt={alt} width={width} height={height} className=""/>
+                    <div className={`relative h-[20rem] flex items-center`}>
+                        <Image
+                            src={imgPath}
+                            alt={alt}
+                            width={width}
+                            height={height}
+                            className="object-cover"
+                        />
                     </div>
                     <div className=" w-full text-center font-Title rounded-xl bg-white h-[70px] flex justify-center items-center ">
-                        <h1 className="  my-auto text-2xl text-center w-full">{desc}</h1>
+                        <h1 className="  my-auto text-2xl text-center w-full">
+                            {desc}
+                        </h1>
                     </div>
                 </div>
-                );  
+            );
         }
     }
-    return(
+    return (
         <>
-        <div className={` border-black px-[2rem] py-[2rem] w-[350px] h-[450px] rounded-xl bg-red hover:cursor-pointer hover:w-[400px]  hover:h-[500px] sha`}>
-            <div className={`flex justify-center items-center w-full h-full border-yellow-100`}>
-                {isDescNull()}
+            <div
+                className={` border-black px-[2rem] py-[2rem] w-[350px] h-[450px] rounded-xl bg-red hover:cursor-pointer hover:w-[400px]  hover:h-[500px] sha`}
+            >
+                <div
+                    className={`flex justify-center items-center w-full h-full border-yellow-100`}
+                >
+                    {isDescNull()}
+                </div>
             </div>
-        </div>
         </>
-    )
+    );
 }

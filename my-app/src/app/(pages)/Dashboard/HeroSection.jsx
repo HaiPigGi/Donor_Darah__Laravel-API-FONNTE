@@ -17,7 +17,7 @@ export default function HeroSection(){
       };
     }, []);
     return(
-        <section className="bg-hero-bg bg-no-repeat bg-cover w-[100%] border border-black">
+        <section className="bg-hero-bg bg-no-repeat bg-cover w-[100%] ">
         <Navbar itemsColor="text-white" responsive={windowWidth <= 770} />
         <div className="w-full h-screen overflow-hidden relative z-20 backdrop-blur-sm">
           <div className="container mx-auto w-full h-full flex justify-center md:justify-end items-center md:items-center">
@@ -26,8 +26,8 @@ export default function HeroSection(){
               <h4 className="text-white font-Title   text-[25px] md:text-[30px] text-center md:text-right font-light">segera donorkan<br /> darah anda</h4>
             </span>
           </div>
+        <div className="w-full h-full absolute bottom-0 bg-gradient-to-b to-white from-transparent from-80% z-10 to-100%"></div>
         </div>
-        <div className="w-full h-full absolute top-0 bg-gradient-to-b to-white from-transparent from-80% z-10 to-100%"></div>
       </section>
     )
 }

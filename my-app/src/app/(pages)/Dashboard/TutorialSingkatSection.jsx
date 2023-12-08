@@ -26,7 +26,7 @@ export default function TutorialSingkatSection() {
 
       }
       return(
-        <section className="w-full h-screen flex items-center w-[100%] border overflow-hidden">
+        <section className="w-full h-screen flex items-center overflow-hidden">
             <div className="md:container mx-auto my-auto">
               <roleContext.Provider value={category}>
                 <roleDispatchContext.Provider value={dispatch}>
@@ -42,9 +42,7 @@ export default function TutorialSingkatSection() {
                       <Card width={600} height={15} desc="Terima Broadcast" imgPath="/img/Frame3.png" alt="Terima Broadcast"/> 
                     </div> : 
                     <div className="flex flex-row justify-center gap-8 items-center h-[30rem]">
-                      <Card width={600} height={15} desc="Registrasi" imgPath="/img/Asset 18.png" alt="Registrasi 1"/>
-                      <Card width={600} height={15} desc="Tunggu" imgPath="/img/email.png" alt="Tunggu 1"/>
-                      <Card width={600} height={15} desc="Terima Broadcast" imgPath="/img/Frame3.png" alt="Terima Broadcast 1"/> 
+                      <Card width={600} height={15} desc="Isi Form" imgPath="/img/Asset 18.png" alt="Registrasi 1"/>
                     </div>
                   }
                 </roleDispatchContext.Provider>

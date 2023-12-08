@@ -21,6 +21,7 @@ use App\Models\Kecamatan;
 use App\Models\Kabupaten;
 use App\Models\provinsiModel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -59,54 +60,56 @@ class RegisterController extends Controller
         }
     }
 
-private function createUser(array $data)
-{
-    // Retrieve the validated data from the session
-    $validatedData = session('validated_data');
-    try {
-        // Generate UUID for id_user column
-        $id_user = Str::uuid();
+    private function createUser(array $data)
+    {
+        // Retrieve the validated data from the session
+        $validatedData = session('validated_data');
+        try {
+            // Generate UUID for id_user column
+            $id_user = Str::uuid();
 
-        // Begin database transaction
-        DB::beginTransaction();
+            // Begin database transaction
+            DB::beginTransaction();
 
-        $user = User::create([
-            'id' => $id_user,
-            'nama' => $data['nama'],
-            'telepon' => $data['telepon'],
-        ]);
+            $user = User::create([
+                'id' => $id_user,
+                'nama' => $data['nama'],
+                'telepon' => $data['telepon'],
+            ]);
 
-        // Create profile record with user_id and other validated data
-        $profile = new profileModel([
-            'id_user' => $id_user,
-            'nama' => $data['nama'],
-            'telepon' => $data['telepon'],
-            'golongan_darah' => $data['golongan_darah'],
-            'ktp' => $data['ktp'],
-            'pekerjaan' => $data['pekerjaan'],
-        ]);
+            // Create profile record with user_id and other validated data
+            $profile = new profileModel([
+                'id_user' => $id_user,
+                'nama' => $data['nama'],
+                'telepon' => $data['telepon'],
+                'golongan_darah' => $data['golongan_darah'],
+                'ktp' => $data['ktp'],
+                'pekerjaan' => $data['pekerjaan'],
+            ]);
 
-        // Get kelurahan IDs from validated data
-        $kelurahanId = $data['kelurahan_id'];
+            // Get kelurahan IDs from validated data
+            $kelurahanId = $data['kelurahan_id'];
 
-        // Associate kelurahan with the profile
-        $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
-        $profile->save();
+            // Associate kelurahan with the profile
+            $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
+            $profile->save();
 
-        // Delete data from sessions table based on the telephone number
-        $teleponToDelete = $data['telepon'];
-        sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
+            // Delete data from sessions table based on the telephone number
+            $teleponToDelete = $data['telepon'];
+            sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
 
-        // Commit the database transaction
-        DB::commit();
+            
+            Auth::login($id_user);
+            // Commit the database transaction
+            DB::commit();
 
-        return $user;
-    } catch (\Exception $e) {
-        // Rollback the database transaction in case of an exception
-        DB::rollback();
-        throw $e; // Re-throw the exception for further handling, if needed
+            return $user;
+        } catch (\Exception $e) {
+            // Rollback the database transaction in case of an exception
+            DB::rollback();
+            throw $e; // Re-throw the exception for further handling, if needed
+        }
     }
-}
     public function verify(Request $request)
     {
         try {

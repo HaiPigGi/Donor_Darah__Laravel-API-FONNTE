@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 export let pekerjaan = "";
 
 export default function Pekerjaan({sendToParent}) {
-  const [selectedOption, setSelectedOption] = useState("");
+ const [selectedOption, setSelectedOption] = useState("");
 
   const handleDropdownChange = (e) => {
     setSelectedOption(e.target.value);
@@ -58,7 +58,7 @@ export default function Pekerjaan({sendToParent}) {
         <option value="Petani">Petani</option>
         <option value="KaryawanSwasta">Karyawan Swasta</option>
         <option value="lain-lain">Lain-Lain</option>
-        {<Lain_Lain />}
+        {/* {<Lain_Lain />} */}
       </select>
     </>
   );

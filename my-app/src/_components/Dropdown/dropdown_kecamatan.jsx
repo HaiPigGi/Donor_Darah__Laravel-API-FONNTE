@@ -6,6 +6,7 @@ export let idKec = ""
 
 async function getKecamatanData() {
   let idKabupaten = idKab
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   try{
     let kecamatanResponse = await axios.get(`${apiUrl}/api/get/kecamatan/${idKabupaten}`)
     console.log(kecamatanResponse);

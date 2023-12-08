@@ -5,6 +5,7 @@ import axios from "axios";
 export let idKelu = "";
 
 export async function getKelurahanData() {
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   try {
     let responseKelurahan = await axios.get(`${apiUrl}/api/get/kelurahan/${idKec}`);
     return responseKelurahan.data.kelurahan;

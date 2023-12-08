@@ -2,9 +2,9 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import "@/_styles/css/navbarStyle.css";
 export default function Navbar(props) {
   const [userId, setUserId] = useState(null);
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   useEffect(() => {
     // Check if userId exists in sessionStorage
     const storedUserId = sessionStorage.getItem('userId');
@@ -18,7 +18,7 @@ export default function Navbar(props) {
   const handleLogout = async () => {
     try {
       // Send a DELETE request to the server
-      const response = await axios.delete(`http://localhost:8000/api/logout/${userId}`);
+      const response = await axios.delete(`${apiUrl}/api/logout/${userId}`);
       // Clear userId from sessionStorage
       console.log("Logout Response:", response);
       sessionStorage.removeItem('userId');
@@ -37,7 +37,7 @@ export default function Navbar(props) {
 
 
   return (
-    <nav className="absolute top-0 w-full z-50">
+    <nav className="absolute top-0 w-full z-50 ">
        <div className="md:container mx-auto flex flex-col md:flex-row py-5 items-center justify-start   md:justify-between">
         <div id="brand" className="mb-4 md:mb-0 border-2">
           <a href="/" className="text-red text-3xl font-black font-Title">

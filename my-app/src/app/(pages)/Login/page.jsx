@@ -49,7 +49,7 @@ export default function Login() {
 
       if (response.status === 200) {
         console.log('berhasil Kirim');
-        // Redirect to the OTP page
+        // Redirect to the   OTP page
         redirectToOtherPage();
       } else {
         console.log("Code Send failed. Please try again.");

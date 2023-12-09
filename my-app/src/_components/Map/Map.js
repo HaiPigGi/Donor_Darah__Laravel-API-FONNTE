@@ -6,11 +6,12 @@ import "leaflet/dist/leaflet.css";
 import "@/_styles/css/map.css";
 function Map() {
   const [userLocations, setUserLocations] = useState([]);
-
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+  
   useEffect(() => {
     const fetchUserLocations = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/user/map");
+        const response = await axios.get(`${apiUrl}/api/user/map`);
         setUserLocations(response.data.user_locations);
       } catch (error) {
         console.error("Error fetching user locations:", error);

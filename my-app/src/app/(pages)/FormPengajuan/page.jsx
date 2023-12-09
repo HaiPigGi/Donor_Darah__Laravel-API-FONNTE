@@ -129,7 +129,6 @@ const FormPengajuan = () => {
     }
   }
 
-  
 
   return (
     <section>

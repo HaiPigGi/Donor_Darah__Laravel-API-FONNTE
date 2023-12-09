@@ -1,10 +1,9 @@
 import Dropdown from "@/_components/Dropdown/dropdown";
 import React, { useState } from "react";
-export default function Hal1(){
-
+export default function Hal1({ data, action }) {
     return(
         <div>
-                <div className=" font-Subtitle mx-auto  h-full mb-2">
+                <div className=" font-Subtitle mx-auto h-full mb-2">
                             <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
                                 <img
                                     className=""
@@ -39,20 +38,21 @@ export default function Hal1(){
                                 name="noTelp"
                             />
                         </div>
-                        <div className="flex  relative font-Subtitle w-[14rem]">
-                            <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex justify-center">
-                                <img
-                                    className="input-icon "
-                                    src="/img/darah.svg"
-                                    alt="Icon"
-                                    height={25}
-                                    width={25}
-                                /> 
+                        <div className="input-container mb-4 relative font-Subtitle">
+                            <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
+                            <img
+                                className="input-icon "
+                                src="/img/darah.svg"
+                                alt="Icon"
+                                height={30}
+                                width={30}
+                            />
                             </div>
-                            <div className="w-">
-                              <Dropdown category="golongan_darah"/>
-                            </div>
-                        </div>                                                
+                            <Dropdown category="golongan_darah" sendToParent={(value)=>{action({
+                            ...data,
+                            "golongan_darah": value,
+                        })}} />
+                        </div>                                             
                     </div>
                    
                     <div className="font-Subtitle mx-auto  h-full mt-2">

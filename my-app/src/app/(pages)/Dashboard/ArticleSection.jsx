@@ -1,5 +1,3 @@
-import RunningLoading from "@/_components/Loading/RunningLoading";
-import Card from "@/_components/card";
 import axios from "axios";
 import { useEffect, useState, Suspense, startTransition } from "react";
 
@@ -9,10 +7,9 @@ export default function ArticleSection() {
     const getAllDataPost = async () => {
         try {
             const response = await axios.get(
-                `${apiUrl}/api/admin/posts/all-data`,
+                `${apiUrl}/api/posts/all-data`,
             );
             setPosts(response.data.posts);
-            console.log("posts:", response.data.posts); // Log the response data instead of the state variable
         } catch (error) {
             console.error("Error fetching posts:", error);
         }

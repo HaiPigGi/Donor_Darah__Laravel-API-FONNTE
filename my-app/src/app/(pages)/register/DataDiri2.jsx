@@ -59,4 +59,8 @@ export default function DataDiri2({ data, action }) {
             </div>
         </div>
     );
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

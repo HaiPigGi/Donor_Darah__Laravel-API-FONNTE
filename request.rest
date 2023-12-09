@@ -72,16 +72,15 @@ withCredentials: true,
   "kelurahan_id": 6472021001
 }
 ###
-POST http://localhost:8000/api/register/auth
+POST http://localhost:8000/api/register/auth/create
 Content-Type: application/json
 
 {
     "nama": "Kapi",
     "telepon": "082253739918",
     "golongan_darah": "O",
-    "provinsi_id": 64,
-    "kabupaten_id": 6402,
-    "kecamatan_id": 6402060,
+    "ktp": "1234567890123456",
+    "pekerjaan": "Engineer",
     "kelurahan_id": 6402060004
 }
 

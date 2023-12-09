@@ -11,6 +11,75 @@ import Loading from "@/_components/Loading/Loading";
 export default function Dashboard() {
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
+    const [token,setToken] = useState(null);
+
+    useEffect(() => {
+      const storedUserId = sessionStorage.getItem('jwtToken');
+    
+      if (storedUserId) {
+        // userId exists, update your state
+        setToken(storedUserId);
+    
+        try {
+          // Parse the JWT token without using jwt_decode
+          const tokenParts = storedUserId.split('.');
+          const decodedToken = JSON.parse(atob(tokenParts[1]));
+    
+          // Get the expiration time from the decoded token
+          const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+    
+          // Calculate the remaining time until expiration
+          const currentTime = Date.now();
+          const remainingTime = expirationTime - currentTime;
+    
+          // Set up a timer to log out the user 5 seconds before the token expires
+          const logoutTimer = setTimeout(() => {
+            handleLogoutOtomatis(storedUserId); // Call your logout function
+          }, remainingTime - 60000);
+    
+          // Cleanup the timer to avoid memory leaks
+          return () => clearTimeout(logoutTimer);
+        } catch (error) {
+          console.error('Error decoding JWT token:', error);
+          // Handle the error as needed, e.g., force logout
+          handleLogoutOtomatis(storedUserId);
+        }
+      }
+  }, []);
+  
+  
+    const handleLogoutOtomatis = async (jwtToken) => {
+      try {
+          // Send a DELETE request to the server
+          const response = await axios.delete(`${apiUrl}/api/logout`, {
+              headers: {
+                  'Authorization': `Bearer ${jwtToken}`
+              }
+          });
+          // Clear userId from sessionStorage
+          sessionStorage.removeItem('jwtToken');
+          // Update the state to reflect the user is now logged out
+          setUserId(null);
+          redirectToOtherPage();
+          setShowDropdown(false); // Close the dropdown
+      } catch (error) {
+          // Handle errors if the DELETE request fails
+          console.error("Error during logout:", error);
+          if (error.response) {
+              // The request was made and the server responded with a status code
+              // that falls out of the range of 2xx
+              console.error("Error response data:", error.response.data);
+              console.error("Error response status:", error.response.status);
+              console.error("Error response headers:", error.response.headers);
+          } else if (error.request) {
+              // The request was made but no response was received
+              console.error("No response received:", error.request);
+          } else {
+              // Something happened in setting up the request that triggered an Error
+              console.error("Error during request setup:", error.message);
+          }
+      }
+    };
 
     useEffect(() => {
         // Simulate a delay (e.g., API request)

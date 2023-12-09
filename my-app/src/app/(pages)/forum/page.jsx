@@ -28,8 +28,6 @@ const  Forum= () => {
   useEffect(() => {
    // Check if userId exists in sessionStorage
    const storedUserId = sessionStorage.getItem('userId');
-   console.log("id user : ",storedUserId);
-
    if (storedUserId) {
      // userId exists, update your state
      setUserId(storedUserId);
@@ -87,7 +85,6 @@ const  Forum= () => {
       const dataMsg = response.data;
       console.log('Data from server:', dataMsg);
 
-  
       // Optionally, you can clear the input field after sending
       setMessages('');
 
@@ -245,4 +242,4 @@ const  Forum= () => {
   );
 }
 
-export default withAuth(Forum);
+export default withAuth(Forum,['user']);

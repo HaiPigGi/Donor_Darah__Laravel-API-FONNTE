@@ -5,12 +5,23 @@ import Loading from "@/_components/Loading/Loading";
 import Navbar from "@/_components/navbar";
 import "@/_styles/css/login.css";
 import "@/_styles/css/regis.css";
+import Modal from 'react-modal';
+import Dropdown from "@/_components/Dropdown/dropdown";
 const Profile = () => {
     
   const [user, setUser] = useState(null);
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editedUser, setEditedUser] = useState({
+    nama: '',
+    telepon: '',
+    ktp: '',
+    pekerjaan: '',
+    golongan_darah: '',
+    kelurahan_id: '',
+  });
 
   useEffect(() => {
       // Simulate a delay (e.g., API request)
@@ -43,11 +54,6 @@ const Profile = () => {
     }
   }, []); // Empty dependency array ensures it runs only once when the component mounts
 
-  const handleEdit = () => {
-    // Handle edit logic here
-    console.log("Edit button clicked");
-  };
-
   const getUserByID = async (jwtToken) => {
     try {
       // Check if Token is not null
@@ -65,6 +71,62 @@ const Profile = () => {
       console.error("Error fetching user data:", error);
     }
   };
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+  
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleEdit = () => {
+    // Pre-fill the editedUser state with the current user details
+    setEditedUser({
+      nama: user.nama,
+      telepon: user.telepon,
+      ktp: user.ktp,
+      pekerjaan: user.pekerjaan,
+      golongan_darah: user.golongan_darah,
+      kelurahan_id: user.kelurahan_id,
+    });
+
+    openModal();
+  };
+  const handleInputChange = (e) => {
+    // Update the editedUser state based on user input
+    setEditedUser({
+      ...editedUser,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Send a PUT request to update user details
+      const response = await axios.put(`${apiUrl}/api/users/getUser/${user.id}`, editedUser, {
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.getItem('jwtToken')}`,
+        },
+      });
+
+      if (response.data.status === 'success') {
+        // Update the user state with the new details
+        setUser({
+          ...user,
+          ...editedUser,
+        });
+
+        closeModal();
+      } else {
+        console.error('Failed to update user:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+  
   return (
     <div className="my-bg">
          <div>
@@ -116,10 +178,10 @@ const Profile = () => {
                 />
             </div>
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-600">Kelurahan ID:</label>
+              <label className="block text-sm font-medium text-gray-600">Kelurahan</label>
               <input
                 type="text"
-                value={user.kelurahan_id}
+                value={user.kelurahan_nama}
                 readOnly
                 className="mt-1 p-2 w-full border rounded-md"
                 />
@@ -134,13 +196,14 @@ const Profile = () => {
                 />
             </div>
             <div className="mb-4">
-              <button
-                type="button"
-                onClick={handleEdit}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md"
-                >
-                Edit
-              </button>
+            <button
+              type="button"
+              onClick={openModal}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
+              Edit
+            </button>
+
               </div>
           </form>
         </div>
@@ -149,6 +212,153 @@ const Profile = () => {
                 </div>
                     )}
                  </div>
+
+      {/* Modal */}
+      <Modal
+  isOpen={isModalOpen}
+  onRequestClose={closeModal}
+  contentLabel="Edit User"
+>
+  <h2>Edit User</h2>
+  <form onSubmit={handleFormSubmit}>
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-600">Nama:</label>
+      <input
+        type="text"
+        name="nama"
+        value={editedUser.nama}
+        onChange={handleInputChange}
+        className="mt-1 p-2 w-full border rounded-md"
+      />
+    </div>
+
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-600">Telepon:</label>
+      <input
+        type="text"
+        name="telepon"
+        value={editedUser.telepon}
+        onChange={handleInputChange}
+        className="mt-1 p-2 w-full border rounded-md"
+      />
+    </div>
+
+    <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-600">KTP:</label>
+      <input
+        type="text"
+        name="ktp"
+        value={editedUser.ktp}
+        onChange={handleInputChange}
+        className="mt-1 p-2 w-full border rounded-md"
+      />
+    </div>
+
+                          <div className="mb-4">
+        <div className="input-container mb-1 font-Subtitle border-2">
+                                          <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
+                                              <img
+                                                  className=""
+                                                  src="/img/Vector.svg"
+                                                  alt="Icon"
+                                                  height={25}
+                                                  width={25}
+                                              />
+                                          </div>
+                                          <Dropdown
+                                              category="pekerjaan"
+                                              value={editedUser.pekerjaan}
+                                              sendToParent={(value) => {
+                                                // Log the selected value
+              
+                                                // Update the state
+                                                setEditedUser((prevUser) => ({
+                                                  ...prevUser,
+                                                  pekerjaan: value,
+                                                }));
+                                              }}
+                                          />
+                                      </div>
+                          </div>
+    <div className="mb-4">
+    <div className="input-container mb-1 font-Subtitle border-2">
+                        <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
+                            <img
+                                className="input-icon "
+                                src="/img/darah.svg"
+                                alt="Icon"
+                                height={25}
+                                width={25}
+                            />
+                        </div>
+                            <Dropdown
+                                category="golongan_darah"
+                                value={editedUser.golongan_darah}
+                                sendToParent={(value) => {
+                                  // Log the selected value
+
+                                  // Update the state
+                                  setEditedUser((prevUser) => ({
+                                    ...prevUser,
+                                    golongan_darah: value,
+                                  }));
+                                }}
+                            />
+                    
+                    </div>
+            </div>
+    <div className="mb-4">
+    <div className=" inline-block font-Subtitle text-[20px] w-full">
+                            <Dropdown category="provinsi" />
+                            <Dropdown category="kabupaten" />
+                            <div className="flex gap-6 justify-center w-full ">
+                                <div className="w-1/2">
+                                    <Dropdown category="kecamatan" />
+                                </div>
+                                <div className="w-1/2">
+                                <Dropdown
+                                      category="kelurahan"
+                                      value={editedUser.kelurahan_id}
+                                      sendToParent={(value) => {
+                                        // Log the selected value
+
+                                        // Update the state
+                                        setEditedUser((prevUser) => ({
+                                          ...prevUser,
+                                          kelurahan_id: value,
+                                        }));
+                                      }}
+                                    />
+
+                                    </div>
+
+                             </div>
+                        </div>
+    </div>
+
+    {/* <div className="mb-4">
+      <label className="block text-sm font-medium text-gray-600">Tagar ID:</label>
+      <input
+        type="text"
+        name="tagar_id"
+        value={editedUser.tagar_id}
+        onChange={handleInputChange}
+        className="mt-1 p-2 w-full border rounded-md"
+      />
+    </div> */}
+
+    <div className="mb-4">
+      <button
+        type="submit"
+        className="px-4 py-2 bg-blue-500 text-white rounded-md"
+      >
+        Save Changes
+      </button>
+    </div>
+  </form>
+  <button onClick={closeModal}>Close Modal</button>
+</Modal>
+
     </div>
                 
   );

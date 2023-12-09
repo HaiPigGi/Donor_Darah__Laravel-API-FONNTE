@@ -20,9 +20,11 @@ export default function Register() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [userId, setUserId] = useState(null);
 
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
+    
     const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
 
@@ -174,6 +176,11 @@ export default function Register() {
             console.log("Axios response:", response);
 
             if (response.status === 200) {
+                const jwtToken = response.data.token;
+                const userRoleFromResponse = response.data.role; // Get the user role
+                // Store the JWT token in session storage
+                sessionStorage.setItem('jwtToken', jwtToken);
+                sessionStorage.setItem('userRole', userRoleFromResponse);
                 setModalContent("Account Successfully Created");
                 setModalIsOpen(true);
                 window.location.href = "/";

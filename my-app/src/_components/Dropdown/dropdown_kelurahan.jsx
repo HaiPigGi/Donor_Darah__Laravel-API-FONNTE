@@ -5,14 +5,16 @@ import axios from "axios";
 export let idKelu = "";
 
 export async function getKelurahanData() {
-  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
-  try {
-    let responseKelurahan = await axios.get(`${apiUrl}/api/get/kelurahan/${idKec}`);
-    return responseKelurahan.data.kelurahan;
-  } catch (e) {
-    console.log(e.message);
-    alert(e.message);
-  }
+    const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+    try {
+        let responseKelurahan = await axios.get(
+            `${apiUrl}/api/get/kelurahan/${idKec}`,
+        );
+        return responseKelurahan.data.kelurahan;
+    } catch (e) {
+        console.log(e.message);
+        alert(e.message);
+    }
 }
 
 function setidKelurahan(id) {
@@ -24,24 +26,19 @@ export default function DropDownKelurahan({ sendToParent }) {
     const [kelurahanList, setKelurahanList] = useState([]);
 
     const handleDropdownChange = (e) => {
-        const selectedKelurahanId = e.target.value;
-        setSelectedOption(selectedKelurahanId);
-
-        // Store the selected Kelurahan ID in sessionStorage
-        sessionStorage.setItem("kelurahan_id", selectedKelurahanId);
-        const getKelurahanID = sessionStorage.getItem("kelurahan_id");
-        console.log("Kelurahan Id dari session : ", getKelurahanID);
+        setSelectedOption(e.target.value);
+        setidKelurahan(e.target.value);
+        sendToParent(e.target.value);
     };
+
 
     const handleDropdownClick = (e) => {
         try {
             getKelurahanData().then((response) => {
-                setidKelurahan(e.target.value);
                 setKelurahanList(response);
-                console.log("kelurahan id : ", response);
-                sendToParent(e.target.value);
             });
         } catch (e) {}
+        
     };
 
     const RenderDropdownData = () => {

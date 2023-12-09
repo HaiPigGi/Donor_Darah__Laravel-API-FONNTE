@@ -11,14 +11,15 @@ import Loading from "@/_components/Loading/Loading";
 import withAuth from "@/_components/Auth/WithAuth";
 
 const FormPengajuan = () => {
+ 
   const [data, setData] = useState({
-    "nama" : "",
-  "telepon" : "",
-  "golongan_darah" : "",
-  "provinsi_id" : "",
-  "kabupaten_id" : "",
-  "kecamatan_id" : "",
-  "kelurahan_id" : ""});
+    nama: "",
+    telepon: "",
+    ktp: "",
+    golongan_darah: "",
+    jumlah_kantong: "",
+    kelurahan_id: "",
+});
   const [session, setSession] = useState({});
   const [buttonNext, setButtonNext] = useState(0);
 

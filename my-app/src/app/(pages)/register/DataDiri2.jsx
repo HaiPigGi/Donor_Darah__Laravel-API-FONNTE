@@ -8,46 +8,6 @@ export default function DataDiri2({ data, action }) {
   const [errorMessage, setErrorMessage] = useState("");
   console.log("DataDiri 2 : ",data);
 
-  // const handleChange = (e) => {
-
-    
-
-  //   // Log the data to console
-  //   // console.log(`Input data - Name: ${name}, Value: ${value}`);
-
-  //   // if (value === "") {
-  //   //   setErrorMessage(
-  //   //     <ErrorMessage
-  //   //       message="tidak boleh ada data yang kosong"
-  //   //       kelas="w-full h-auto bg-red text-white absolute left-[-1px] bottom-[-50px] rounded-xl p-2"
-  //   //     />
-  //   //   );
-  //   // } else if (name === "telepon" && value === "") {
-  //   //   let detectNonNumber = value.match(/\D/g);
-  //   //   if (detectNonNumber !== null) {
-  //   //     setErrorMessage(
-  //   //       <ErrorMessage
-  //   //         message="Harap Masukkan Nomor telpon dengan Nomor"
-  //   //         kelas="w-[400px] h-auto bg-red text-white absolute left-[-1px] bottom-[-50px] rounded-xl p-2"
-  //   //       />
-  //   //     );
-  //   //     detectNonNumber = "";
-  //   //   } else {
-  //   //     setErrorMessage("");
-  //   //   }
-  //   // } else {
-  //   //   setErrorMessage("");
-  //   // }
-
-  //   // Call the action function to update the data in the parent component's state
-  //   action({
-  //     ...data,
-  //     [name]: value,
-  //   });
-  //   // Store data in sessionStorage
-  //   // sessionStorage.setItem(name, value);
-  // };
-
   return (
     <div id="contentRegister" className="mx-auto flex justify-center pt-10">
       <div className="">

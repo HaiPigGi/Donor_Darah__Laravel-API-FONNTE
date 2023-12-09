@@ -134,6 +134,7 @@ class UserController extends Controller
                 // Add the user location to the array
                // Add the user location to the array
                 $userLocations[] = [
+                    'nama' =>$profile->nama,
                     'lat' => $kabupatenData->lat,
                     'long' => $kabupatenData->long,
                 ];

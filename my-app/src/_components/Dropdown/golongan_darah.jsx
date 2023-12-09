@@ -8,11 +8,11 @@ export default function DropDownGolonganDarah({sendToParent}) {
   const handleDropdownChange = (e) => {
     setSelectedOption(e.target.value);
     golongan_darah = e.target.value;
-    sendToParent(e.target.value);
-    // Store the selected golongan darah in session storage
+    sendToParent(e.target.value); // make sure sendToParent is a function
     sessionStorage.setItem("golongan_darah", golongan_darah);
     console.log("Golongan Darah in sessionStorage:", golongan_darah);
   };
+  
   
   return (
     <select
@@ -26,8 +26,17 @@ export default function DropDownGolonganDarah({sendToParent}) {
         Golongan Darah
       </option>
       <option value="A">A</option>
+      <option value="A+">A+ (Resus: A+)</option>
+      <option value="A-">A- (Resus: A-)</option>
       <option value="B">B</option>
+      <option value="B+">B+ (Resus: B+)</option>
+      <option value="B-">B- (Resus: B-)</option>
+      <option value="AB">AB</option>
+      <option value="AB+">AB+ (Resus: AB+)</option>
+      <option value="AB-">AB- (Resus: AB-)</option>
       <option value="O">O</option>
+      <option value="O+">O+ (Resus: O+)</option>
+      <option value="O-">O- (Resus: O-)</option>
     </select>
   );
 }

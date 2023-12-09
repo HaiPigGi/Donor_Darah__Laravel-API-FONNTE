@@ -1,5 +1,4 @@
 import RunningLoading from "@/_components/Loading/RunningLoading";
-import Card from "@/_components/card";
 import axios from "axios";
 import { useEffect, useState, Suspense, startTransition } from "react";
 

@@ -291,7 +291,7 @@ export default function Register() {
 
     const handleKembali = () => {
         const pagi =
-            document.getElementById("pagination").childNodes[buttonNext];
+        document.getElementById("pagination").childNodes[buttonNext];
         setButtonNext(buttonNext - 1);
         pagi.classList.remove("bg-red");
         pagi.classList.add("border-2");
@@ -392,7 +392,6 @@ export default function Register() {
             );
         }
     };
-
     const formRendering = () => {
         if (buttonNext == 0) {
             return (

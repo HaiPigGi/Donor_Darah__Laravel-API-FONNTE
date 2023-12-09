@@ -3,13 +3,9 @@ import ErrorMessage from "@/_components/errorMessage";
 
 export default function DataDiri({ action, data }) {
   const [errorMessage, setErrorMessage] = useState("");
-  console.log("data : ",data);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Log the data to console
-    console.log(`Input data - Name: ${name}, Value: ${value}`);
 
     if (value === "") {
       setErrorMessage(

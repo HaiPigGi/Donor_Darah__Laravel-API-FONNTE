@@ -1,6 +1,7 @@
 import Dropdown from "@/_components/Dropdown/dropdown";
 import React, { useState } from "react";
 export default function Hal1({ data, action }) {
+    // saving data to object data
     const handleChange = (e) => {
         const { name, value } = e.target;
         action({
@@ -8,6 +9,7 @@ export default function Hal1({ data, action }) {
             [name]: value,
         });
     };
+
     return (
         <div className=" grid grid-cols-1 md:grid-cols-4 md:gap-4 w-full">
             <div className="md:col-span-2">

@@ -34,74 +34,75 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Tambahkan route untuk menampilkan form registrasi dengan middleware CORS
 Route::middleware(['cors', 'web'])->group(function () {
-    // Login Routes
-    Route::get('/login', [LoginController::class, 'index'])->name('login');
-    Route::post('/verify/login', [LoginController::class, 'login']);
-    Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
-    Route::delete('/logout/{userId}', [LoginController::class, 'logout']);
-
-    //user profiles
-    Route::prefix('users')->group(function () {
-    Route::get('/getUser/{userId}', [UserController::class, 'getUserDetails']);
-    Route::put('/getUser/{userId}', [UserController::class, 'updateUser']);
-    });
-    //for akseptor
-    Route::post('/form/akseptor-send',[Akseptor::class,'validateData']);
-
-    // Registrasi
-    Route::get('/register/auth', [RegisterController::class, 'index']);
-    Route::post('/register/auth', [RegisterController::class, 'verify']);
-    Route::get('/register/auth/verify', [VerificationController::class, 'index']);
-    Route::post('/register/auth/verify', [RegisterController::class, 'validateCheck']);
-    Route::post('/register/auth/create', [RegisterController::class, 'verifyCreateUser']);
-    Route::post('/check-number/telepon', [UserController::class, 'checkNumber']);
-
-    // Data Provinsi, Kabupaten, Kecamatan, Kelurahan
-    Route::get('/get/provinsi', [ProvinsiController::class, 'getProvinsiData'])->name('provinsi');
-    Route::get('/get/kabupaten/{id}', [kabupatenController::class, 'getKabupatenData'])->name('kabupaten');
-    Route::get('/get/kecamatan/{id}', [kecamatanController::class, 'getKecamatanData'])->name('kecamatan');
-    Route::get('/get/kelurahan/{id}', [kelurahanController::class, 'getKelurahanData'])->name('kelurahan');
-    Route::get('/user/map',[UserController::class,'getUserLocation']);
-
-    Route::get('/get-session-data', [SessionController::class, 'getSessionData']);
-    // CSRF Cookie
-    Route::get('/sanctum/csrf-cookie', function (Request $request) {
-        return response()->json(['message' => 'CSRF cookie set']);
-    });
-
-    // Routes for PostController
-    Route::prefix('admin')->group(function () {
+        // Registrasi
+        Route::get('/register/auth', [RegisterController::class, 'index']);
+        Route::post('/register/auth', [RegisterController::class, 'verify']);
+        Route::get('/register/auth/verify', [VerificationController::class, 'index']);
+        Route::post('/register/auth/verify', [RegisterController::class, 'validateCheck']);
+        Route::post('/register/auth/create', [RegisterController::class, 'verifyCreateUser']);
+        Route::post('/check-number/telepon', [UserController::class, 'checkNumber']);
+        // Login Routes
+        Route::get('/login', [LoginController::class, 'index'])->name('login');
+        Route::post('/verify/login', [LoginController::class, 'login']);
+        Route::post('/verify/otp/login', [LoginController::class, 'validateCheck']);
+        //Logout
+        Route::middleware(['jwt'])->group(function() {
+            Route::delete('/logout', [LoginController::class, 'logout']);
+        });
+        //user profiles
+        Route::prefix('users')->middleware(['jwt'])->group(function () {
+            Route::get('/getUser', [UserController::class, 'getUserDetails']);
+            Route::put('/getUser/{userId}', [UserController::class, 'updateUser']);
+        });
+        //get All POST Without Auth
         Route::get('/posts/all-data', [beritaController::class, 'getAllDataStore']);
-        Route::get('/posts/all-data/{id}', [beritaController::class, 'getAllDataStoreByID']);
-        Route::get('/getAkseptor/{id}', [verifyAkseptorController::class, 'getAkseptorByID']);
-        Route::post('/posts', [beritaController::class, 'store']);
-        Route::post('/posts/{post}', [beritaController::class, 'update']);
-        Route::delete('/posts/{post}', [beritaController::class, 'destroy']);
-        // Route for updating Akseptor data
-        Route::get('/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
-        Route::put('/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
-        Route::get('/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse']);
-        Route::get('/getUserByGolongan/{golonganDarah}',[verifyAkseptorController::class,'getUserLocationsByGolonganDarah']);
-    }); 
 
+        // Routes for Admin
+        Route::prefix('admin')->middleware(['jwt'])->group(function () {
+            Route::get('/posts/all-data', [beritaController::class, 'getAllDataStore']);
+            Route::get('/posts/all-data/{id}', [beritaController::class, 'getAllDataStoreByID']);
+            Route::get('/getAkseptor/{id}', [verifyAkseptorController::class, 'getAkseptorByID']);
+            Route::post('/posts', [beritaController::class, 'store']);
+            Route::post('/posts/{post}', [beritaController::class, 'update']);
+            Route::delete('/posts/{post}', [beritaController::class, 'destroy']);
+            // Route for updating Akseptor data
+            Route::get('/verify_akseptor', [verifyAkseptorController::class, 'showDataAkseptor']);
+            Route::put('/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
+            Route::get('/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse']);
+            Route::get('/getUserByGolongan/{golonganDarah}', [verifyAkseptorController::class, 'getUserLocationsByGolonganDarah']);
+        });
 
-    // Untuk Tagar
-    Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
-    Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);
+        //for akseptor
+        Route::post('/form/akseptor-send',[Akseptor::class,'validateData']);
 
-    //its for sendMessage
-    Route::post('/send-message/{tagarId}/{userId}', [ChatMessageSend::class, 'sendMessage']);
+        // Data Provinsi, Kabupaten, Kecamatan, Kelurahan
+        Route::get('/get/provinsi', [ProvinsiController::class, 'getProvinsiData'])->name('provinsi');
+        Route::get('/get/kabupaten/{id}', [kabupatenController::class, 'getKabupatenData'])->name('kabupaten');
+        Route::get('/get/kecamatan/{id}', [kecamatanController::class, 'getKecamatanData'])->name('kecamatan');
+        Route::get('/get/kelurahan/{id}', [kelurahanController::class, 'getKelurahanData'])->name('kelurahan');
+        Route::get('/user/map',[UserController::class,'getUserLocation']);
 
-    Route::post('/tagars/{tagarId}/user-messages/associate', [ChatMessageSend::class, 'associateMessageWithTagar']);
+        Route::get('/get-session-data', [SessionController::class, 'getSessionData']);
+        // CSRF Cookie
+        Route::get('/sanctum/csrf-cookie', function (Request $request) {
+            return response()->json(['message' => 'CSRF cookie set']);
+        });
 
-    // Get messages associated with a tagar
-    Route::get('/tagars/{tagarId}/messages', [ChatMessageSend::class, 'getMessagesForTagar']);
+        Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
+        Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);
+        //its for sendMessage
+        Route::post('/send-message/{tagarId}/{userId}', [ChatMessageSend::class, 'sendMessage']);
 
-    Route::get('/tagars/messages', [ChatMessageSend::class,'getAllMessagesFromTagar']);
+        Route::post('/tagars/{tagarId}/user-messages/associate', [ChatMessageSend::class, 'associateMessageWithTagar']);
 
-   
+        // Get messages associated with a tagar
+        Route::get('/tagars/{tagarId}/messages', [ChatMessageSend::class, 'getMessagesForTagar']);
 
-    Route::get('/admin/getUser',[userAdminController::class,'getAllUser']);
+        Route::get('/tagars/messages', [ChatMessageSend::class,'getAllMessagesFromTagar']);
+
+    
+
+        Route::get('/admin/getUser',[userAdminController::class,'getAllUser']);
 
 
 });

@@ -34,7 +34,7 @@ const Profile = () => {
 
   useEffect(() => {
     // Check if userId exists in sessionStorage
-    const storedUserId = sessionStorage.getItem('userId');
+    const storedUserId = sessionStorage.getItem('jwtToken');
 
     if (storedUserId) {
       // userId exists, update your state
@@ -48,13 +48,16 @@ const Profile = () => {
     console.log("Edit button clicked");
   };
 
-  const getUserByID = async (id) => {
+  const getUserByID = async (jwtToken) => {
     try {
-      // Check if userId is not null
-      if (id) {
-        const response = await axios.get(`${apiUrl}/api/users/getUser/${id}`);
+      // Check if Token is not null
+      if (jwtToken) {
+        const response = await axios.get(`${apiUrl}/api/users/getUser`, {
+          headers: {
+              'Authorization': `Bearer ${jwtToken}`
+          }
+      });
         setUser(response.data.user); // Assuming the user data is returned as an object
-        console.log("nama : ", response.data.user.nama); // Access the name directly from the response
       } else {
         console.error("userId is null");
       }
@@ -64,8 +67,6 @@ const Profile = () => {
   };
   return (
     <div className="my-bg">
-
-
          <div>
             {loading ? (
                 <Loading progress={progress} />

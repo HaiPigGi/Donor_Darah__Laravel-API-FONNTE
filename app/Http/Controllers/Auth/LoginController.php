@@ -3,18 +3,16 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use App\Models\User;
 use App\Models\sessionModels;
 use GuzzleHttp\Client;
 use App\Models\sessionMod;
+use Tymon\JWTAuth\Facades\JWTAuth;
 class LoginController extends Controller
 {
 
@@ -127,20 +125,17 @@ class LoginController extends Controller
                 ], 404);
             }
 
-            // Perform the login action
-            Auth::login($user);
-            Log::info("Cek User Id Untuk login : ".json_encode($userId));
+            // Generate JWT token
+            $token = JWTAuth::fromUser($user);
+            Log::info("Cek Token JWT Untuk Login : " . json_encode($token));
 
-            //  // Perform the login action
-            //  Auth::loginUsingId($userId);
-            // // Log data to the log file
-            Log::info("Data Session Database: " . json_encode($sessionDataArray));
+            // Return the token and other user information in the response
             return response()->json([
                 'message' => 'Successfully OTP Verification.',
-                'id' => $userId, // Assuming you have the user ID stored in $userId
-                'role' =>$user->role,
+                'id' => $userId,
+                'role' => $user->role,
+                'token' => $token, // Include the JWT token in the response
             ]);
-            
         } else {
             // No matching session found
             Log::info("Invalid verification code received: $userCode");
@@ -160,15 +155,25 @@ class LoginController extends Controller
     }
 }
 
-    public function logout($userId)
+public function logout()
 {
     try {
-        // Check if the user with the provided ID exists
-        $user = User::find($userId);
+        // Get the authenticated user using the JWT token
+        $token = JWTAuth::getToken();
+        
+        if (!$token) {
+            return response()->json(['message' => 'Token not provided.'], 401);
+        }
+
+        $user = JWTAuth::toUser($token);
 
         if (!$user) {
             return response()->json(['message' => 'User not found.'], 404);
         }
+
+        // Get the user ID
+        $userId = $user->id;
+        Log::info("cek ID Dari Logout : ".json_encode($userId));
 
         // Logout user
         Auth::logout();

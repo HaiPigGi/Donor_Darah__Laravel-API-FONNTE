@@ -7,7 +7,7 @@ import UserDetailsModal from "./UserDetailsModal";
 import AddPostModal from "./AddPostModal";
 import EditPostModal from "./EditPostModal";
 
-const Dashboard = () => {
+const Dashboard = (props) => {
     const [activeMenu, setActiveMenu] = useState("");
     const [users, setUsers] = useState([]);
     const [requests, setRequests] = useState([]);
@@ -23,52 +23,136 @@ const Dashboard = () => {
     const [posts, setPosts] = useState([]);
     const [editingPost, setEditingPost] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [token,setToken] = useState(null);
+
 
     useEffect(() => {
-        // Check if userId exists in sessionStorage
-        const storedUserId = sessionStorage.getItem("userId");
+        const storedUserId = sessionStorage.getItem('jwtToken');
+      
         if (storedUserId) {
-            // userId exists, update your state
-            setUserId(storedUserId);
+          // userId exists, update your state
+          setUserId(storedUserId);
+          setToken(storedUserId);
+          getDataAkseptor(storedUserId);
+          getAllDataPost(storedUserId);
+          getAllUser(storedUserId);
+      
+          // Parse the JWT token without using jwt_decode
+          const tokenParts = storedUserId.split('.');
+          const decodedToken = JSON.parse(atob(tokenParts[1]));
+      
+          // Get the expiration time from the decoded token
+          const expirationTime = decodedToken.exp * 1000; // Convert to milliseconds
+      
+          // Calculate the remaining time until expiration
+          const currentTime = Date.now();
+          const remainingTime = expirationTime - currentTime;
+      
+          // Log the remaining time until expiration
+          console.log(`Remaining time until expiration: ${remainingTime} milliseconds`);
+      
+          // Set up a timer to log out the user 5 seconds before the token expires
+          const logoutTimer = setTimeout(() => {
+            handleLogoutOtomatis(storedUserId); // Call your logout function
+          }, remainingTime - 60000); // Subtract 5 seconds (5000 milliseconds)
+      
+          // Cleanup the timer to avoid memory leaks
+          return () => clearTimeout(logoutTimer);
         }
-    }, []); // Empty dependency array ensures it runs only once when the component mounts
+      
+      }, []);
 
-    const handleLogout = async () => {
+      const handleLogoutOtomatis = async (jwtToken) => {
         try {
             // Send a DELETE request to the server
-            const response = await axios.delete(
-                `${apiUrl}/api/logout/${userId}`,
-            );
+            const response = await axios.delete(`${apiUrl}/api/logout`, {
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`
+                }
+            });
             // Clear userId from sessionStorage
-            console.log("Logout Response:", response);
-            sessionStorage.removeItem("userId");
+            sessionStorage.removeItem('jwtToken');
             // Update the state to reflect the user is now logged out
             setUserId(null);
             redirectToOtherPage();
+            setShowDropdown(false); // Close the dropdown
         } catch (error) {
             // Handle errors if the DELETE request fails
             console.error("Error during logout:", error);
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.error("Error response data:", error.response.data);
+                console.error("Error response status:", error.response.status);
+                console.error("Error response headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("No response received:", error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error("Error during request setup:", error.message);
+            }
         }
-    };
+      };
+      
+    const handleLogout = async () => {
+        try {
+            // Send a DELETE request to the server
+            const response = await axios.delete(`${apiUrl}/api/logout`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            // Clear userId from sessionStorage
+            sessionStorage.removeItem('jwtToken');
+            // Update the state to reflect the user is now logged out
+            setUserId(null);
+            redirectToOtherPage();
+            setShowDropdown(false); // Close the dropdown
+        } catch (error) {
+            // Handle errors if the DELETE request fails
+            console.error("Error during logout:", error);
+            if (error.response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                console.error("Error response data:", error.response.data);
+                console.error("Error response status:", error.response.status);
+                console.error("Error response headers:", error.response.headers);
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error("No response received:", error.request);
+            } else {
+                // Something happened in setting up the request that triggered an Error
+                console.error("Error during request setup:", error.message);
+            }
+        }
+      };
 
     const redirectToOtherPage = () => {
-        window.location.href = "/";
+        window.location.href = "/Login";
     };
 
-    const getAllUser = async () => {
+    const getAllUser = async (jwtToken) => {
         try {
-            const response = await axios.get(`${apiUrl}/api/admin/getUser`);
+            const response = await axios.get(`${apiUrl}/api/admin/getUser`, {
+                headers: {
+                    'Authorization': `Bearer ${jwtToken}`
+                }
+            });
             setUsers(response.data); // Set the retrieved user data
         } catch (error) {
             console.error("Error fetching user data:", error);
         }
     };
 
-    const getDataAkseptor = async () => {
+    const getDataAkseptor = async (jwtToken) => {
         try {
             const response = await axios.get(
-                `${apiUrl}/api/admin/verify_akseptor`,
-            );
+                `${apiUrl}/api/admin/verify_akseptor`, {
+                    headers: {
+                        'Authorization': `Bearer ${jwtToken}`
+                    }
+                });
             setDataAkseptor(response.data); // Set the retrieved dataAkseptor
         } catch (error) {
             console.error("Error fetching dataAkseptor:", error);
@@ -76,10 +160,6 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
-        getAllUser();
-        getDataAkseptor();
-        getAllDataPost();
-
         // Simulate a delay (e.g., API request)
         const delay = setTimeout(() => {
             setLoading(false);
@@ -102,12 +182,13 @@ const Dashboard = () => {
     const getUserDetails = async (akseptorId) => {
         try {
             const response = await axios.get(
-                `${apiUrl}/api/admin/getAkseptor/${akseptorId}`,
-            );
+                `${apiUrl}/api/admin/getAkseptor/${akseptorId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             const userDetails = response.data;
 
-            // Handle the userDetails data (e.g., update state or perform any other actions)
-            console.log("User Details:", userDetails);
             setSelectedAkseptor(userDetails);
             setIsModalOpen(true);
         } catch (error) {
@@ -120,13 +201,15 @@ const Dashboard = () => {
         setIsAddPostModalOpen(true);
     };
 
-    const getAllDataPost = async () => {
+    const getAllDataPost = async (jwtToken) => {
         try {
             const response = await axios.get(
-                `${apiUrl}/api/admin/posts/all-data`,
-            );
+                `${apiUrl}/api/admin/posts/all-data`, {
+                    headers: {
+                        'Authorization': `Bearer ${jwtToken}`
+                    }
+                });
             setPosts(response.data.posts);
-            console.log("posts:", response.data.posts); // Log the response data instead of the state variable
         } catch (error) {
             console.error("Error fetching posts:", error);
         }
@@ -149,8 +232,11 @@ const Dashboard = () => {
     const handleDeletePost = async (postId) => {
         try {
             const response = await axios.delete(
-                `${apiUrl}/api/admin/posts/${postId}`,
-            );
+                `${apiUrl}/api/admin/posts/${postId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
             console.log("cek response : ", response.data);
 
             // Jika status response tidak ok, lemparkan error
@@ -159,9 +245,6 @@ const Dashboard = () => {
                     `Failed to delete post (HTTP ${response.status})`,
                 );
             }
-
-            console.log(response.data.message); // Log pesan sukses dari server jika diperlukan
-
             // Lakukan operasi atau pembaruan UI lainnya setelah penghapusan berhasil
         } catch (error) {
             console.error("Error deleting post:", error.message);
@@ -187,13 +270,6 @@ const Dashboard = () => {
                                     className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white"
                                 >
                                     Lihat User
-                                </a>
-                                <a
-                                    href="#"
-                                    onClick={() => setActiveMenu("requests")}
-                                    className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white"
-                                >
-                                    Mengaply Permintaan
                                 </a>
                                 <a
                                     href="#"
@@ -365,14 +441,6 @@ const Dashboard = () => {
                                         )}
                                     </div>
                                 )}
-                                {activeMenu === "requests" && (
-                                    <div>
-                                        <h2 className="text-lg font-semibold text-gray-600 mb-2">
-                                            Daftar Permintaan
-                                        </h2>
-                                        {/* Rendering code for requests can be added here */}
-                                    </div>
-                                )}
                                 {activeMenu === "posts" && (
                                     <div>
                                         <h2 className="text-lg font-semibold text-gray-600 mb-2">
@@ -475,10 +543,9 @@ const Dashboard = () => {
                     editingPost={editingPost}
                 />
             )}
-
             {/* ... (existing code) */}
         </div>
     );
 };
 
-export default Dashboard;
+export default withAuth(Dashboard, ['admin']);

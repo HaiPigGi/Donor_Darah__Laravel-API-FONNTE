@@ -26,6 +26,8 @@ const FormPengajuan = () => {
 
     const [openError, setOpenError] = useState(false);
     const cancelButtonRef = useRef(null);
+
+    // make use state for parsing the data
     const [data, setData] = useState({
         nama: "",
         telepon: "",
@@ -63,6 +65,7 @@ const FormPengajuan = () => {
         setSession(cookie);
     };
 
+    // for checking is there still null values on object data
     const cekAllFilled = () => {
         console.log("openError from cekAllFilled : ", openError);
         if (
@@ -84,6 +87,7 @@ const FormPengajuan = () => {
         }
     };
 
+    // sending form to backend
     const sendForm = async () => {
         try {
             await axios.post(`${apiUrl}/api/form/akseptor-send`, data, {
@@ -97,20 +101,19 @@ const FormPengajuan = () => {
             console.log("Error From formPengajuan Page.jsx : ", error);
         }
     };
+
     const Buttons = () => {
-        if (buttonNext == 0) {
-            return (
-                <div className="w-full flex justify-end py-2">
-                    <button
-                        className="border-2 rounded-full px-3 py-3 bg-red text-white "
-                        type="button"
-                        onClick={cekAllFilled}
-                    >
-                        Kirim Pengajuan
-                    </button>
-                </div>
-            );
-        }
+        return (
+            <div className="w-full flex justify-end py-2">
+                <button
+                    className="border-2 rounded-full px-3 py-3 bg-red text-white "
+                    type="button"
+                    onClick={cekAllFilled}
+                >
+                    Kirim Pengajuan
+                </button>
+            </div>
+        );
     };
 
     return (
@@ -132,6 +135,7 @@ const FormPengajuan = () => {
                                     <div className="flex pt-2 justify-center w-full h-full text-center ">
                                         <form className="font-Subtitle w-full px-5">
                                             <Hal1
+                                            // for parsing data to children node
                                                 action={(newValue) => {
                                                     setData(newValue);
                                                 }}
@@ -181,6 +185,7 @@ const FormPengajuan = () => {
                                     <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                                         <div className="sm:flex sm:items-start">
                                             <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                {/* conditional rendering icon when error and success */}
                                                 {error ? (
                                                     <ExclamationTriangleIcon
                                                         className="h-6 w-6 text-red"
@@ -198,12 +203,14 @@ const FormPengajuan = () => {
                                                     as="h3"
                                                     className="text-xl font-semibold leading-6 text-gray-900"
                                                 >
+                                                  {/* conditional rendering title when error and when success */}
                                                     {error
                                                         ? error
                                                         : "Form berhasil dikirim"}
                                                 </Dialog.Title>
                                                 <div className="mt-2">
                                                     <p className="text-sm text-gray-500">
+                                                      {/* conditional rendering subtitle when error and when success */}
                                                         {error
                                                             ? error
                                                             : "kebutuhan darah akan dibroadcast ke seluruh pendonor"}

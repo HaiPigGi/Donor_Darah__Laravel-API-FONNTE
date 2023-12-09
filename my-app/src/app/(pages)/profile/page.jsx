@@ -6,10 +6,9 @@ import Navbar from "@/_components/navbar";
 import "@/_styles/css/login.css";
 import "@/_styles/css/regis.css";
 const Profile = () => {
+    
   const [user, setUser] = useState(null);
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
-
-
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 

@@ -21,23 +21,33 @@ export function setidProv(id){
 export default function DropDownProvinsi(action) {
   const [selectedOption, setSelectedOption] = useState("");
   const [ProvinsiList, setProvinsiList] = useState([]);
-  
-  useEffect( () => {
-    try{
-      let provinsiData = getProvinsiData()
-      provinsiData
-      .then(result => {
-          setProvinsiList(result)
-        }
-      ).catch(error => {
-          // alert(error.message)
-        }
-      )
+  const [renderedOnce, setRenderedOnce] =useState(true);
+  const [count, setCount] =useState(0);
 
-    }catch(e){
-      console.log("error at UseEffect DDProv : "+e.message)
+  useEffect( () => {
+    if(renderedOnce){
+      setCount(count+1);
+      console.log("randered : ",count);
+      try{
+        let provinsiData = getProvinsiData()
+        provinsiData
+        .then(result => {
+            setProvinsiList(result)
+          }
+        ).catch(error => {
+            // alert(error.message)
+          }
+        )
+  
+      }catch(e){
+        console.log("error at UseEffect DDProv : "+e.message)
+      }
+      setRenderedOnce(false);
+    }else{
+      
     }
-  }, []);
+  }, [renderedOnce]);
+
   const handleDropdownChange = (e) => {
     console.log("Selected value:", e.target.value);
     setidProv(e.target.value);

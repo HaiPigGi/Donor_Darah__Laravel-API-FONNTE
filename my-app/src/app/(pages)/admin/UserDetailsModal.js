@@ -1,11 +1,11 @@
 "use client";
-import React from 'react';
 import axios from 'axios'; // Import axios
 import Modal from 'react-modal';
+import React, { useState,useEffect } from 'react';
 
 const UserDetailsModal = ({ isOpen, onRequestClose, akseptorDetails }) => {
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
-
+  const [token,setToken] = useState(null);
     const customStyles = {
         content: {
           width: '60%',
@@ -18,11 +18,24 @@ const UserDetailsModal = ({ isOpen, onRequestClose, akseptorDetails }) => {
         },
       };
 
+      useEffect(() => {
+        // Check if userId exists in sessionStorage
+        const storedUserId = sessionStorage.getItem("jwtToken");
+        if (storedUserId) {
+          setToken(storedUserId);
+        }
+        console.log("Sensitive information is logged here.");
+    }, []); 
+
       const verifyAkseptor = async (akseptorId) => {
+        console.log("Token in verifyAkseptor:", token);
         try {
           // Send a PUT request to update Akseptor data
-          const response = await axios.put(`${apiUrl}/api/admin/verify_akseptor/${akseptorId}`);
-      
+          const response = await axios.put(`${apiUrl}/api/admin/verify_akseptor/${akseptorId}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
           // Handle the response as needed
           console.log('Verification response:', response.data);
           // You can update your state or perform other actions based on the response

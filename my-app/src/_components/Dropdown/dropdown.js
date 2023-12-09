@@ -32,4 +32,8 @@ function Dropdowns({ category, action }) {
 export default function Dropdown({ category, sendToParent }) {
     console.log("sendToParent DD: " + sendToParent);
     return <Dropdowns category={category} action={sendToParent} />;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

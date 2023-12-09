@@ -114,6 +114,7 @@ export default function Hal1({ data, action }) {
                                 alt="Icon"
                                 height={25}
                                 width={25}
+<<<<<<< HEAD
                             />
                         </div>
                         <div className="w-full">
@@ -143,6 +144,22 @@ export default function Hal1({ data, action }) {
                             "golongan_darah": value,
                         })}} />
                         </div>                                             
+=======
+                            />
+                        </div>
+                        <div className="w-full">
+                            <Dropdown
+                                category="golongan_darah"
+                                sendToParent={(value) => {
+                                    action({
+                                        ...data,
+                                        golongan_darah: value,
+                                    });
+                                    console.log("Kelurahan Render :", data);
+                                }}
+                            />
+                        </div>
+>>>>>>> main
                     </div>
                     <div className="font-Subtitle ms-2 w-[10rem]">
                         <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">

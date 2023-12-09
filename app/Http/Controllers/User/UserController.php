@@ -11,6 +11,9 @@ use App\Models\Kelurahan;
 use App\Models\Kecamatan;
 use App\Models\Kabupaten;
 use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 class UserController extends Controller
 {
     /**
@@ -19,36 +22,43 @@ class UserController extends Controller
      * @param  int  $userId
      * @return \Illuminate\Http\Response
      */
+     protected function getUserDetails()
+{
+    try {
+        // Get the authenticated user using the JWT token
+        $token = JWTAuth::getToken();
+        Log::info('Request data:'.json_encode($token));
 
-     protected function getUserDetails($userId)
-     {
-         try {
-             // Find the user by ID
-             $user = User::findOrFail($userId);
-             
-             // Find the user's profile by ID
-             $profile = profileModel::where('id_user', $userId)->firstOrFail();
-     
-             // Get the user's details
-             $userData = [
-                 'id' => $user->id,
-                 'nama' => $user->nama,
-                 'telepon' => $user->telepon,
-                 'ktp' => $profile->ktp,
-                 'pekerjaan'=>$profile->pekerjaan,  
-                 'golongan_darah'=>$profile->golongan_darah,
-                 'kelurahan_id'=>$profile->kelurahan_id,
-                 'tagar_id'=>$profile->tagar_id
-             ];
-             // Return user details as JSON
-             return response()->json(['status' => 'success', 'user' => $userData]);
-         } catch (\Exception $e) {
-             // Handle the exception, for example, return a 404 response for not found
-             Log::error('Exception occurred while getUserDetail Message: ' . $e->getMessage());
-             return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
-         }
-     }
-     
+        $user = JWTAuth::toUser($token);
+
+        // Check if the user exists
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+        }
+
+        // Find the user's profile by ID
+        $profile = profileModel::where('id_user', $user->id)->firstOrFail();
+
+        // Get the user's details
+        $userData = [
+            'id' => $user->id,
+            'nama' => $user->nama,
+            'telepon' => $user->telepon,
+            'ktp' => $profile->ktp,
+            'pekerjaan' => $profile->pekerjaan,
+            'golongan_darah' => $profile->golongan_darah,
+            'kelurahan_id' => $profile->kelurahan_id,
+            'tagar_id' => $profile->tagar_id
+        ];
+
+        // Return user details as JSON
+        return response()->json(['status' => 'success', 'user' => $userData]);
+    } catch (\Exception $e) {
+        // Handle the exception, for example, return a 404 response for not found
+        Log::error('Exception occurred while getUserDetail Message: ' . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+    }
+}
      
      protected function updateUser(Request $request, $userId)
      {

@@ -1,17 +1,29 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 
 const AddPostModal = ({ isOpen, onRequestClose }) => {
     const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
     const [session, setSession] = useState({});
+    const [token,setToken] = useState(null);
+
      const [formData, setFormData] = useState({
     image: null,
     title: '',
     content: '',
     event: '',
   });
+
+  useEffect(() => {
+    // Check if userId exists in sessionStorage
+    const storedUserId = sessionStorage.getItem("jwtToken");
+    if (storedUserId) {
+      setToken(storedUserId);
+
+    }
+    console.log("Sensitive information is logged here.");
+}, []); 
 
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
@@ -24,7 +36,6 @@ const AddPostModal = ({ isOpen, onRequestClose }) => {
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
-  
     // Perform client-side validation
     if (!formData.image || !formData.title || !formData.content || !formData.event) {
       console.error('Please fill in all the required fields.');
@@ -47,6 +58,7 @@ const AddPostModal = ({ isOpen, onRequestClose }) => {
         postData,
         {
           headers: {
+            'Authorization': `Bearer ${token}`,
             'csrf_token': session.csrf_token,
           },
         }

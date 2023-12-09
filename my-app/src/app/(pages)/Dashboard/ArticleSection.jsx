@@ -19,25 +19,25 @@ export default function ArticleSection() {
     };
 
     const ShowAllCards = () => {
-            return posts.map((post) => {
-                return (
-                    <li className="bg-red rounded-md text-center w-[20rem] h-[25rem] relative hover:transform border-2">
-                        <Suspense
-                            fallback={<p className="text-black">Loading ...</p>}
-                        >
-                            <img
-                                src={post.image.url}
-                                alt={post.title}
-                                layout="fill"
-                                className="object-cover mx-auto rounded-md"
-                            />
-                        </Suspense>
-                        <h1 className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-black to-transparent text-white rounded-b-md text-xl font-bold flex items-center justify-center b">
-                            {post.title}
-                        </h1>
-                    </li>
-                );
-            });
+        return posts.map((post) => {
+            return (
+                <li className="bg-red rounded-md text-center w-[20rem] h-[25rem] relative hover:transform border-2">
+                    <Suspense
+                        fallback={<p className="text-black">Loading ...</p>}
+                    >
+                        <img
+                            src={post.image.url}
+                            alt={post.title}
+                            layout="fill"
+                            className="object-cover mx-auto rounded-md w-full h-full"
+                        />
+                    </Suspense>
+                    <h1 className="absolute bottom-0 w-full h-20 bg-gradient-to-t from-black to-transparent text-white rounded-b-md text-xl font-bold flex items-center justify-center b">
+                        {post.title}
+                    </h1>
+                </li>
+            );
+        });
     };
 
     useEffect(() => {

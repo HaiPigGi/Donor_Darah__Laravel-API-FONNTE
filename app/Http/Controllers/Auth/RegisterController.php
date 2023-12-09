@@ -99,7 +99,7 @@ class RegisterController extends Controller
             sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
 
             
-            Auth::login($id_user);
+            // Auth::login($id_user);
             // Commit the database transaction
             DB::commit();
 

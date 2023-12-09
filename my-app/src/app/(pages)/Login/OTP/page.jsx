@@ -61,17 +61,18 @@ export default function Otp() {
 
       if (response.status === 200) {
         console.log("Verification is successful");
-        const userIdFromResponse = response.data.id;
+        const jwtToken = response.data.token;
         const userRoleFromResponse = response.data.role; // Get the user role
-        console.log("User ID from response:", userIdFromResponse);
-        console.log("User role from response:", userRoleFromResponse);
-        sessionStorage.setItem('userId', userIdFromResponse);
+        console.log("User ID from response:", jwtToken);
+         // Store the JWT token in session storage
+          sessionStorage.setItem('jwtToken', jwtToken);
+          sessionStorage.setItem('userRole', userRoleFromResponse);
          // Redirect based on user role
       if (userRoleFromResponse === "admin") {
-        setUserId(userIdFromResponse);
+        setUserId(jwtToken);
         redirectToOtherPageAdmin();
       } else {
-        setUserId(userIdFromResponse);
+        setUserId(jwtToken);
         redirectToOtherPage();
       }
       } else {

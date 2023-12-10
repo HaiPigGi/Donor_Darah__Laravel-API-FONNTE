@@ -49,6 +49,8 @@ const handleLogout = async () => {
       });
       // Clear userId from sessionStorage
       sessionStorage.removeItem('jwtToken');
+      sessionStorage.removeItem('userId');
+      sessionStorage.removeItem('userRole');
       // Update the state to reflect the user is now logged out
       setUserId(null);
       setUser(null); // Clear user data
@@ -156,7 +158,7 @@ function classNames(...classes) {
                 Forum
             </a>
             <a
-                href=""
+                href="/tentang"
                 className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
             >
                 Tentang

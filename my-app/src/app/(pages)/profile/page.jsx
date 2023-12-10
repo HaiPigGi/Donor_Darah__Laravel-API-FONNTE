@@ -7,8 +7,8 @@ import "@/_styles/css/login.css";
 import "@/_styles/css/regis.css";
 import Modal from 'react-modal';
 import Dropdown from "@/_components/Dropdown/dropdown";
+import AutoLogout from '@/_components/Auth/AutoLogout';
 const Profile = () => {
-    
   const [user, setUser] = useState(null);
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   const [loading, setLoading] = useState(true);
@@ -22,6 +22,29 @@ const Profile = () => {
     golongan_darah: '',
     kelurahan_id: '',
   });
+
+  useEffect(() => {
+    const autoLogout = new AutoLogout();
+    // Initiate the automatic logout mechanism
+    autoLogout.checkToken();
+
+    // Simulate a delay (e.g., API request)
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 4500);
+
+    // Update progress every 50ms until it reaches 100%
+    const progressInterval = setInterval(() => {
+      setProgress((prevProgress) => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
+    }, 50);
+
+    // Cleanup the timeout and interval to avoid memory leaks
+    return () => {
+      clearTimeout(delay);
+      clearInterval(progressInterval);
+      autoLogout.clearLogoutTimer(); // Clear the logout timer when the component unmounts
+    };
+  }, []);
 
   useEffect(() => {
       // Simulate a delay (e.g., API request)

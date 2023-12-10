@@ -7,8 +7,9 @@ import Head from 'next/head';
 import Pusher from "./pusher.js"
 import Loading from "@/_components/Loading/Loading.jsx";
 import withAuth from "@/_components/Auth/WithAuth.js";
+import AutoLogout from "@/_components/Auth/AutoLogout.js";
 
-const  Forum= () => {
+const  Forum = () => {
   const [bold, setBold] = useState(false);
   const [italic, setItalic] = useState(false);
   const [underline, setUnderline] = useState(false);
@@ -25,6 +26,32 @@ const  Forum= () => {
   const [userId, setUserId] = useState(null);
 
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+
+
+  useEffect(() => {
+    const autoLogout = new AutoLogout();
+    // Initiate the automatic logout mechanism
+    autoLogout.checkToken();
+
+    // Simulate a delay (e.g., API request)
+    const delay = setTimeout(() => {
+      setLoading(false);
+    }, 4500);
+
+    // Update progress every 50ms until it reaches 100%
+    const progressInterval = setInterval(() => {
+      setProgress((prevProgress) => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
+    }, 50);
+
+    // Cleanup the timeout and interval to avoid memory leaks
+    return () => {
+      clearTimeout(delay);
+      clearInterval(progressInterval);
+      autoLogout.clearLogoutTimer(); // Clear the logout timer when the component unmounts
+    };
+  }, []);
+
+
   useEffect(() => {
    // Check if userId exists in sessionStorage
    const storedUserId = sessionStorage.getItem('userId');
@@ -73,18 +100,14 @@ const  Forum= () => {
   const sendMessageUser = async () => {
     try {
       // Send the new message to the server
-      const response = await axios.post(`${apiUrl}api/send-message/${tagarId}/${userId}`, {
+      const response = await axios.post(`${apiUrl}/api/send-message/${tagarId}/${userId}`, {
         content: messages,
       }, {
         headers: {
           csrf_token: session.csrf_token,
         },
       });
-      // Assuming the server responds with the newly created message
-      console.log('Server response:', response.data.name);
       const dataMsg = response.data;
-      console.log('Data from server:', dataMsg);
-
       // Optionally, you can clear the input field after sending
       setMessages('');
 
@@ -115,7 +138,7 @@ const  Forum= () => {
       // Fetch user details for all messages
       const usersData = await Promise.all(
         dataMessages.messages.map((message) =>
-          axios.get(`${apiUrl}/api/users/${message.id_user}`)
+          axios.get(`${apiUrl}/api/getDetail/${message.id_user}`)
         )
       );
 
@@ -134,7 +157,6 @@ const  Forum= () => {
 
       // Display messages in the textarea
       setResultText(`Messages for ${selectedTagar}:\n${messages.join('\n')}`);
-      console.log("data tagar id : ", dataMessages);
     } catch (error) {
       console.error('Error fetching messages:', error);
     }

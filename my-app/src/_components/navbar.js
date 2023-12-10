@@ -13,6 +13,8 @@ export default function Navbar(props) {
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   const [showDropdown, setShowDropdown] = useState(false);
   const [token,setToken] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
 
   useEffect(() => {
     const storedUserId = sessionStorage.getItem('jwtToken');
@@ -128,23 +130,15 @@ function classNames(...classes) {
 }
 
   return (
-    <nav className="absolute top-0 w-full z-50">
-    <div className="md:container mx-auto flex flex-col md:flex-row py-5 items-center justify-start md:justify-between">
-        <div id="brand" className="mb-4 md:mb-0">
-            <a
-                href="/"
-                className="text-red text-3xl font-black font-Title"
-            >
-                Dondar
-            </a>
-        </div>
-        <div
-            id="items"
-            className={[
-                "font-Subtitle font-regular md:visible collapse w-1/2 text-right",
-                props.itemsColor,
-            ].join(" ")}
-        >
+    <nav className="absolute top-0 w-full z-50 p-4">
+   <div className="container mx-auto flex items-center justify-between">
+                <div id="brand" className="flex items-center flex-shrink-0 text-white mr-6">
+                    <a href="/" className="text-red text-3xl font-black font-Title">Dondar</a>
+                </div>
+                <div id="items" className={[
+                    "font-Subtitle font-regular md:visible collapse w-1/2 text-right",
+                    props.itemsColor,
+                ].join(" ")}>
             <a
                 href="/FormPengajuan"
                 className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
@@ -164,24 +158,6 @@ function classNames(...classes) {
                 Tentang
             </a>
             {userId ? (
-                // <Dropdown className="inline">
-                //     <Dropdown.Toggle
-                //         id="dropdown-basic"
-                //         className="px-4 py-2 bg-red text-white font-bold rounded-full ml-4"
-                //     >
-                //         {user ? `Hello, ${user.nama}` : "Hello"}{" "}
-                //         {/* Access the name directly from the user state */}
-                //     </Dropdown.Toggle>
-                //     <Dropdown.Menu>
-                //         <Dropdown.Item href={"/profile"}>
-                //             View Profile
-                //         </Dropdown.Item>
-                //         <br />
-                //         <Dropdown.Item onClick={handleLogout}>
-                //             Logout
-                //         </Dropdown.Item>
-                //     </Dropdown.Menu>
-                // </Dropdown>
                 <Menu
                     as="div"
                     className="relative inline-block text-left"
@@ -249,7 +225,66 @@ function classNames(...classes) {
                 </Link>
             )}
         </div>
-    </div>
-</nav>
+        <div className="md:hidden">
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="text-white focus:outline-none"
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                    >
+                        <svg
+                            className="h-6 w-6"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 6h16M4 12h16m-7 6h7"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+             {/* Mobile Menu */}
+             {mobileMenuOpen && (
+                <div className="md:hidden absolute top-0 left-0 w-full bg-gray-800">
+                    {/* Example of mobile menu items */}
+                    <div className="p-4">
+                        <div id="brand" className="flex items-center flex-shrink-0 text-white mr-6">
+                            <a href="/" className="text-red text-3xl font-black font-Title">Dondar</a>
+                        </div>
+                        <a
+                            href="/FormPengajuan"
+                            className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
+                        >
+                            Kebutuhan
+                        </a>
+                        <a
+                            href="/forum"
+                            className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
+                        >
+                            Forum
+                        </a>
+                        <a
+                            href="/tentang"
+                            className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
+                        >
+                            Tentang
+                        </a>
+                        {/* Close button */}
+                        <button
+                            className="text-white px-4 py-2 mt-4 bg-red hover:bg-opacity-75 rounded-full"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Close
+                        </button>
+                    </div>
+                </div>
+            )}
+        </nav>
   );
 }

@@ -18,7 +18,7 @@ export default function HeroSection(){
     }, []);
     return(
         <section className="bg-hero-bg bg-no-repeat bg-cover w-[100%] ">
-        <Navbar itemsColor="text-white" responsive={windowWidth <= 770} />
+        <Navbar itemsColor="text-white" />
         <div className="w-full h-screen overflow-hidden relative z-20 backdrop-blur-sm">
           <div className="container mx-auto w-full h-full flex justify-center md:justify-end items-center md:items-center">
             <span className="">

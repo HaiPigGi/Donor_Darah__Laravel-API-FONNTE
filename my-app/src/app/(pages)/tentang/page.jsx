@@ -38,7 +38,7 @@ const AboutPage = () => {
                     <div>
                         <Navbar itemsColor="text-white " />
                         <div className="row">
-                        <div className="container mx-auto p-4 md:p-8">
+                        <div className="container mx-auto p-4 md:p-8" style={{ overflowY: 'auto', maxHeight: '80vh' }}>
                             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 mt-5 text-red">Tentang Kami</h1>
 
                             <section className="bg-white p-4 md:p-6 lg:p-8 mb-4 md:mb-8 rounded-lg">

@@ -142,35 +142,35 @@ const FormPengajuan = () => {
     };
 
     return (
-        <section>
-            <div className="my-bg">
+        <section className="h-screen overflow-hidden relative">
+             <div className="my-bg h-full bg-cover bg-center">
                 <div>
                     {loading ? (
                         <Loading progress={progress} />
                     ) : (
                         <div>
-                            <Navbar itemsColor="text-white" />
-                            <div className=" h-screen flex items-center">
-                                <div className="w-[70%] h-auto bg-white rounded-xl mx-auto ">
-                                    <div className="mt-2 w-full">
-                                        <h1 className="text-black font-Title text-[40px] block text-center">
-                                            Form ajuan kebutuhan darah
-                                        </h1>
-                                    </div>
-                                    <div className="flex pt-2 justify-center w-full h-full text-center ">
-                                        <form className="font-Subtitle w-full px-5">
-                                            <Hal1
-                                            // for parsing data to children node
-                                                action={(newValue) => {
+                           <Navbar itemsColor="text-white" />
+                            <div className="min-h-screen flex flex-col items-center justify-center">
+                            <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] h-auto max-h-[80vh] bg-white rounded-xl mx-auto p-4 overflow-y-auto">
+                                <div className="flex flex-col items-center">
+                                <h1 className="text-black font-Title text-2xl md:text-3xl text-center mb-2">
+                                Form ajuan kebutuhan darah
+                                </h1>
+                                                        <form className="font-Subtitle w-full max-w-md mx-auto">
+                                                <Hal1
+                                                    // for parsing data to children node
+                                                    action={(newValue) => {
                                                     setData(newValue);
-                                                }}
-                                                data={data}
-                                            />
-                                            <Buttons />
-                                        </form>
+                                                    }}
+                                                    data={data}
+                                                />
+                                                <Buttons />
+                                                </form>
                                     </div>
                                 </div>
-                            </div>
+                                </div>
+
+
                         </div>
                     )}
                 </div>

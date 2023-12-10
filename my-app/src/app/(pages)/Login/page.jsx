@@ -86,8 +86,8 @@ export default function Login() {
   };
 
   return (
-    <main>
-      <div className="my-bg">
+    <section className="h-screen overflow-hidden relative">
+             <div className="my-bg h-full bg-cover bg-center">
         <div>
           {loading ? (
             <Loading progress={progress} />
@@ -139,6 +139,6 @@ export default function Login() {
           )}
         </div>
       </div>
-    </main>
+      </section>
   );
 }

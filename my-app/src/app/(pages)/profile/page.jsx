@@ -5,6 +5,7 @@ import Loading from "@/_components/Loading/Loading";
 import Navbar from "@/_components/navbar";
 import "@/_styles/css/login.css";
 import "@/_styles/css/regis.css";
+import "@/_styles/css/profile.css";
 import Modal from 'react-modal';
 import Dropdown from "@/_components/Dropdown/dropdown";
 import AutoLogout from '@/_components/Auth/AutoLogout';
@@ -151,7 +152,8 @@ const Profile = () => {
   };
   
   return (
-    <div className="my-bg">
+    <section className="h-screen overflow-hidden relative">
+             <div className="my-bg h-full bg-cover bg-center">
          <div>
             {loading ? (
                 <Loading progress={progress} />
@@ -243,7 +245,7 @@ const Profile = () => {
   contentLabel="Edit User"
 >
   <h2>Edit User</h2>
-  <form onSubmit={handleFormSubmit}>
+  <form onSubmit={handleFormSubmit} className="w-full max-w-md">
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-600">Nama:</label>
       <input
@@ -277,32 +279,32 @@ const Profile = () => {
       />
     </div>
 
-                          <div className="mb-4">
-        <div className="input-container mb-1 font-Subtitle border-2">
-                                          <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
-                                              <img
-                                                  className=""
-                                                  src="/img/Vector.svg"
-                                                  alt="Icon"
-                                                  height={25}
-                                                  width={25}
-                                              />
-                                          </div>
-                                          <Dropdown
-                                              category="pekerjaan"
-                                              value={editedUser.pekerjaan}
-                                              sendToParent={(value) => {
-                                                // Log the selected value
-              
-                                                // Update the state
-                                                setEditedUser((prevUser) => ({
-                                                  ...prevUser,
-                                                  pekerjaan: value,
-                                                }));
-                                              }}
-                                          />
-                                      </div>
-                          </div>
+    <div className="mb-4">
+  <div className="input-container mb-1 font-Subtitle border-2">
+    <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
+      <img
+        className=""
+        src="/img/Vector.svg"
+        alt="Icon"
+        height={25}
+        width={25}
+      />
+    </div>
+    <Dropdown
+      category="pekerjaan"
+      value={editedUser.pekerjaan}
+      sendToParent={(value) => {
+        // Log the selected value
+        // Update the state
+        setEditedUser((prevUser) => ({
+          ...prevUser,
+          pekerjaan: value,
+        }));
+      }}
+    />
+  </div>
+</div>
+
     <div className="mb-4">
     <div className="input-container mb-1 font-Subtitle border-2">
                         <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
@@ -383,7 +385,7 @@ const Profile = () => {
 </Modal>
 
     </div>
-                
+    </section>
   );
 };
 

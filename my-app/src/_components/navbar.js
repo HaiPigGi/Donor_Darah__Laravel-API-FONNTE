@@ -275,6 +275,13 @@ function classNames(...classes) {
                         >
                             Tentang
                         </a>
+                         {/* Close button */}
+                         <button
+                            className="text-white px-4 py-2 mt-4 mr-3 bg-red hover:bg-opacity-75 rounded-full"
+                            onClick={() => setMobileMenuOpen(false)}
+                        >
+                            Close
+                        </button>
                         {userId ? (
                 <Menu
                     as="div"
@@ -309,7 +316,7 @@ function classNames(...classes) {
                                                 active
                                                     ? "bg-gray-100 text-gray-900"
                                                     : "text-gray-700",
-                                                "block px-4 py-2 text-sm",
+                                                "block px-4 py-2 text-xs",
                                             )}
                                         >
                                             View Profile
@@ -324,7 +331,7 @@ function classNames(...classes) {
                                                 active
                                                     ? "bg-gray-100 text-gray-900"
                                                     : "text-gray-700",
-                                                "block w-full px-4 py-2 text-left text-sm",
+                                                "block w-full px-4 py-2 text-left text-xs",
                                             )}
                                         >
                                             Sign out
@@ -342,13 +349,7 @@ function classNames(...classes) {
                     </a>
                 </Link>
             )}
-                        {/* Close button */}
-                        <button
-                            className="text-white px-4 py-2 mt-4 bg-red hover:bg-opacity-75 rounded-full"
-                            onClick={() => setMobileMenuOpen(false)}
-                        >
-                            Close
-                        </button>
+                       
                     </div>
                 </div>
             )}

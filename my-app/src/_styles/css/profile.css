@@ -1,0 +1,21 @@
+/* Add these styles for responsiveness */
+.modal {
+    width: 100%;
+    max-width: 400px; /* Adjust the max-width as needed */
+    margin: 0 auto;
+  }
+  
+  .overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow-y: auto;
+  }
+  
+  @media (min-width: 768px) {
+    .modal {
+      max-width: 600px; /* Adjust the max-width for larger screens */
+    }
+  }
+  

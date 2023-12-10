@@ -193,75 +193,80 @@ const  Forum = () => {
 
 
   return (
-          <>
-          <Head>
-                <script src="https://js.pusher.com/8.4/pusher.min.js"></script>
-            </Head>
-      <div className="my-bg">
-      <div>
+    <>
+      <Head>
+        <script src="https://js.pusher.com/8.4/pusher.min.js"></script>
+      </Head>
+
+      <div className="my-bg h-full bg-cover bg-center">
+        <div>
           {loading ? (
             <Loading progress={progress} />
           ) : (
             <div>
-        <Navbar itemsColor="text-black" />
-        <div className="mt-20 pt-20">
-        <div className="mt-5 flex justify-center textarea-container">
-        <textarea
-            className="textarea border border-gray-300 rounded-lg p-2 w-[35rem] h-20 text-left"
-            value={fetchedMessages.join('\n')}
-            readOnly
+              <Navbar itemsColor="text-white" />
+              <div className="w-full h-screen overflow-hidden relative z-20 backdrop-blur-sm">
+              <div className="mt-20 pt-20">
+  <div className="mt-5 flex justify-center textarea-container">
+    <textarea
+      className="textarea border border-gray-300 rounded-lg p-2 w-full md:w-[35rem] h-20 text-left"
+      value={fetchedMessages.join('\n')}
+      readOnly
+    />
+  </div>
+  <br />
+  <br />
+  <div className="rectangle-36 flex-container relative border-2 border-red rounded-lg w-full md:w-[40rem] md:h-[7rem] px-4">
+    <div className="flex flex-col md:flex-row items-top justify-left">
+      <div className="relative z-10 flex-grow mb-2 md:mb-0 md:mr-2">
+        <input
+          value={messages}
+          onChange={(e) => setMessages(e.target.value)}
+          style={{
+            fontWeight: bold ? 'bold' : 'normal',
+            fontStyle: italic ? 'italic' : 'normal',
+            textDecoration: underline ? 'underline' : 'none',
+          }}
+          className="border-transparent rounded-lg w-full h-[5rem] md:h-[7rem] px-4 text-[20px] focus:outline-none focus:ring focus:border-blue-300"
+          type="text"
+          placeholder="Type your message..."
         />
-        </div>
-            <br />
-            <br />
-            <div className="rectangle-36 flex-container relative border-2 border-red rounded-lg w-[40rem] h-[7rem] ps-[4rem]">
-            <div className="flex items-top justify-left">
-                <div className="relative z-10 flex-grow">
-                <input
-                  value={messages}
-                  onChange={(e) => setMessages(e.target.value)}
-                  style={{
-                    fontWeight: bold ? "bold" : "normal",
-                    fontStyle: italic ? "italic" : "normal",
-                    textDecoration: underline ? "underline" : "none",
-                  }}
-                  className="border-transparent rounded-lg w-full h-[5rem] px-[2rem] text-[20px] focus:outline-none focus:ring focus:border-blue-300"
-                  type="text"
-                  placeholder="Type your message..."
-                />
-              </div>
-              <div className="button ml-4 relative z-10">
-                <button
-                  onClick={sendMessageUser}
-                  className="tombol font-bold text-l text-white rounded-lg px-3 py-2 h-10 w-[8rem] bg-red"
-                >
-                  Kirim
-                </button>
-              </div>
-              <div className="relative ml-4 z-10">
-              <select
-                value={selectedTagar}
-                onChange={handleTagarChange}
-                className="select appearance-none bg-transparent border border-gray-300 text-gray-700 py-2 pl-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
-                style={{ color: '#000' }}
-                >
-                <option value="" disabled>Select Tagar</option>
-                {tagarOptions.map((tagar) => (
-                    <option key={tagar.id} value={tagar.id} style={{ color: '#000' }}>
-                    {tagar.nama_tagar} {/* Corrected property name */}
-                    </option>
-                ))}
-                </select>
+      </div>
+      <div className="button relative z-10">
+        <button
+          onClick={sendMessageUser}
+          className="tombol font-bold text-l text-white rounded-lg px-3 py-2 h-10 w-full md:w-[8rem] bg-red"
+        >
+          Kirim
+        </button>
+      </div>
+      <div className="relative mt-2 md:mt-0 md:ml-4 z-10">
+        <select
+          value={selectedTagar}
+          onChange={handleTagarChange}
+          className="select appearance-none bg-transparent border border-gray-300 text-gray-700 py-2 pl-4 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline w-full md:w-auto"
+          style={{ color: '#000' }}
+        >
+          <option value="" disabled>Select Tagar</option>
+          {tagarOptions.map((tagar) => (
+            <option key={tagar.id} value={tagar.id} style={{ color: '#000' }}>
+              {tagar.nama_tagar}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
               </div>
             </div>
-          </div>
-        </div>
-        </div>
           )}
         </div>
       </div>
     </>
   );
-}
+};
+
 
 export default withAuth(Forum,['user']);

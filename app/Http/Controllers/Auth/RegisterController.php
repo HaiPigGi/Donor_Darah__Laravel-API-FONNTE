@@ -57,9 +57,9 @@ class RegisterController extends Controller
             // Generate JWT token
             $token = $this->generateLoginJWT($findUserIDWithTelepon->id);
             
-    
             return response()->json([
                 'message' => 'Successfully Created.',
+                'id' => $findUserIDWithTelepon->id,
                 'role' => "user",
                 'token' => $token, 
             ], 200);

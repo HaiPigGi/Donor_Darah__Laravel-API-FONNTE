@@ -61,17 +61,21 @@ export default function Otp() {
 
       if (response.status === 200) {
         console.log("Verification is successful");
-        const userIdFromResponse = response.data.id;
+        const jwtToken = response.data.token;
         const userRoleFromResponse = response.data.role; // Get the user role
-        console.log("User ID from response:", userIdFromResponse);
-        console.log("User role from response:", userRoleFromResponse);
-        sessionStorage.setItem('userId', userIdFromResponse);
+        const getUserId = response.data.id;
+        console.log("User ID from response:", jwtToken);
+         // Store the JWT token in session storage
+          sessionStorage.setItem('jwtToken', jwtToken);
+          sessionStorage.setItem('userRole', userRoleFromResponse);
+          sessionStorage.setItem('userId', getUserId);
+          
          // Redirect based on user role
       if (userRoleFromResponse === "admin") {
-        setUserId(userIdFromResponse);
+        setUserId(jwtToken);
         redirectToOtherPageAdmin();
       } else {
-        setUserId(userIdFromResponse);
+        setUserId(jwtToken);
         redirectToOtherPage();
       }
       } else {
@@ -91,7 +95,7 @@ export default function Otp() {
 
   return (
     <main>
-      <div className="my-bg">
+      <div className="my-bg h-full bg-cover bg-center">
         <div>
           {loading ? (
             <Loading progress={progress} />

@@ -10,6 +10,10 @@ use App\Models\profileModel;
 use App\Models\Kelurahan;
 use App\Models\Kecamatan;
 use App\Models\Kabupaten;
+use Illuminate\Support\Facades\DB;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 class UserController extends Controller
 {
     /**
@@ -18,23 +22,99 @@ class UserController extends Controller
      * @param  int  $userId
      * @return \Illuminate\Http\Response
      */
-
-    protected function getUserDetails($userId)
+    protected function getUserDetails()
     {
         try {
-            // Find the user by ID
-            $user = User::findOrFail($userId);
-            Log::info("cek User : ".json_encode($user));
-            // Get the user's name
-            $userName = $user->nama;
+            // Get the authenticated user using the JWT token
+            $token = JWTAuth::getToken();
+            Log::info('Request data:'.json_encode($token));
+    
+            $user = JWTAuth::toUser($token);
+    
+            // Check if the user exists
+            if (!$user) {
+                return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+            }
+    
+            // Find the user's profile by ID
+            $profile = profileModel::where('id_user', $user->id)->firstOrFail();
+    
+            // Get the name of the kelurahan using kelurahan_id
+            $kelurahanName = '';
+            if ($profile->kelurahan_id) {
+                $kelurahan = Kelurahan::find($profile->kelurahan_id);
+                if ($kelurahan) {
+                    $kelurahanName = $kelurahan->nama;
+                }
+            }
+    
+            // Get the user's details
+            $userData = [
+                'id' => $user->id,
+                'nama' => $user->nama,
+                'telepon' => $user->telepon,
+                'ktp' => $profile->ktp,
+                'pekerjaan' => $profile->pekerjaan,
+                'golongan_darah' => $profile->golongan_darah,
+                'kelurahan_id' => $profile->kelurahan_id,
+                'kelurahan_nama' => $kelurahanName, // Add kelurahan_name to userData
+                'tagar_id' => $profile->tagar_id
+            ];
+    
             // Return user details as JSON
-            return response()->json(['users' => ['id' => $user->id, 'nama' => $userName]]);
+            return response()->json(['status' => 'success', 'user' => $userData]);
         } catch (\Exception $e) {
             // Handle the exception, for example, return a 404 response for not found
             Log::error('Exception occurred while getUserDetail Message: ' . $e->getMessage());
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
         }
     }
+     protected function updateUser(Request $request, $userId)
+     {
+         try {
+             // Begin database transaction
+             DB::beginTransaction();
+             Log::info('Request data:', $request->all());
+     
+             // Find the user by ID
+             $user = User::findOrFail($userId);
+     
+             // Update user details
+             $user->nama = $request->input('nama');
+             $user->telepon = $request->input('telepon');
+             // Add other fields as needed
+     
+             $user->save();
+     
+             // Find the user's profile by ID
+             $profile = ProfileModel::where('id_user', $userId)->firstOrFail();
+     
+             // Update profile details
+             $profile->ktp = $request->input('ktp');
+             $profile->pekerjaan = $request->input('pekerjaan');
+             $profile->golongan_darah = $request->input('golongan_darah');
+     
+             // Get kelurahan IDs from validated data
+             $kelurahanId = $request->input('kelurahan_id');
+     
+             // Associate kelurahan with the profile
+             $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
+             $profile->save();
+     
+             // Commit the database transaction
+             DB::commit();
+     
+             return response()->json(['status' => 'success', 'message' => 'User and profile updated successfully']);
+         } catch (\Exception $e) {
+             // Rollback the database transaction in case of an exception
+             DB::rollback();
+             Log::error('Exception occurred while updating user and profile: ' . $e->getMessage());
+             return response()->json(['status' => 'error', 'message' => 'Failed to update user and profile'], 500);
+         }
+     }
+     
+            
+
 
     public function getUserLocation()
     {
@@ -73,6 +153,7 @@ class UserController extends Controller
                 // Add the user location to the array
                // Add the user location to the array
                 $userLocations[] = [
+                    'nama' =>$profile->nama,
                     'lat' => $kabupatenData->lat,
                     'long' => $kabupatenData->long,
                 ];
@@ -116,7 +197,8 @@ class UserController extends Controller
         }
        
     }
-    
+
+        
     
 
 

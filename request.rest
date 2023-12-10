@@ -72,16 +72,15 @@ withCredentials: true,
   "kelurahan_id": 6472021001
 }
 ###
-POST http://localhost:8000/api/register/auth
+POST http://localhost:8000/api/register/auth/create
 Content-Type: application/json
 
 {
     "nama": "Kapi",
     "telepon": "082253739918",
     "golongan_darah": "O",
-    "provinsi_id": 64,
-    "kabupaten_id": 6402,
-    "kecamatan_id": 6402060,
+    "ktp": "1234567890123456",
+    "pekerjaan": "Engineer",
     "kelurahan_id": 6402060004
 }
 
@@ -137,8 +136,11 @@ POST http://localhost:8000/api/verify/otp/login
 Content-Type: application/json
 
 {
-    "code" : "522304"
+    "code" : "613142"
 }
+
+###
+GET http://localhost:8000/api/users/getUser
 
 ### 
 POST http://localhost:8000/api/tagars/4/choose
@@ -222,3 +224,11 @@ Content-Type: application/json
     "kelurahan_id": 6472050009,
     "tujuan_Pengajuan": "Verification purpose"
 }
+
+
+### 
+GET http://localhost:8000/api/users/getUser/fb928ac6-7256-4dd0-aa33-2e7f66d6034f
+
+
+###
+GET http://localhost:8000/user

@@ -57,7 +57,7 @@ export default function Verifikasi({ data, action }) {
               placeholder="Masukan Kode OTP"
               value={code}
               onChange={handleInputChange}
-              className="mt-1 p-2 border border-black rounded-md w-80 text-center"
+              className="border border-black rounded-xl w-full sm:w-[370px] h-14 ps-[4rem] text-[20px]"
             />
           </div>
           <p className="mt-3 mb-5">

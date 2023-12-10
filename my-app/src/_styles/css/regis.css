@@ -1,8 +1,12 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .my-bg {
-    height: 100vh;
-    background: url("/img/bgHero.png");
-    background-size: cover;
-    /* background-position: center; */
+  height: 100vh;
+  background: url("/img/bgHero.png");
+  background-size: cover;
 }
 
 .rectangle-37,
@@ -11,12 +15,11 @@
 }
 
 .rectangle-37 {
-  position: relative;
   display: flex;
   background: #ffffff;
   border-radius: 30px;
-  width: 100vh;
-  height: 75vh;
+  width: 80%; 
+  height: 65vh;
   margin: auto;
   text-align: center;
 }
@@ -24,37 +27,49 @@
 .tombol5 {
   width: 6.5rem;
   height: 1.5rem;
-  /* margin: 1px; */
   margin-right: 2rem;
 }
 
-.animateFull{
+.animateFull {
   animation-name: progresBarAnimate;
   animation-duration: 1000ms;
 }
 
-@keyframes progresBarAnimate{
-  from {width:50%;}
-  to{width:100%;}
+@keyframes progresBarAnimate {
+  from {
+    width: 50%;
+  }
+  to {
+    width: 100%;
+  }
 }
 
-.animateHalf{
-  animation-name:progresBarAnimate1;
-  animation-duration:1000ms;
-}
-@keyframes progresBarAnimate1{
-  from{width:0%;}
-  to{width:50%;}
+.animateHalf {
+  animation-name: progresBarAnimate1;
+  animation-duration: 1000ms;
 }
 
-.animateFullHalf{
-  animation-name:progressBarFulHalf;
-  animation-duration:1000ms;
+@keyframes progresBarAnimate1 {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 50%;
+  }
 }
 
-@keyframes progressBarFulHalf{
-  from{width:100%;}
-  to{width:50%;}
+.animateFullHalf {
+  animation-name: progressBarFulHalf;
+  animation-duration: 1000ms;
+}
+
+@keyframes progressBarFulHalf {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 50%;
+  }
 }
 
 /* Add this to your CSS */
@@ -73,27 +88,37 @@
   max-height: 600px; /* Set the maximum height */
   margin: 0 auto; /* Center the modal horizontally */
 }
+
 .custom-modal .modal-content {
   width: 100%;
   height: 100%;
 }
+
 .custom-modal .modal-content .p {
   color: white; /* Set the text color to white */
 }
 
 /* Add this to your CSS */
 .custom-close-button {
-  background-color: #618264; /* Red background color, you can change this */
-  color: #fff; /* White text color */
-  padding: 10px 20px; /* Adjust padding based on your design */
+  background-color: #618264;
+  color: #fff;
+  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px; /* Adjust font size based on your design */
+  font-size: 16px;
 }
 
 .custom-close-button:hover {
-  background-color: #186F65; /* Darker red on hover, you can change this */
+  background-color: #186F65;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .rectangle-37 {
+    flex-direction: column;
+    height: auto;
+  }
 }
 
 

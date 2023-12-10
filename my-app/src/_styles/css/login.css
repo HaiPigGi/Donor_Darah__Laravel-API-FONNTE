@@ -1,8 +1,14 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .my-bg {
   height: 100vh;
   background: url("/img/bgHero.png");
   background-size: cover;
-  /* background-position: center; */
+  margin: 0; /* Remove margin for the background */
+  overflow: hidden;
 }
 
 .row {
@@ -24,61 +30,73 @@
   display: flex;
   background: #ffffff;
   border-radius: 30px;
-  width: 100vh;
+  width: 80%; 
   height: 65vh;
   margin: auto;
   text-align: center;
-  /* position: relative; */
-}
-
-.wraper,
-wraper* {
-  box-sizing: border-box;
 }
 
 .wraper {
-  display:flex;
+  display: flex;
   justify-content: center;
-  align-items:center;
+  align-items: center;
   color: black;
   text-align: center;
   position: relative;
-  width: 100%;
+  width: 80vw; 
+  max-width: 500px; 
   height: 100%;
-}
-
-
-.input-container {
-  display:flex;
-  /* position:relative; */
-  justify:center;
-  width: 100%;
-}
-
-.rectangle-36,
-.rectangle-36 * {
+  margin: auto;
   box-sizing: border-box;
 }
 
-.rectangle-36 {
+.input-container {
   display: flex;
-  background: #ffffff;
-  border-radius: 30px;
-  width: 100vh;
-  height: 50vh;
-  margin: auto;
-  text-align: center;
-  /* position: relative; */
+  width: 100%;
 }
+
 .kotak-baru {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #ff0000; /* Warna background kotak baru */
-  border-radius: 10px; /* Contoh border-radius */
-  width: 500px; /* Lebar kotak baru */
-  height: 100px; /* Tinggi kotak baru */
-  margin-top: -12rem; /* Menghilangkan jarak atas */
-  margin-bottom: 6rem; /* Menghilangkan jarak bawah */
+  background: #ff0000;
+  border-radius: 10px;
+  width: 500px;
+  height: 100px;
+  margin-top: -12rem;
+  margin-bottom: 6rem;
   text-align: center;
+}
+
+
+@media (max-width: 767px) {
+  .rectangle-36 {
+    height: 30%;
+    width: 100%; /* Adjusted width for smaller screens */
+    margin: 0;
+  }
+
+  .wraper {
+    padding: 0 20px;
+  }
+
+  .input-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 468px) {
+  .rectangle-36 {
+    height: 40%;
+    width: 100%; /* Adjusted width for smaller screens */
+    margin: 0;
+  }
+
+  .wraper {
+    padding: 0 20px;
+  }
+
+  .input-container {
+    flex-direction: column;
+  }
 }

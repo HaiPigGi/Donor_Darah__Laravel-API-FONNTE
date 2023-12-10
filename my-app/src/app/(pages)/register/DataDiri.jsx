@@ -3,13 +3,9 @@ import ErrorMessage from "@/_components/errorMessage";
 
 export default function DataDiri({ action, data }) {
   const [errorMessage, setErrorMessage] = useState("");
-  console.log("data : ",data);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Log the data to console
-    console.log(`Input data - Name: ${name}, Value: ${value}`);
 
     if (value === "") {
       setErrorMessage(
@@ -49,67 +45,68 @@ export default function DataDiri({ action, data }) {
 
   return (
     <div id="contentRegister" className="mx-auto flex justify-center pt-10">
-      <div className="w-auto">
-        <div className="input-container mb-2 font-Subtitle">
-          <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
-            <img
-              className=""
-              src="/img/username.svg"
-              alt="Icon"
-              height={25}
-              width={25}
-            />
-          </div>
-          <input
-            className="border border-black rounded-xl w-full h-14 ps-[4rem] text-[20px]"
-            type="text"
-            placeholder="Masukkan nama anda"
-            name="nama" // Use a unique identifier for each field
-            onChange={handleChange}
+    <div className="w-auto">
+      <div className="input-container mb-2 font-Subtitle">
+        <div className="absolute bg-black h-14 w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
+          <img
+            className=""
+            src="/img/username.svg"
+            alt="Icon"
+            height={25}
+            width={25}
           />
         </div>
-        <div className="input-container mb-2 relative font-Subtitle">
-          <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
-            <img
-              className="input-icon "
-              src="/img/phone.svg"
-              alt="Icon"
-              height={30}
-              width={30}
-            />
-          </div>
-          <input
-            className="border border-black rounded-xl w-[370px] h-14 ps-[4rem] text-[20px]"
-            type="text"
-            placeholder="Masukan nomor anda"
-            name="telepon" // Use a unique identifier for each field
-            onChange={handleChange}
-          />
-        </div>
- 
-        <div className="h-auto flex justify-start relative font-Subtitle">
-          <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
-            <img
-              className="input-icon "
-              src="/img/solar_calendar-bold.svg"
-              alt="Icon"
-              height={25}
-              width={25}
-            />
-          </div>
-          <input
-            className="border border-black rounded-xl w-[370px] h-14 ps-[4rem] text-[20px]"
-            type="text"
-            placeholder="Masukan nomor KTP (16 digit)"
-            name="ktp"
-            onChange={handleChange}
-          />
-        </div>
-        <div className="flex justify-start items-center mt-2">
-          <p className="tulisan text-l">Harap di isi dengan benar</p>
-        </div>
-        {errorMessage}
+        <input
+          className="border border-black rounded-xl w-full sm:w-[370px] h-14 ps-[4rem] text-[20px]"
+          type="text"
+          placeholder="Masukkan nama anda"
+          name="nama"
+          onChange={handleChange}
+        />
       </div>
+      <div className="input-container mb-2 relative font-Subtitle">
+        <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
+          <img
+            className="input-icon "
+            src="/img/phone.svg"
+            alt="Icon"
+            height={30}
+            width={30}
+          />
+        </div>
+        <input
+          className="border border-black rounded-xl w-full sm:w-[370px] h-14 ps-[4rem] text-[20px]"
+          type="text"
+          placeholder="Masukan nomor anda"
+          name="telepon"
+          onChange={handleChange}
+        />
+      </div>
+  
+      <div className="h-auto flex justify-start relative font-Subtitle">
+        <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
+          <img
+            className="input-icon "
+            src="/img/solar_calendar-bold.svg"
+            alt="Icon"
+            height={25}
+            width={25}
+          />
+        </div>
+        <input
+          className="border border-black rounded-xl w-full sm:w-[370px] h-14 ps-[4rem] text-[20px]"
+          type="text"
+          placeholder="Masukan nomor KTP (16 digit)"
+          name="ktp"
+          onChange={handleChange}
+        />
+      </div>
+      <div className="flex justify-start items-center mt-2">
+        <p className="tulisan text-l">Harap di isi dengan benar</p>
+      </div>
+      {errorMessage}
     </div>
+  </div>
+  
   );
 }

@@ -20,9 +20,11 @@ export default function Register() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
+    const [userId, setUserId] = useState(null);
 
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
+    
     const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
 
@@ -174,6 +176,13 @@ export default function Register() {
             console.log("Axios response:", response);
 
             if (response.status === 200) {
+                const jwtToken = response.data.token;
+                const userRoleFromResponse = response.data.role; // Get the user role
+                const getUserId = response.data.id; 
+                // Store the JWT token in session storage
+                sessionStorage.setItem('jwtToken', jwtToken);
+                sessionStorage.setItem('userRole', userRoleFromResponse);
+                sessionStorage.setItem('userId', getUserId);
                 setModalContent("Account Successfully Created");
                 setModalIsOpen(true);
                 window.location.href = "/";
@@ -291,7 +300,7 @@ export default function Register() {
 
     const handleKembali = () => {
         const pagi =
-            document.getElementById("pagination").childNodes[buttonNext];
+        document.getElementById("pagination").childNodes[buttonNext];
         setButtonNext(buttonNext - 1);
         pagi.classList.remove("bg-red");
         pagi.classList.add("border-2");
@@ -392,7 +401,6 @@ export default function Register() {
             );
         }
     };
-
     const formRendering = () => {
         if (buttonNext == 0) {
             return (
@@ -440,8 +448,8 @@ export default function Register() {
     };
 
     return (
-        <section>
-            <div className="my-bg">
+        <section className="h-screen overflow-hidden relative">
+             <div className="my-bg h-full bg-cover bg-center">
                 <div>
                     {loading ? (
                         <Loading progress={progress} />
@@ -453,12 +461,12 @@ export default function Register() {
                                     <div className="wraper text-center relative">
                                         <h1
                                             id="title"
-                                            className="text-black font-Title text-[40px] block absolute top-[4%]"
+                                            className="text-black font-Title text-4xl md:text-5xl lg:text-6xl xl:text-7xl block absolute top-[4%] md:top-[2%]"
                                         >
                                             Register
                                         </h1>
                                         <div
-                                            className=" flex justify-center items-center  mx-auto absolute top-[17%]"
+                                           className=" flex justify-center items-center  mx-auto absolute top-[17%]"
                                             id="pagination"
                                         >
                                             <div className="w-14 h-3 bg-red me-2 rounded-full"></div>
@@ -466,7 +474,7 @@ export default function Register() {
                                             <div className="w-14 h-3  rounded-full border-2 border-red me-2"></div>
                                             <div className="w-14 h-3  rounded-full border-2 border-red"></div>
                                         </div>
-                                        <form className="w-full px-5 py-50 font-Subtitle mt-10">
+                                        <form className="w-full px-5 py-50 font-Subtitle mt-10 md:mt-5 lg:mt-8 xl:mt-10">
                                             {formRendering()}
                                             <div className="flex justify-end px-[5rem]">
                                                 {nextButton()}

@@ -9,19 +9,14 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
-use App\Http\Controllers\maps\ProvinsiController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Cache;
 use App\Models\sessionMod;
 use App\Models\profileModel;
 use App\Models\Kelurahan;
-use App\Models\Kecamatan;
-use App\Models\Kabupaten;
-use App\Models\provinsiModel;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Http\JsonResponse;
 
 class RegisterController extends Controller
 {
@@ -51,65 +46,109 @@ class RegisterController extends Controller
                 'kelurahan_id' => ['exists:kelurahan,id'],
                 'telepon' => ['required', 'string', 'max:255'],
             ]);         
-
-            $this->createUser($validatedData);
-            return response()->json(['message' => 'Successfully Validate'],200);
+            
+            // Create user and get the user object
+            $user = $this->createUser($validatedData);
+    
+            // Find the user with the telephone number
+            $findUserIDWithTelepon = User::where('telepon', $validatedData['telepon'])->firstOrFail();
+            Log::info("cek id User berdasarkan nomer telpon : ".json_encode($findUserIDWithTelepon->id));
+            
+            // Generate JWT token
+            $token = $this->generateLoginJWT($findUserIDWithTelepon->id);
+            
+            return response()->json([
+                'message' => 'Successfully Created.',
+                'id' => $findUserIDWithTelepon->id,
+                'role' => "user",
+                'token' => $token, 
+            ], 200);
         } catch (ValidationException $e) {
             // Handle any exceptions that occurred during the createUser process
-            return response()->json(['message' => 'Failed to create user. Please try again.', 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'message' => 'Failed to create user. Please try again.', 
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
+    
+
+
 
     private function createUser(array $data)
-    {
-        // Retrieve the validated data from the session
-        $validatedData = session('validated_data');
-        try {
-            // Generate UUID for id_user column
-            $id_user = Str::uuid();
+{
+    // Retrieve the validated data from the session
+    $validatedData = session('validated_data');
+    try {
+        // Generate UUID for id_user column
+        $id_user = Str::uuid();
 
-            // Begin database transaction
-            DB::beginTransaction();
+        // Begin database transaction
+        DB::beginTransaction();
 
-            $user = User::create([
-                'id' => $id_user,
-                'nama' => $data['nama'],
-                'telepon' => $data['telepon'],
-            ]);
+        $user = User::create([
+            'id' => $id_user,
+            'nama' => $data['nama'],
+            'telepon' => $data['telepon'],
+        ]);
 
-            // Create profile record with user_id and other validated data
-            $profile = new profileModel([
-                'id_user' => $id_user,
-                'nama' => $data['nama'],
-                'telepon' => $data['telepon'],
-                'golongan_darah' => $data['golongan_darah'],
-                'ktp' => $data['ktp'],
-                'pekerjaan' => $data['pekerjaan'],
-            ]);
+        // Create profile record with user_id and other validated data
+        $profile = new profileModel([
+            'id_user' => $id_user,
+            'nama' => $data['nama'],
+            'telepon' => $data['telepon'],
+            'golongan_darah' => $data['golongan_darah'],
+            'ktp' => $data['ktp'],
+            'pekerjaan' => $data['pekerjaan'],
+        ]);
 
-            // Get kelurahan IDs from validated data
-            $kelurahanId = $data['kelurahan_id'];
+        // Get kelurahan IDs from validated data
+        $kelurahanId = $data['kelurahan_id'];
 
-            // Associate kelurahan with the profile
-            $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
-            $profile->save();
+        // Associate kelurahan with the profile
+        $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
 
-            // Delete data from sessions table based on the telephone number
-            $teleponToDelete = $data['telepon'];
-            sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
+        $profile->save();
 
-            
-            Auth::login($id_user);
-            // Commit the database transaction
-            DB::commit();
+        // Delete data from sessions table based on the telephone number
+        $teleponToDelete = $data['telepon'];
+        sessionMod::where('data', 'LIKE', '%"telepon":"' . $teleponToDelete . '"%')->delete();
 
-            return $user;
-        } catch (\Exception $e) {
-            // Rollback the database transaction in case of an exception
-            DB::rollback();
-            throw $e; // Re-throw the exception for further handling, if needed
-        }
+        // Commit the transaction
+        DB::commit();
+
+        return $user;
+    } catch (\Exception $e) {
+        // Rollback the database transaction in case of an exception
+        DB::rollback();
+        throw $e; // Re-throw the exception for further handling, if needed
     }
+}
+private function generateLoginJWT($id): string
+{
+    try {
+        // Find the user with the given ID
+        $user = User::findOrFail($id);
+
+        // Generate JWT token
+        $token = JWTAuth::fromUser($user);
+
+        Log::info("Generated Token: " . json_encode($token));
+        Log::info("Role User: " . json_encode($user->role));
+
+        // Return the generated token
+        return $token;
+    } catch (\Exception $e) {
+        // Handle the exception if the user is not found
+        Log::error("User not found with ID: " . $id);
+        
+        // You might want to throw an exception or handle it according to your needs
+        // For now, returning an empty string, but you might want to handle this differently
+        return '';
+    }
+}
+
+
     public function verify(Request $request)
     {
         try {

@@ -6,12 +6,23 @@ import axios from 'axios';
 const EditPostModal = ({ isOpen, onRequestClose, editingPost }) => {
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   const [session, setSession] = useState({});
+  const [token,setToken] = useState(null);
   const [formData, setFormData] = useState({
     image: null,
     title: '',
     content: '',
     event: '',
   });
+
+  useEffect(() => {
+    // Check if userId exists in sessionStorage
+    const storedUserId = sessionStorage.getItem("jwtToken");
+    if (storedUserId) {
+      setToken(storedUserId);
+
+    }
+    console.log("Sensitive information is logged here.");
+}, []); 
 
   useEffect(() => {
     if (editingPost) {
@@ -60,6 +71,7 @@ const EditPostModal = ({ isOpen, onRequestClose, editingPost }) => {
         postData,
         {
           headers: {
+            'Authorization': `Bearer ${token}`,
             'csrf_token': session.csrf_token,
           },
         }

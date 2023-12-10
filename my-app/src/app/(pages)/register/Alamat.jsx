@@ -1,7 +1,6 @@
 import Dropdown from "@/_components/Dropdown/dropdown";
 
 export default function Alamat({ data, action }) {
-    console.log(data);
     const actionOnchange = (newValue) => {
         action({
             ...data,

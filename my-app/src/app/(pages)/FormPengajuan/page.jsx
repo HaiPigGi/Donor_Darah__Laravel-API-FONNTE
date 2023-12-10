@@ -14,7 +14,7 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
 } from "@heroicons/react/24/outline";
-
+// import AutoLogout from "@/_components/Auth/AutoLogout";
 const FormPengajuan = () => {
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
@@ -26,6 +26,7 @@ const FormPengajuan = () => {
 
     const [openError, setOpenError] = useState(false);
     const cancelButtonRef = useRef(null);
+    const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
     // make use state for parsing the data
     const [data, setData] = useState({
@@ -39,7 +40,29 @@ const FormPengajuan = () => {
         tujuan_pengajuan: "",
     });
 
-    const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+    // useEffect(() => {
+    //     const autoLogout = new AutoLogout();
+    //     // Initiate the automatic logout mechanism
+    //     autoLogout.checkToken();
+    
+    //     // Simulate a delay (e.g., API request)
+    //     const delay = setTimeout(() => {
+    //       setLoading(false);
+    //     }, 4500);
+    
+    //     // Update progress every 50ms until it reaches 100%
+    //     const progressInterval = setInterval(() => {
+    //       setProgress((prevProgress) => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
+    //     }, 50);
+    
+    //     // Cleanup the timeout and interval to avoid memory leaks
+    //     return () => {
+    //       clearTimeout(delay);
+    //       clearInterval(progressInterval);
+    //       autoLogout.clearLogoutTimer(); // Clear the logout timer when the component unmounts
+    //     };
+    //   }, []);
+
 
     useEffect(() => {
         // Simulate a delay (e.g., API request)

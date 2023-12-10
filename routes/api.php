@@ -88,13 +88,13 @@ Route::middleware(['cors', 'web'])->group(function () {
             return response()->json(['message' => 'CSRF cookie set']);
         });
 
+        Route::post('/send-message/{tagarId}/{userId}', [ChatMessageSend::class, 'sendMessage']);
+
+        Route::get('/getDetail/{id}', [ChatMessageSend::class, 'getUserDetails']);
+
         Route::post('/tagars', [TagarController::class, 'store'])->middleware('auth');
         Route::post('/tagars/{tagarId}/choose', [TagarController::class, 'chooseTagar']);
         //its for sendMessage
-        Route::post('/send-message/{tagarId}/{userId}', [ChatMessageSend::class, 'sendMessage']);
-
-        Route::post('/tagars/{tagarId}/user-messages/associate', [ChatMessageSend::class, 'associateMessageWithTagar']);
-
         // Get messages associated with a tagar
         Route::get('/tagars/{tagarId}/messages', [ChatMessageSend::class, 'getMessagesForTagar']);
 

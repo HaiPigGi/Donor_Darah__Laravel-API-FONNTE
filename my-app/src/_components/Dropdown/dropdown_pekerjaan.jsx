@@ -45,7 +45,7 @@ export default function Pekerjaan({sendToParent}) {
   return (
     <>
       <select
-        className="h-14 w-[400px] border-2 border-stone-950 rounded-md block mb-3 text-[20px] ps-[4rem]"
+        className="border-2 border-stone-950 text-left rounded-md text-[20px] ps-[4rem] w-full h-14"
         value={selectedOption}
         name="pekerjaan"
         onChange={handleDropdownChange}

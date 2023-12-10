@@ -95,7 +95,7 @@ export default function Otp() {
 
   return (
     <main>
-      <div className="my-bg">
+      <div className="my-bg h-full bg-cover bg-center">
         <div>
           {loading ? (
             <Loading progress={progress} />

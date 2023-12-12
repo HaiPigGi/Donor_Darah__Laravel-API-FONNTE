@@ -160,7 +160,7 @@ public function logout()
     try {
         // Get the authenticated user using the JWT token
         $token = JWTAuth::getToken();
-        
+
         if (!$token) {
             return response()->json(['message' => 'Token not provided.'], 401);
         }
@@ -173,7 +173,7 @@ public function logout()
 
         // Get the user ID
         $userId = $user->id;
-        Log::info("cek ID Dari Logout : ".json_encode($userId));
+        Log::info("User ID for Logout: " . json_encode($userId));
 
         // Logout user
         Auth::logout();
@@ -181,24 +181,23 @@ public function logout()
         // Find and delete the session record associated with the user
         $sessionData = SessionModels::where('data', 'LIKE', '%"id":"' . $userId . '"%')->first();
 
+        // Regardless of whether the session data is found or not, proceed with logout
         if ($sessionData) {
             $sessionData->delete();
-
-            // Invalidate session and regenerate CSRF token
-            session()->invalidate();
-            session()->regenerateToken();
-
-            return response()->json(['message' => 'User logged out successfully.'], 200);
-        } else {
-            // If session record not found, handle accordingly (e.g., redirect to login page)
-            return response()->json(['message' => 'Session data not found.'], 401);
         }
+
+        // Invalidate session and regenerate CSRF token
+        session()->invalidate();
+        session()->regenerateToken();
+
+        return response()->json(['message' => 'User logged out successfully.'], 200);
     } catch (\Exception $e) {
         // Handle exceptions and return an error response
         Log::error("Error during logout: " . $e->getMessage());
         return response()->json(['status' => 'error', 'message' => 'Failed to logout. Please try again later.'], 500);
     }
 }
+
 
 private function sendVerificationCode($phoneNumber, $verificationCode)
     {
@@ -210,7 +209,21 @@ private function sendVerificationCode($phoneNumber, $verificationCode)
         }
 
         // Define the message and target phone number
-        $message = "Your verification code: $verificationCode"; // Corrected message string
+        $message = "
+        🌟 Selamat datang kembali! Kami rindu,
+        😊 Dalam suasana ceria dan berbunga.
+        🚀 Bersiaplah, kode verifikasi siap hadir,
+        🌈 Hiasi harimu, oh saudara yang terpilih.
+    
+        🌺 Pantun:
+        📜 Pagi cerah, senyummu bersinar,
+        🎉 Kode verifikasi, tanda kembalimu.
+        💌 Donordarahbersama.com, tempat bakti abadi,
+        🤝 Selamat datang, di keluarga sejati.
+    
+        🎁 Kode Verifikasi: $verificationCode
+    ";
+
         $target = $phoneNumber;
 
         try {

@@ -10,24 +10,25 @@ use Illuminate\Notifications\Notifiable;
 class profileModel extends Model
 {
     use HasApiTokens, HasFactory, Notifiable;
+
     protected $table = 'profiles';
 
     protected $fillable = [
         'id_user',
-        'nama',  // Add this line
+        'nama',
         'telepon',
         'golongan_darah',
         'ktp',
         'pekerjaan',
         'kelurahan_id',
-        'tagar_id', // Update this line
+        'tagar_id', 
     ];
-    // Profile.php
 
     public function user()
-        {
-            return $this->belongsTo(User::class);
-        }
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
     public function provinsi()
     {
         return $this->belongsTo(provinsiModel::class, 'provinsi_id');
@@ -42,18 +43,14 @@ class profileModel extends Model
     {
         return $this->belongsTo(Kecamatan::class, 'kecamatan_id');
     }
-    
+
     public function kelurahan()
     {
         return $this->belongsTo(Kelurahan::class, 'kelurahan_id');
     }
 
-  public function tagar()
+    public function tagar()
     {
-        return $this->belongsTo(TagarModel::class);
+        return $this->belongsTo(TagarModel::class, 'tagar_id');
     }
-
-    
-
-
 }

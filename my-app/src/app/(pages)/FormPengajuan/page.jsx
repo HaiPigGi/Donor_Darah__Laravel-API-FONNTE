@@ -14,7 +14,11 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
 } from "@heroicons/react/24/outline";
+<<<<<<< HEAD
 // import AutoLogout from "@/_components/Auth/AutoLogout";
+=======
+
+>>>>>>> 9f42033 (update code)
 const FormPengajuan = () => {
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
@@ -26,7 +30,10 @@ const FormPengajuan = () => {
 
     const [openError, setOpenError] = useState(false);
     const cancelButtonRef = useRef(null);
+<<<<<<< HEAD
     const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+=======
+>>>>>>> 9f42033 (update code)
 
     // make use state for parsing the data
     const [data, setData] = useState({
@@ -34,12 +41,16 @@ const FormPengajuan = () => {
         telepon: "",
         ktp: "",
         golongan_darah: "",
+<<<<<<< HEAD
         alamat: "",
+=======
+>>>>>>> 9f42033 (update code)
         jumlah_kantong: "",
         kelurahan_id: "",
         tujuan_pengajuan: "",
     });
 
+<<<<<<< HEAD
     // useEffect(() => {
     //     const autoLogout = new AutoLogout();
     //     // Initiate the automatic logout mechanism
@@ -127,6 +138,72 @@ const FormPengajuan = () => {
         }
     };
 
+=======
+    const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
+
+    useEffect(() => {
+        // Simulate a delay (e.g., API request)
+        const delay = setTimeout(() => {
+            setLoading(false);
+        }, 4500);
+
+        // Update progress every 50ms until it reaches 100%
+        const progressInterval = setInterval(() => {
+            setProgress((prevProgress) =>
+                prevProgress < 100 ? prevProgress + 1 : prevProgress,
+            );
+        }, 50);
+
+        // Cleanup the timeout and interval to avoid memory leaks
+        return () => {
+            clearTimeout(delay);
+            clearInterval(progressInterval);
+        };
+    }, []);
+
+    const getcsrf = async () => {
+        let cookie = await axios.get(`${apiUrl}/api/senctum/csrf-cookie`);
+        setSession(cookie);
+    };
+
+    // for checking is there still null values on object data
+    const cekAllFilled = () => {
+        console.log("openError from cekAllFilled : ", openError);
+        if (
+            data.nama == "" ||
+            data.ktp == "" ||
+            data.telepon == "" ||
+            data.golongan_darah == "" ||
+            data.kelurahan_id == "" ||
+            data.jumlah_kantong == ""
+        ) {
+            console.log(data);
+            setError("Ada data yang belum diisi");
+            setOpenError(true);
+            console.log("openError from cekAllFilled2 : ", openError);
+        } else {
+            setError("");
+            setOpenError(false);
+            sendForm();
+        }
+    };
+
+    // sending form to backend
+    const sendForm = async () => {
+        try {
+            await axios.post(`${apiUrl}/api/form/akseptor-send`, data, {
+                headers: {
+                    csrf_token: session.csrf_token,
+                    session_data: session.session_data,
+                },
+            });
+            setOpenError(true);
+        } catch (error) {
+            console.log("Error From formPengajuan Page.jsx : ", error);
+        }
+    };
+
+>>>>>>> 9f42033 (update code)
     const Buttons = () => {
         return (
             <div className="w-full flex justify-end py-2">
@@ -142,13 +219,19 @@ const FormPengajuan = () => {
     };
 
     return (
+<<<<<<< HEAD
         <section className="h-screen overflow-hidden relative">
              <div className="my-bg h-full bg-cover bg-center">
+=======
+        <section>
+            <div className="my-bg">
+>>>>>>> 9f42033 (update code)
                 <div>
                     {loading ? (
                         <Loading progress={progress} />
                     ) : (
                         <div>
+<<<<<<< HEAD
                            <Navbar itemsColor="text-white" />
                             <div className="min-h-screen flex flex-col items-center justify-center">
                             <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] h-auto max-h-[80vh] bg-white rounded-xl mx-auto p-4 overflow-y-auto">
@@ -171,6 +254,30 @@ const FormPengajuan = () => {
                                 </div>
 
 
+=======
+                            <Navbar itemsColor="text-white" />
+                            <div className=" h-screen flex items-center">
+                                <div className="w-[70%] h-auto bg-white rounded-xl mx-auto ">
+                                    <div className="mt-2 w-full">
+                                        <h1 className="text-black font-Title text-[40px] block text-center">
+                                            Form ajuan kebutuhan darah
+                                        </h1>
+                                    </div>
+                                    <div className="flex pt-2 justify-center w-full h-full text-center ">
+                                        <form className="font-Subtitle w-full px-5">
+                                            <Hal1
+                                            // for parsing data to children node
+                                                action={(newValue) => {
+                                                    setData(newValue);
+                                                }}
+                                                data={data}
+                                            />
+                                            <Buttons />
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+>>>>>>> 9f42033 (update code)
                         </div>
                     )}
                 </div>

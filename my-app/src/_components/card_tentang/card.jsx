@@ -71,11 +71,11 @@ const YourComponent = () => {
                     <div className="relative max-h-125 overflow-hidden">
                         <img
                             className="absolute"
-                            src="/img/y1.JPG"
+                            src="/img/frans1.jpg"
                             alt="asu"/>
                         <img
                             className="relative transform duration-500 group-hover:opacity-0"
-                            src="/img/y2.JPG"
+                            src="/img/frans1.jpg"
                             alt="io"
                         />
                     </div>
@@ -133,11 +133,11 @@ const YourComponent = () => {
                     <div className="relative max-h-125 overflow-hidden">
                         <img
                             className="absolute"
-                            src="/img/j1.JPG"
+                            src="/img/abdi1.jpeg"
                             alt="asu"/>
                         <img
                             className="relative transform duration-500 group-hover:opacity-0"
-                            src="/img/j2.JPG"
+                            src="/img/abdi2.jpeg"
                             alt="io"
                         />
                     </div>

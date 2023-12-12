@@ -17,12 +17,13 @@ class akseptor_model extends Model
         'ktp',
         'golongan_darah',
         'jumlah_kantong',
+        'kelurahan_id',
         'tujuan_Pengajuan',
         'alamat',
     ];
 
     public function kelurahan()
     {
-        return $this->belongsTo(Kelurahan::class);
+        return $this->belongsTo(Kelurahan::class, 'kelurahan_id');
     }
 }

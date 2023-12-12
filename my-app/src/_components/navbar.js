@@ -129,7 +129,6 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
 }
 
-<<<<<<< HEAD
   return (
     <nav className="absolute top-0 w-full z-50 p-4">
    <div className="container mx-auto flex items-center justify-between">
@@ -284,64 +283,6 @@ function classNames(...classes) {
                             Close
                         </button>
                         {userId ? (
-=======
-  
-  return (
-    <nav className="absolute top-0 w-full z-50">
-    <div className="md:container mx-auto flex flex-col md:flex-row py-5 items-center justify-start md:justify-between">
-        <div id="brand" className="mb-4 md:mb-0">
-            <a
-                href="/"
-                className="text-red text-3xl font-black font-Title"
-            >
-                Dondar
-            </a>
-        </div>
-        <div
-            id="items"
-            className={[
-                "font-Subtitle font-regular md:visible collapse w-1/2 text-right",
-                props.itemsColor,
-            ].join(" ")}
-        >
-            <a
-                href="/FormPengajuan"
-                className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
-            >
-                Kebutuhan
-            </a>
-            <a
-                href="/forum"
-                className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
-            >
-                Forum
-            </a>
-            <a
-                href=""
-                className="px-4 py-2 hover:border-b-2 border-red hover:text-red"
-            >
-                Tentang
-            </a>
-            {userId ? (
-                // <Dropdown className="inline">
-                //     <Dropdown.Toggle
-                //         id="dropdown-basic"
-                //         className="px-4 py-2 bg-red text-white font-bold rounded-full ml-4"
-                //     >
-                //         {user ? `Hello, ${user.nama}` : "Hello"}{" "}
-                //         {/* Access the name directly from the user state */}
-                //     </Dropdown.Toggle>
-                //     <Dropdown.Menu>
-                //         <Dropdown.Item href={"/profile"}>
-                //             View Profile
-                //         </Dropdown.Item>
-                //         <br />
-                //         <Dropdown.Item onClick={handleLogout}>
-                //             Logout
-                //         </Dropdown.Item>
-                //     </Dropdown.Menu>
-                // </Dropdown>
->>>>>>> 9f42033 (update code)
                 <Menu
                     as="div"
                     className="relative inline-block text-left"
@@ -375,11 +316,7 @@ function classNames(...classes) {
                                                 active
                                                     ? "bg-gray-100 text-gray-900"
                                                     : "text-gray-700",
-<<<<<<< HEAD
                                                 "block px-4 py-2 text-xs",
-=======
-                                                "block px-4 py-2 text-sm",
->>>>>>> 9f42033 (update code)
                                             )}
                                         >
                                             View Profile
@@ -394,11 +331,7 @@ function classNames(...classes) {
                                                 active
                                                     ? "bg-gray-100 text-gray-900"
                                                     : "text-gray-700",
-<<<<<<< HEAD
                                                 "block w-full px-4 py-2 text-left text-xs",
-=======
-                                                "block w-full px-4 py-2 text-left text-sm",
->>>>>>> 9f42033 (update code)
                                             )}
                                         >
                                             Sign out
@@ -416,16 +349,10 @@ function classNames(...classes) {
                     </a>
                 </Link>
             )}
-<<<<<<< HEAD
                        
                     </div>
                 </div>
             )}
         </nav>
-=======
-        </div>
-    </div>
-</nav>
->>>>>>> 9f42033 (update code)
   );
 }

@@ -12,7 +12,6 @@ export async function getKelurahanData() {
         );
         return responseKelurahan.data.kelurahan;
     } catch (e) {
-        console.log(e.message);
         alert(e.message);
     }
 }

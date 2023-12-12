@@ -9,7 +9,6 @@ async function getKecamatanData() {
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   try{
     let kecamatanResponse = await axios.get(`${apiUrl}/api/get/kecamatan/${idKabupaten}`)
-    console.log(kecamatanResponse);
     return kecamatanResponse.data.kecamatan 
   }catch(e){
     if(idKabupaten == undefined){

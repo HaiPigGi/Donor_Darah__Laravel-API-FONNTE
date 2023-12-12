@@ -5,16 +5,16 @@ import axios from "axios";
 export default function DropDown() {
   const [selectedOption, setSelectedOption] = useState("");
   const [kelurahanList, setKelurahanList] = useState([]);
+  const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
   
   const getData = async () => {
     try{
-      const response = axios.get("http://localhost:8000/api/get/provinsi");
+      const response = axios.get(`${apiUrl}/api/get/provinsi`);
       console.log(response.data);
     }catch(e){
       console.log("Error: ", e)
     }
   }
-
   useEffect(() => {
     // Mengambil data kelurahan dari API
     getData()

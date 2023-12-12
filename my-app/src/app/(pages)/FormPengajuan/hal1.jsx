@@ -11,13 +11,8 @@ export default function Hal1({ data, action }) {
     };
 
     return (
-<<<<<<< HEAD
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
             <div className="col-span-2 lg:col-span-4">  
-=======
-        <div className=" grid grid-cols-1 md:grid-cols-4 md:gap-4 w-full">
-            <div className="md:col-span-2">
->>>>>>> 9f42033 (update code)
                 <h1 className="font-bold text-xl text-left">Data Diri</h1>
                 <div className="relative font-Subtitle mx-auto mb-2">
                     <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
@@ -38,10 +33,7 @@ export default function Hal1({ data, action }) {
                         onChange={handleChange}
                     />
                 </div>
-<<<<<<< HEAD
                 <div className="relative font-Subtitle mx-auto mb-2">
-=======
->>>>>>> 9f42033 (update code)
                 <div className="font-Subtitle mx-auto mt-2">
                     <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
                         <img
@@ -61,10 +53,7 @@ export default function Hal1({ data, action }) {
                         onChange={handleChange}
                     />
                 </div>
-<<<<<<< HEAD
                 </div>
-=======
->>>>>>> 9f42033 (update code)
                 <div className="flex relative font-Subtitle w-full me-2 mt-2">
                     <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
                         <img
@@ -84,7 +73,6 @@ export default function Hal1({ data, action }) {
                         onChange={handleChange}
                     />
                 </div>
-<<<<<<< HEAD
                 <div className="flex relative font-Subtitle w-full me-2 mt-2">
                     <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex items-center justify-center">
                         <img
@@ -104,8 +92,6 @@ export default function Hal1({ data, action }) {
                         onChange={handleChange}
                     />
                 </div>
-=======
->>>>>>> 9f42033 (update code)
                 <div className="w-full h-auto border-2 border-black rounded-lg mt-2">
                     <div className="p-2 font-Subtitle">
                         <h1 className="text-start font-bold">
@@ -126,10 +112,6 @@ export default function Hal1({ data, action }) {
                                                 ...data,
                                                 kelurahan_id: value,
                                             });
-                                            console.log(
-                                                "Kelurahan Render :",
-                                                data,
-                                            );
                                         }}
                                     />
                                 </div>
@@ -138,11 +120,7 @@ export default function Hal1({ data, action }) {
                     </div>
                 </div>
             </div>
-<<<<<<< HEAD
             <div className="col-span-2 lg:col-span-4">
-=======
-            <div className="md:col-span-2">
->>>>>>> 9f42033 (update code)
                 <h1 className="font-bold text-left text-xl">Kebutuhan Darah</h1>
                 <div className="flex items-center">
                     <div className="flex  relative font-Subtitle w-2/3">
@@ -163,15 +141,11 @@ export default function Hal1({ data, action }) {
                                         ...data,
                                         golongan_darah: value,
                                     });
-                                    console.log("Kelurahan Render :", data);
                                 }}
                             />
                         </div>
                     </div>
-<<<<<<< HEAD
                     <div className="relative font-Subtitle mx-auto mb-2">
-=======
->>>>>>> 9f42033 (update code)
                     <div className="font-Subtitle ms-2 w-[10rem]">
                         <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
                             <img
@@ -192,10 +166,7 @@ export default function Hal1({ data, action }) {
                         />
                     </div>
                 </div>
-<<<<<<< HEAD
                 </div>
-=======
->>>>>>> 9f42033 (update code)
                 <div className="font-Subtitle mt-2">
                     <textarea
                         className="w-full h-[7.4rem] border border-black rounded-md p-2 resize-none"

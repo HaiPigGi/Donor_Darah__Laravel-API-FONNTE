@@ -12,10 +12,6 @@ export async function getKelurahanData() {
         );
         return responseKelurahan.data.kelurahan;
     } catch (e) {
-<<<<<<< HEAD
-=======
-        console.log(e.message);
->>>>>>> d911010 (new update)
         alert(e.message);
     }
 }

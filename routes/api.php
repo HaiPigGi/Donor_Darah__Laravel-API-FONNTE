@@ -28,10 +28,6 @@ use App\Http\Controllers\admin\beritaController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 // Tambahkan route untuk menampilkan form registrasi dengan middleware CORS
 Route::middleware(['cors', 'web'])->group(function () {
         // Registrasi
@@ -54,6 +50,7 @@ Route::middleware(['cors', 'web'])->group(function () {
             Route::get('/getUser', [UserController::class, 'getUserDetails']);
             Route::put('/getUser/{userId}', [UserController::class, 'updateUser']);
         });
+        
         //get All POST Without Auth
         Route::get('/posts/all-data', [beritaController::class, 'getAllDataStore']);
 
@@ -103,6 +100,4 @@ Route::middleware(['cors', 'web'])->group(function () {
     
 
         Route::get('/admin/getUser',[userAdminController::class,'getAllUser']);
-
-
 });

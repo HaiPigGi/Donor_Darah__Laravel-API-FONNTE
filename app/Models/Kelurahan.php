@@ -12,15 +12,22 @@ class Kelurahan extends Model
     protected $table = 'kelurahan';
     public $timestamps = false;
 
-    public function kecamatan()
-    {
-        return $this->belongsTo(Kecamatan::class);
-    }
-    
     protected $fillable = [
         'id',
         'kecamatan_id',
         'nama',
-        // tambahkan kolom lain yang ingin di-mass assignable
     ];
+    public function kecamatan()
+    {
+        return $this->belongsTo(Kecamatan::class);
+    }
+    public function profiles()
+    {
+        return $this->hasMany(profileModel::class, 'kelurahan_id'); 
+    }
+    public function akseptors()
+    {
+        return $this->hasMany(akseptor_model::class, 'kelurahan_id'); 
+    }
+    
 }

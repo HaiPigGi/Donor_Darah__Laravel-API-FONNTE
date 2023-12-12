@@ -8,19 +8,11 @@ import DropDownGolonganDarah from "./golongan_darah";
 import Pekerjaan from "./dropdown_pekerjaan";
 
 function Dropdowns({ category, action }) {
-<<<<<<< HEAD
-=======
-    console.log("action : " + action);
->>>>>>> d911010 (new update)
     if (category == "tutorialSingkat") {
         return <TutorialSingkatDropdown selection={selection} />;
     } else if (category == "provinsi") {
         return <DropDownProvinsi />;
     } else if (category == "kabupaten") {
-<<<<<<< HEAD
-=======
-        console.log("Kabupaten Added");
->>>>>>> d911010 (new update)
         return <DropDownKabupaten />;
     } else if (category == "kecamatan") {
         return <DropDownKecamatan />;
@@ -36,11 +28,5 @@ function Dropdowns({ category, action }) {
 }
 
 export default function Dropdown({ category, sendToParent }) {
-<<<<<<< HEAD
     return <Dropdowns category={category} action={sendToParent} />;
 }
-=======
-    console.log("sendToParent DD: " + sendToParent);
-    return <Dropdowns category={category} action={sendToParent} />;
-}
->>>>>>> d911010 (new update)

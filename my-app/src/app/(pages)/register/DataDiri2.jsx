@@ -6,10 +6,6 @@ import Dropdown from "@/_components/Dropdown/dropdown";
 
 export default function DataDiri2({ data, action }) {
     const [errorMessage, setErrorMessage] = useState("");
-<<<<<<< HEAD
-=======
-    console.log("DataDiri 2 : ", data);
->>>>>>> d911010 (new update)
 
     return (
         <div id="contentRegister" className="mx-auto flex justify-center pt-10">
@@ -62,8 +58,4 @@ export default function DataDiri2({ data, action }) {
             </div>
         </div>
     );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> d911010 (new update)

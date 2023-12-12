@@ -163,7 +163,7 @@ export default function Register() {
                     ktp: String(data.ktp),
                     golongan_darah: String(data.golongan_darah),
                     pekerjaan: String(data.pekerjaan),
-                    kelurahan_id: parseInt(data.kelurahan_id),
+                    kelurahan_id: (data.kelurahan_id),
                 },
                 {
                     headers: {
@@ -177,7 +177,7 @@ export default function Register() {
 
             if (response.status === 200) {
                 const jwtToken = response.data.token;
-                const userRoleFromResponse = response.data.role; // Get the user role
+                const userRoleFromResponse = response.data.role; //Get the user role
                 const getUserId = response.data.id; 
                 // Store the JWT token in session storage
                 sessionStorage.setItem('jwtToken', jwtToken);

@@ -112,10 +112,6 @@ export default function Hal1({ data, action }) {
                                                 ...data,
                                                 kelurahan_id: value,
                                             });
-                                            console.log(
-                                                "Kelurahan Render :",
-                                                data,
-                                            );
                                         }}
                                     />
                                 </div>
@@ -145,7 +141,6 @@ export default function Hal1({ data, action }) {
                                         ...data,
                                         golongan_darah: value,
                                     });
-                                    console.log("Kelurahan Render :", data);
                                 }}
                             />
                         </div>

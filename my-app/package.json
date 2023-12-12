@@ -2,10 +2,11 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://donordarahbersama.com",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "jwt-decode": "^4.0.0",
     "laravel-echo": "^1.15.3",
     "leaflet": "^1.9.4",
+    "leaflet-defaulticon-compatibility": "^0.1.2",
     "moment": "^2.29.4",
     "next": "^14.0.3",
     "next-auth": "^4.23.2",

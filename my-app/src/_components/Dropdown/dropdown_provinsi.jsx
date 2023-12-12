@@ -27,7 +27,6 @@ export default function DropDownProvinsi(action) {
   useEffect( () => {
     if(renderedOnce){
       setCount(count+1);
-      console.log("randered : ",count);
       try{
         let provinsiData = getProvinsiData()
         provinsiData
@@ -49,7 +48,6 @@ export default function DropDownProvinsi(action) {
   }, [renderedOnce]);
 
   const handleDropdownChange = (e) => {
-    console.log("Selected value:", e.target.value);
     setidProv(e.target.value);
     setSelectedOption(e.target.value);
   };

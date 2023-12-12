@@ -12,19 +12,15 @@ export default function Pekerjaan({sendToParent}) {
 
     // Store the selected pekerjaan in session storage
     sessionStorage.setItem("pekerjaan", pekerjaan);
-    console.log("session dari pekerjaan : ",pekerjaan)
-
     // If the selected pekerjaan is "lain-lain", store the custom input value
     if (e.target.value === "lain-lain") {
       const customInputValue = document.getElementById("lain-lain-input").value;
-      console.log("Custom Input Value:", customInputValue);
       sessionStorage.setItem("lain-lain", customInputValue);
     }
   };
 
   useEffect(() => {
     // Log the final pekerjaan value to the console after state update
-    console.log("Final Pekerjaan Value:", pekerjaan);
   }, [pekerjaan]);
 
   function Lain_Lain() {

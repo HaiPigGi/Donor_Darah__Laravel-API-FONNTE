@@ -10,7 +10,6 @@ const getKabupatenData = async () => {
   let idProvince = idProv
   try{
     let kabResponse = axios.get(`${apiUrl}/api/get/kabupaten/${idProvince}`)
-    console.log(await kabResponse)
     return (await kabResponse).data.kabupaten
 
   }catch(e){

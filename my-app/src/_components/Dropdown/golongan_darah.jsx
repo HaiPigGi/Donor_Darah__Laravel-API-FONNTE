@@ -10,7 +10,6 @@ export default function DropDownGolonganDarah({sendToParent}) {
     golongan_darah = e.target.value;
     sendToParent(e.target.value); // make sure sendToParent is a function
     sessionStorage.setItem("golongan_darah", golongan_darah);
-    console.log("Golongan Darah in sessionStorage:", golongan_darah);
   };
   
   

@@ -30,7 +30,8 @@ const AboutPage = () => {
     }, []);
 
     return (
-        <div className="my-bg">
+        <section className="h-screen overflow-hidden relative">
+        <div className="my-bg h-full bg-cover bg-center">
             <div>
                 {loading ? (
                     <Loading progress={progress} />
@@ -90,6 +91,7 @@ const AboutPage = () => {
                 )}
             </div>
         </div>
+        </section>
     );
 };
 

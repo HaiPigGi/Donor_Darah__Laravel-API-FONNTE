@@ -40,28 +40,7 @@ const FormPengajuan = () => {
         tujuan_pengajuan: "",
     });
 
-    // useEffect(() => {
-    //     const autoLogout = new AutoLogout();
-    //     // Initiate the automatic logout mechanism
-    //     autoLogout.checkToken();
-    
-    //     // Simulate a delay (e.g., API request)
-    //     const delay = setTimeout(() => {
-    //       setLoading(false);
-    //     }, 4500);
-    
-    //     // Update progress every 50ms until it reaches 100%
-    //     const progressInterval = setInterval(() => {
-    //       setProgress((prevProgress) => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
-    //     }, 50);
-    
-    //     // Cleanup the timeout and interval to avoid memory leaks
-    //     return () => {
-    //       clearTimeout(delay);
-    //       clearInterval(progressInterval);
-    //       autoLogout.clearLogoutTimer(); // Clear the logout timer when the component unmounts
-    //     };
-    //   }, []);
+
 
 
     useEffect(() => {
@@ -101,10 +80,8 @@ const FormPengajuan = () => {
             data.kelurahan_id == "" ||
             data.jumlah_kantong == ""
         ) {
-            console.log(data);
             setError("Ada data yang belum diisi");
             setOpenError(true);
-            console.log("openError from cekAllFilled2 : ", openError);
         } else {
             setError("");
             setOpenError(false);

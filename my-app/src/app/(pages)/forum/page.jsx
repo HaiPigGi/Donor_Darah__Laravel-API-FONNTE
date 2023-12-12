@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import "@/_styles/css/forum.css";
 import axios from 'axios';
 import Head from 'next/head';
-import Pusher from "./pusher.js"
+import echoInstance from "./pusher";
 import Loading from "@/_components/Loading/Loading.jsx";
 import withAuth from "@/_components/Auth/WithAuth.js";
 import AutoLogout from "@/_components/Auth/AutoLogout.js";
@@ -75,25 +75,26 @@ const  Forum = () => {
       clearInterval(progressInterval);
     };
   }, []);
-
+  
   useEffect(() => {
-
     fetchAllTagars();
-    // Use Pusher to subscribe to a channel with the selected tagarId
-    const channel = Pusher.channel(`tagar.${tagarId}`);
+    // Use Pusher only on the client side
+    if (typeof window !== 'undefined') {
+      // Use Pusher to subscribe to a channel with the selected tagarId
+      const channel = echoInstance.channel(`tagar.${tagarId}`);
 
-    // Bind to an event on the channel
-    channel.listen('MessageCreated', (data) => {
-      console.log(data)
-      // Handle the received message
-      const newMessage = `${data.user.nama}: ${data.message.content}`;
-      setFetchedMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
+      // Bind to an event on the channel
+      channel.listen('MessageCreated', (data) => {
+        // Handle the received message
+        const newMessage = `${data.user.nama}: ${data.message.content}`;
+        setFetchedMessages((prevMessages) => [...prevMessages, newMessage]);
+      });
 
-    // Clean up when the component is unmounted
-    return () => {
-      channel.stopListeningForWhisper()// Stop listening to the event
-    };
+      // Clean up when the component is unmounted
+      return () => {
+        channel.stopListeningForWhisper(); // Stop listening to the event
+      };
+    }
   }, [tagarId]);
 
 

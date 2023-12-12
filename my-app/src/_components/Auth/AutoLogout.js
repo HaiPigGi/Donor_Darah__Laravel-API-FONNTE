@@ -21,8 +21,8 @@ class AutoLogout {
       const currentTime = Date.now();
       const remainingTime = expirationTime - currentTime;
 
-      // Log the remaining time until expiration
-      console.log(`Remaining time until expiration: ${remainingTime} milliseconds`);
+      // // Log the remaining time until expiration
+      // console.log(`Remaining time until expiration: ${remainingTime} milliseconds`);
 
       // Set up a timer to log out the user 5 seconds before the token expires
       this.logoutTimer = setTimeout(() => {

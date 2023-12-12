@@ -2,10 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from "@/_components/navbar";
 import Loading from '@/_components/Loading/Loading';
+import Card from '@/_components/card_tentang/card';
 import "@/_styles/css/login.css";
 import "@/_styles/css/regis.css";
 
 const AboutPage = () => {
+    
     const [loading, setLoading] = useState(true);
     const [progress, setProgress] = useState(0);
 
@@ -83,6 +85,11 @@ const AboutPage = () => {
                                     pendonor, seperti merangsang produksi sel darah baru dan meningkatkan
                                     kesehatan jantung.
                                 </p>
+                            </section>
+
+                            <section className="bg-white p-4 md:p-6 lg:p-8 mb-4 md:mb-8 rounded-lg">
+                            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2">Pekerja Donor Darah?</h2>
+                                <Card/>
                             </section>
                         </div>
                     </div>

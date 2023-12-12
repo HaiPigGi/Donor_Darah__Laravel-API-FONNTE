@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@material-tailwind/react": "^2.1.5",
     "@next/font": "^13.5.2",
     "@react-aria/ssr": "^3.9.0",
     "@types/moment": "^2.13.0",

@@ -34,47 +34,73 @@ class RegisterController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      */
-    protected function verifyCreateUser(Request $request)
-    {
-        try {
-            Log::info('Request data:', is_array($request->all()) ? $request->all() : []);   
-            $validatedData = $request->validate([
-                'nama' => ['required', 'string', 'max:255'],
-                'ktp' => ['required', 'string','max:255'],
-                'pekerjaan' => ['required', 'string', 'max:255'],
-                'golongan_darah' => ['required', 'string'],
-                'kelurahan_id' => ['exists:kelurahan,id'],
-                'telepon' => ['required', 'string', 'max:255'],
-            ]);         
-            
-            // Create user and get the user object
-            $user = $this->createUser($validatedData);
-    
-            // Find the user with the telephone number
-            $findUserIDWithTelepon = User::where('telepon', $validatedData['telepon'])->firstOrFail();
-            Log::info("cek id User berdasarkan nomer telpon : ".json_encode($findUserIDWithTelepon->id));
-            
-            // Generate JWT token
-            $token = $this->generateLoginJWT($findUserIDWithTelepon->id);
-            
-            return response()->json([
-                'message' => 'Successfully Created.',
-                'id' => $findUserIDWithTelepon->id,
-                'role' => "user",
-                'token' => $token, 
-            ], 200);
-        } catch (ValidationException $e) {
-            // Handle any exceptions that occurred during the createUser process
-            return response()->json([
-                'message' => 'Failed to create user. Please try again.', 
-                'error' => $e->getMessage()
-            ], 500);
-        }
+   protected function verifyCreateUser(Request $request)
+{
+    try {
+        // Log incoming request data
+        Log::info('Incoming request data:', is_array($request->all()) ? $request->all() : []);
+
+        // Validate the incoming request data
+        $validatedData = $request->validate([
+            'nama' => ['required', 'string', 'max:255'],
+            'ktp' => ['required', 'string', 'max:255'],
+            'pekerjaan' => ['required', 'string', 'max:255'],
+            'golongan_darah' => ['required', 'string'],
+            'kelurahan_id' => ['exists:kelurahan,id'],
+            'telepon' => ['required', 'string', 'max:255'],
+        ]);
+
+        // Log validated data
+        Log::info('Validated data:', $validatedData);
+
+        // Create user and get the user object
+        $this->createUser($validatedData);
+
+        // Find the user with the telephone number
+        $findUserIDWithTelepon = User::where('telepon', $validatedData['telepon'])->firstOrFail();
+        Log::info("User ID based on telephone number: " . $findUserIDWithTelepon->id);
+
+        // Generate JWT token
+        $token = $this->generateLoginJWT($findUserIDWithTelepon->id);
+
+        // Log token information
+        Log::info("Generated JWT token: " . $token);
+
+        // Create a detailed message for registration
+        $message = "\n\nNama: {$validatedData['nama']}\nNomor Telepon: {$validatedData['telepon']}\nKTP: {$validatedData['ktp']}\nPekerjaan: {$validatedData['pekerjaan']}\nGolongan Darah: {$validatedData['golongan_darah']}\n\n";
+
+        // Send registration message
+        $this->sendSuccessfullyRegister($findUserIDWithTelepon->telepon, $message);
+
+        return response()->json([
+            'message' => 'Successfully Created.',
+            'id' => $findUserIDWithTelepon->id,
+            'role' => "user",
+            'token' => $token,
+        ], 200);
+    } catch (ValidationException $e) {
+        // Log validation errors
+        Log::error("Validation errors: " . json_encode($e->errors()));
+
+        // Handle any exceptions that occurred during the createUser process
+        return response()->json([
+            'message' => 'Failed to create user. Please try again.',
+            'error' => $e->getMessage(),
+            'validation_errors' => $e->errors(),
+        ], 500);
+    } catch (\Exception $e) {
+        // Log other exceptions
+        Log::error("Exception: " . $e->getMessage());
+
+        // Handle any other exceptions that occurred during the createUser process
+        return response()->json([
+            'message' => 'Failed to create user. Please try again.',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
+
     
-
-
-
     private function createUser(array $data)
 {
     // Retrieve the validated data from the session
@@ -91,24 +117,30 @@ class RegisterController extends Controller
             'nama' => $data['nama'],
             'telepon' => $data['telepon'],
         ]);
-
-        // Create profile record with user_id and other validated data
-        $profile = new profileModel([
-            'id_user' => $id_user,
-            'nama' => $data['nama'],
-            'telepon' => $data['telepon'],
-            'golongan_darah' => $data['golongan_darah'],
-            'ktp' => $data['ktp'],
-            'pekerjaan' => $data['pekerjaan'],
-        ]);
-
-        // Get kelurahan IDs from validated data
+       // Get kelurahan IDs from validated data
+        
         $kelurahanId = $data['kelurahan_id'];
-
-        // Associate kelurahan with the profile
-        $profile->kelurahan()->associate(Kelurahan::find($kelurahanId));
-
+        Log::info('Kelurahan ID to insert: ' . $kelurahanId);
+        Log::info('Attempting to associate kelurahan with ID: ' . $kelurahanId);
+        
+        
+         // Attempt to find the Kelurahan model by ID
+        $kelurahanNew = Kelurahan::findOrFail($kelurahanId);
+        Log::info("cek id kelurahan : ".json_encode($kelurahanNew));
+        
+        // Create profile record with user_id and other validated data
+       $profile = new profileModel([
+        'id_user' => $id_user,
+        'nama' => $data['nama'],
+        'telepon' => $data['telepon'],
+        'golongan_darah' => $data['golongan_darah'],
+        'ktp' => $data['ktp'],
+        'pekerjaan' => $data['pekerjaan'],
+        'kelurahan_id' => $kelurahanId, // Langsung masukkan nilai ID kelurahan
+    ]);
+                
         $profile->save();
+        
 
         // Delete data from sessions table based on the telephone number
         $teleponToDelete = $data['telepon'];
@@ -299,7 +331,7 @@ private function generateLoginJWT($id): string
      * @param  string  $phoneNumber
      * @param  string  $verificationCode
      */ 
-    private function sendVerificationCode($phoneNumber, $verificationCode)
+     private function sendVerificationCode($phoneNumber, $verificationCode)
     {
         $fonteeApiToken = env('FONNTE_API_TOKEN');
         $client = new Client();
@@ -308,8 +340,9 @@ private function generateLoginJWT($id): string
             return response()->json(['error' => 'Invalid API token'], 401);
         }
 
-        // Define the message and target phone number
-        $message = "Your verification code: $verificationCode"; // Corrected message string
+        // Define the poetic message and target phone number
+       $message = "Sampaikan senyuman tulus di wajah Anda. Terima kasih, rekan di dunia maya. Donordarahbersama.com, sebagai wahana bakti. Anda adalah pahlawan tanpa tanda jasa. 😊\n\nDarah yang Anda sumbangkan adalah suci, dan nyawa Anda memiliki nilai yang sangat berharga. Setetes darah memiliki berjuta makna. Dengan ucapan terima kasih ini, kami sampaikan rasa hormat dan penghargaan.\n\nKode Verifikasi: $verificationCode.\n\nJangan lupakan pesan ini, sebagai satu keluarga. 🤝 Donordarahbersama.com, sebuah ikatan kebaikan. Terima kasih, rekan di dunia maya.\n\nSelamatkan nyawa dengan kebaikan tulus Anda. Darah yang Anda berikan adalah permulaan dari keajaiban. ❤️ Donordarahbersama.com, kami ucapkan terima kasih. Sampaikan pesan kebaikan, untuk menciptakan dunia yang lebih manusiawi. 🌍";
+
         $target = $phoneNumber;
 
         try {
@@ -352,5 +385,68 @@ private function generateLoginJWT($id): string
             return ['status' => 'error', 'message' => $e->getMessage()];
         }
     }
+    
+    /**
+ * Send a thank you message and verification code via Fontee API to the user's WhatsApp number after successful registration.
+ *
+ * @param  string  $phoneNumber
+ * @param  string  $verificationCode
+ */
+private function sendSuccessfullyRegister($phoneNumber, $msg)
+{
+    $fonteeApiToken = env('FONNTE_API_TOKEN');
+    $client = new Client();
+
+    if (empty($fonteeApiToken)) {
+        return response()->json(['error' => 'Invalid API token'], 401);
+    }
+
+    // Define the poetic message and target phone number
+   $message = "Terima kasih telah melakukan registrasi!\n\n Ini adalah Detail Anda :\n\n$msg.\n\nSampaikan Kepada Orang Lain Bahwa Kalian Pantas Untuk Mendonasikan Darah Anda Untuk Sesama.\n\nKeluarga Besar donordarahbersama.com mengucapkan Terima Kasih 😊";
+
+
+    $target = $phoneNumber;
+
+    try {
+        $response = $client->post(env("FONNTE_API_LINK"), [
+            'headers' => [
+                'Authorization' => $fonteeApiToken,
+            ],
+            'json' => [
+                'message' => $message,
+                'target' => $target,
+            ],
+        ]);
+
+        // Log the request and complete response for debugging
+        Log::info('Fontee API Request:', [
+            'url' => env("FONNTE_API_LINK"),
+            'headers' => [
+                'Authorization' => $fonteeApiToken,
+            ],
+            'body' => [
+                'message' => $message,
+                'target' => $target,
+            ],
+        ]);
+        Log::info('Fontee API Response:', json_decode($response->getBody(), true)); // Log complete response
+
+        // Handle the response from Fontee API
+        $body = $response->getBody();
+        $result = json_decode($body);
+
+        if ($result->status === true) {
+            // Pengiriman berhasil
+            return ['status' => 'success'];
+        } else {
+            // Pengiriman gagal, kirim respons JSON error dengan alasan yang diberikan oleh layanan WhatsApp
+            return ['status' => 'error', 'reason' => $result->reason ?? 'Unknown error'];
+        }
+    } catch (\Exception $e) {
+        // Tangani kesalahan yang mungkin terjadi selama pengiriman
+        return ['status' => 'error', 'message' => $e->getMessage()];
+    }
+}
+
 
 }

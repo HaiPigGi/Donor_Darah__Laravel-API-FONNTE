@@ -15,7 +15,7 @@ const AboutPage = () => {
         // Simulate a delay (e.g., API request)
         const delay = setTimeout(() => {
             setLoading(false);
-        }, 4500);
+        }, 2000);
 
         // Update progress every 50ms until it reaches 100%
         const progressInterval = setInterval(() => {

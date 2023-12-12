@@ -27,6 +27,10 @@ export default function DropDownProvinsi(action) {
   useEffect( () => {
     if(renderedOnce){
       setCount(count+1);
+<<<<<<< HEAD
+=======
+      console.log("randered : ",count);
+>>>>>>> d911010 (new update)
       try{
         let provinsiData = getProvinsiData()
         provinsiData

@@ -293,7 +293,7 @@ class Akseptor extends Controller
                 }
                 Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
 
-                if (!is_array($phoneNumbersByGolonganDarah) || empty(trim($phoneNumbersByGolonganDarah['telepon']))) {
+                if (!is_array($phoneNumbersByGolonganDarah)) {
                     Log::info("cek data golongan ternyata kosong: " . json_encode($phoneNumbersByGolonganDarah));
                     return response()->json(['message' => 'Golongan Darah Is Not Found or Telepon is Empty'], 404);
                 }
@@ -364,8 +364,6 @@ class Akseptor extends Controller
                 return response()->json(['message' => 'Failed to update Akseptor data. Please try again.', 'error' => $e->getMessage()], 500);
             }
         }
-        
-        
         
         private function getUserLocationsByGolonganDarah($golonganDarah)
         {

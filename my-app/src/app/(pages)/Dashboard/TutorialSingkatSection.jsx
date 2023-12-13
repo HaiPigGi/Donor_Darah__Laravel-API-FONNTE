@@ -35,7 +35,7 @@ export default function TutorialSingkatSection() {
               </h1>
               <TutorialSingkatDropdown />
             </div>
-            <div className="flex flex-col md:flex-row gap-4 md:gap-0  justify-between items-center md:h-[30rem] border-2">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-0  justify-between items-center md:h-[30rem]">
               {category.kategori === "Pendonor" ? (
                 <>
                   <Card

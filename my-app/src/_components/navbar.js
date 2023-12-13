@@ -108,7 +108,7 @@ function classNames(...classes) {
 
   return (
     <nav className="absolute top-0 w-full z-50 p-4">
-   <div className="container mx-auto flex items-center justify-between">
+   <div className="md:container mx-auto flex items-center justify-between">
                 <div id="brand" className="flex items-center flex-shrink-0 text-white mr-6">
                     <a href="/" className="text-red text-3xl font-black font-Title">Dondar</a>
                 </div>
@@ -228,7 +228,7 @@ function classNames(...classes) {
 
              {/* Mobile Menu */}
              {mobileMenuOpen && (
-                <div className="md:hidden fixed top-0 left-0 w-full bg-gray-800 text-white">
+                <div className="md:hidden absolute top-0 left-0 w-full bg-gray-800 text-white">
                     {/* Example of mobile menu items */}
                     <div className="p-4 border-white border">
                         <div id="brand" className="flex items-center flex-shrink-0 text-white mr-6">

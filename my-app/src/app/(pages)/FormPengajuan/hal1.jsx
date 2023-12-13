@@ -11,8 +11,8 @@ export default function Hal1({ data, action }) {
     };
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-            <div className="col-span-2 lg:col-span-4">  
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+            <div className="col-span-1 lg:col-span-4">  
                 <h1 className="font-bold text-xl text-left">Data Diri</h1>
                 <div className="relative font-Subtitle mx-auto mb-2">
                     <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
@@ -120,51 +120,55 @@ export default function Hal1({ data, action }) {
                     </div>
                 </div>
             </div>
-            <div className="col-span-2 lg:col-span-4">
+            <div className="col-span-2 lg:col-span-4 mb-2">
                 <h1 className="font-bold text-left text-xl">Kebutuhan Darah</h1>
-                <div className="flex items-center">
-                    <div className="flex  relative font-Subtitle w-2/3">
-                        <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex justify-center">
-                            <img
-                                className="input-icon "
-                                src="/img/darah.svg"
-                                alt="Icon"
-                                height={25}
-                                width={25}
-                            />
-                        </div>
-                        <div className="w-full">
-                            <Dropdown
-                                category="golongan_darah"
-                                sendToParent={(value) => {
-                                    action({
-                                        ...data,
-                                        golongan_darah: value,
-                                    });
-                                }}
-                            />
+                <div className="flex items-center border-red gap-2">
+                    <div className="w-2/3 font-Subtitle ">
+                        <label htmlFor="golongan_darah">Golongan Darah</label>
+                        <div className="flex  relative  w-full ">
+                            <div className="h-full w-14 bg-black absolute rounded-e-[100px] rounded-s-2xl flex justify-center">
+                                <img
+                                    className="input-icon "
+                                    src="/img/darah.svg"
+                                    alt="Icon"
+                                    height={25}
+                                    width={25}
+                                />
+                            </div>
+                            <div className="w-full">
+                                <Dropdown
+                                    category="golongan_darah"
+                                    sendToParent={(value) => {
+                                        action({
+                                            ...data,
+                                            golongan_darah: value,
+                                        });
+                                    }}
+                                />
+                            </div>
                         </div>
                     </div>
-                    <div className="relative font-Subtitle mx-auto mb-2">
-                    <div className="font-Subtitle ms-2 w-[10rem]">
-                        <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
-                            <img
-                                className="text-white"
-                                src="/img/tanganDarah.svg"
-                                alt="Icon"
-                                height={25}
-                                width={25}
+                    <div className="font-Subtitle mx-auto">
+                        <label htmlFor="jumlah_kantong" className="">Jumlah Katong</label>
+                        <div className="font-Subtitle relative  w-[10rem]">
+                            <div className="absolute bg-black h-14  w-14 z-0 rounded-e-[100px] rounded-s-2xl flex justify-center items-center">
+                                <img
+                                    className="text-white"
+                                    src="/img/tanganDarah.svg"
+                                    alt="Icon"
+                                    height={25}
+                                    width={25}
+                                />
+                            </div>
+                            <input
+                                className="border border-black rounded-xl w-full h-14 ps-[4rem] text-[20px] block"
+                                type="number"
+                                placeholder="Jumlah kantong"
+                                name="jumlah_kantong"
+                                id="jumlah_kantong"
+                                onChange={handleChange}
                             />
                         </div>
-                        <input
-                            className="border border-black rounded-xl w-full h-14 ps-[4rem] text-[20px] block"
-                            type="number"
-                            placeholder="Jumlah kantong"
-                            name="jumlah_kantong"
-                            id="jumlah_kantong"
-                            onChange={handleChange}
-                        />
-                    </div>
                 </div>
                 </div>
                 <div className="font-Subtitle mt-2">

@@ -119,7 +119,7 @@ const FormPengajuan = () => {
     };
 
     return (
-        <section className="h-screen overflow-hidden relative">
+        <section className="h-screen  overflow-hidden relative">
              <div className="my-bg h-full bg-cover bg-center">
                 <div>
                     {loading ? (
@@ -128,7 +128,7 @@ const FormPengajuan = () => {
                         <div>
                            <Navbar itemsColor="text-white" />
                             <div className="min-h-screen flex flex-col items-center justify-center">
-                            <div className="w-full sm:w-[90%] md:w-[70%] lg:w-[50%] xl:w-[40%] h-auto max-h-[80vh] bg-white rounded-xl mx-auto p-4 overflow-y-auto">
+                            <div className="w-[90%]  md:w-1/2 h-auto max-h-[80vh] bg-white rounded-xl mx-4 p-4 overflow-y-auto">
                                 <div className="flex flex-col items-center">
                                 <h1 className="text-black font-Title text-2xl md:text-3xl text-center mb-2">
                                 Form ajuan kebutuhan darah

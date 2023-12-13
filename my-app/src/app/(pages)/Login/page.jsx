@@ -10,6 +10,8 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter,Link } from "next/navigation";
+
 
 
 export default function Login() {
@@ -75,10 +77,11 @@ export default function Login() {
   };
 
   const check = () => {
+    const cekIncludeString = telepon.match(/\d+/g);
     if(telepon == ""){
       setErrorMessage("Nomor telfon masih kosong");
       setModalIsOpen(true);
-    }else if(telepon.match(/\d+/g) == null){
+    }else if(cekIncludeString == null){
       setErrorMessage("Harap isi dengan nomor telfon");
       setModalIsOpen(true);
     }
@@ -89,8 +92,14 @@ export default function Login() {
   };
 
   const handleApiError = (error) => {
-    if (error.response) {
-      console.error("Server responded with error status:", error.response.status);
+    console.log(error);
+    if (error.response ) {
+       console.error("Server responded with error status:", error.response.status);
+        if(error.response.status === 401){
+          setErrorMessage("Nomor belum terdaftar");
+          setModalIsOpen(true);
+        }
+
     } else if (error.request) {
       console.error("No response received from the server");
     } else {
@@ -106,9 +115,9 @@ export default function Login() {
       console.error("Error getting CSRF token:", error);
     }
   };
-
+  const router = useRouter();
   const redirectToOtherPage = () => {
-    window.location.href = '/Login/OTP'; 
+    router.push("/Login/OTP");
   };
 
   return (
@@ -143,7 +152,10 @@ export default function Login() {
                               placeholder="Masukkan No Anda"
                               name="telepon"
                               value={telepon}
-                              onChange={(e) => setTelepon(e.target.value)}
+                              onChange={(e) =>{
+                                console.log(e.target.value)
+                                setTelepon(e.target.value)
+                              }}
                             />
                           </div>
                           <p className="text-sm md:text-l text-left mt-2 col-start-1 col-span-3 my-auto mx-auto w-full">Kode OTP dikirim via Whatsapp</p>

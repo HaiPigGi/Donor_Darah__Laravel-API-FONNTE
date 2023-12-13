@@ -9,7 +9,7 @@ export default function TutorialSingkatDropdown(){
     const[isActive,setIsActive] = useState(false);
     return(
         <>
-            <div className="font-Subtitle border-2 h-auto">
+            <div className="font-Subtitle h-auto">
                 <button className="md:text-2xl text-lg w-40 font-bold text-left px-2 rounded-r-full bg-red text-white flex justify-between items-center" onClick={e => {
                     setIsActive(!isActive);
                     setSelect(select);

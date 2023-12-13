@@ -62,7 +62,7 @@ const Forum = () => {
         // Simulate a delay (e.g., API request)
         const delay = setTimeout(() => {
             setLoading(false);
-        }, 4500);
+        }, 3000);
 
         // Update progress every 50ms until it reaches 100%
         const progressInterval = setInterval(() => {
@@ -128,7 +128,6 @@ const Forum = () => {
         }
     };
 
-<<<<<<< HEAD
     const getcsrf = async () => {
         try {
             const cookie = await axios.get(`${apiUrl}/api/get-session-data`);
@@ -136,30 +135,6 @@ const Forum = () => {
         } catch (error) {
             console.error("Error getting CSRF token:", error);
         }
-=======
-
-  useEffect(() => {
-   // Check if userId exists in sessionStorage
-   const storedUserId = sessionStorage.getItem('userId');
-   if (storedUserId) {
-     // userId exists, update your state
-     setUserId(storedUserId);
-   }
-    // Simulate a delay (e.g., API request)
-    const delay = setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-
-    // Update progress every 50ms until it reaches 100%
-    const progressInterval = setInterval(() => {
-      setProgress(prevProgress => (prevProgress < 100 ? prevProgress + 1 : prevProgress));
-    }, 50);
-
-    // Cleanup the timeout and interval to avoid memory leaks
-    return () => {
-      clearTimeout(delay);
-      clearInterval(progressInterval);
->>>>>>> a77b8f0379c72ce6579565f96d24269b62a2623b
     };
     const handleTagarChange = async (e) => {
         const selectedTagarId = e.target.value;

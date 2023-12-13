@@ -15,8 +15,6 @@ use App\Models\Kabupaten;
 use App\Models\provinsi;
 class verifyAkseptorController extends Controller
 {
-
-
     public function showDataAkseptor () {
         $akseptor = akseptor_model::all();
         return response()->json($akseptor);

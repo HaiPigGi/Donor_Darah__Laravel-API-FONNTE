@@ -9,6 +9,7 @@ import "@/_styles/css/profile.css";
 import Modal from 'react-modal';
 import Dropdown from "@/_components/Dropdown/dropdown";
 import AutoLogout from '@/_components/Auth/AutoLogout';
+
 const Profile = () => {
   const [user, setUser] = useState(null);
   const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
@@ -207,15 +208,6 @@ const Profile = () => {
               <input
                 type="text"
                 value={user.kelurahan_nama}
-                readOnly
-                className="mt-1 p-2 w-full border rounded-md"
-                />
-            </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-600">Tagar ID:</label>
-              <input
-                type="text"
-                value={user.tagar_id}
                 readOnly
                 className="mt-1 p-2 w-full border rounded-md"
                 />

@@ -264,10 +264,7 @@ class Akseptor extends Controller
                // Retrieve phone numbers with the same golongan darah
                 $phoneNumbersByGolonganDarah = $this->getUserLocationsByGolonganDarah($golonganDarah);
                 Log::info("cek user dengan golongan darah sama  : " . json_encode($phoneNumbersByGolonganDarah));
-        
-                if (!$phoneNumbersByGolonganDarah) {
-                    return response()->json(['message' => 'Golongan Darah Is Not Found']);
-                }
+    
         
                 // Initialize an array to store the results
                 $results = [];
@@ -295,6 +292,12 @@ class Akseptor extends Controller
                     Log::info("Provinsi ID: " . json_encode(['message' => 'provinsi_id is missing or empty']));
                 }
                 Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
+
+                if (!is_array($phoneNumbersByGolonganDarah) || empty(trim($phoneNumbersByGolonganDarah['telepon']))) {
+                    Log::info("cek data golongan ternyata kosong: " . json_encode($phoneNumbersByGolonganDarah));
+                    return response()->json(['message' => 'Golongan Darah Is Not Found or Telepon is Empty'], 404);
+                }
+    
         
         
                 foreach ($phoneNumbersByGolonganDarah as $userData) {

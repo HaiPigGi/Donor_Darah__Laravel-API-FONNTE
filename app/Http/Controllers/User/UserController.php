@@ -12,8 +12,6 @@ use App\Models\Kecamatan;
 use App\Models\Kabupaten;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
-
 class UserController extends Controller
 {
     /**
@@ -47,7 +45,6 @@ class UserController extends Controller
                     $kelurahanName = $kelurahan->nama;
                 }
             }
-    
             // Get the user's details
             $userData = [
                 'id' => $user->id,
@@ -114,11 +111,6 @@ class UserController extends Controller
         return response()->json(['status' => 'error', 'message' => 'Failed to update user and profile'], 500);
     }
 }
-
-     
-            
-
-
     public function getUserLocation()
     {
         try {

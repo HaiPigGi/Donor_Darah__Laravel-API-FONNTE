@@ -82,29 +82,6 @@ const handleLogout = async () => {
     window.location.href = '/';
   };
 
-
-  const handleDropdownToggle = () => {
-    const dropDownBasic = document.getElementById("Menus");
-    setIsOpen(!isOpen);
-
-    if (isOpen) {
-        dropDownBasic.classList.add("from:transform");
-        dropDownBasic.classList.add("from:opacity-0");
-        dropDownBasic.classList.add("from:scale-95");
-        dropDownBasic.classList.add("to:transform");
-        dropDownBasic.classList.add("to:opacity-100");
-        dropDownBasic.classList.add("to:scale-100");
-    } else {
-        dropDownBasic.classList.remove("from:transform");
-        dropDownBasic.classList.remove("from:opacity-0");
-        dropDownBasic.classList.remove("from:scale-95");
-        dropDownBasic.classList.remove("to:transform");
-        dropDownBasic.classList.remove("to:opacity-100");
-        dropDownBasic.classList.remove("to:scale-100");
-
-        dropDownBasic.classList.add("from:");
-    }
-};
 useEffect(() => {
     const handleDocumentClick = (e) => {
         // Cek apakah element yang diklik adalah bagian dari dropdown
@@ -251,9 +228,9 @@ function classNames(...classes) {
 
              {/* Mobile Menu */}
              {mobileMenuOpen && (
-                <div className="md:hidden absolute top-0 left-0 w-full bg-gray-800">
+                <div className="md:hidden fixed top-0 left-0 w-full bg-gray-800 text-white">
                     {/* Example of mobile menu items */}
-                    <div className="p-4">
+                    <div className="p-4 border-white border">
                         <div id="brand" className="flex items-center flex-shrink-0 text-white mr-6">
                             <a href="/" className="text-red text-3xl font-black font-Title">Dondar</a>
                         </div>

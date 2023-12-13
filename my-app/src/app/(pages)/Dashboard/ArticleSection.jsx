@@ -17,7 +17,7 @@ export default function ArticleSection() {
     const ShowAllCards = () => {
         return posts.map((post) => {
             return (
-                <li className="bg-red rounded-md text-center w-[20rem] h-[25rem] relative hover:transform border-2">
+                <li className="rounded-md text-center w-[20rem] h-[25rem] relative hover:transform border-2">
                     <Suspense fallback={<p className="text-black">Loading ...</p>}>
                         <img
                             src={post.image.url}

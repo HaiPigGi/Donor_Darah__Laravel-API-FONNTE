@@ -4,7 +4,7 @@ export default function Card({ alt, imgPath, desc, width = 200, height = 100 }) 
     function isDescNull() {
         if (desc === "") {
             return (
-                <div className="relative h-full">
+                <div className="relative h-full ">
                     <Image
                         src={imgPath}
                         alt={alt}
@@ -16,13 +16,13 @@ export default function Card({ alt, imgPath, desc, width = 200, height = 100 }) 
         } else {
             return (
                 <div className="flex flex-col">
-                    <div className="relative h-[20rem]">
+                    <div className=" h-[20rem]  flex">
                         <Image
                             src={imgPath}
                             alt={alt}
                             width={width}
                             height={height}
-                            className="object-cover"
+                            className="object-cover self-center"
                         />
                     </div>
                     <div className="w-full text-center font-Title rounded-xl bg-white mt-2 p-2">
@@ -36,7 +36,7 @@ export default function Card({ alt, imgPath, desc, width = 200, height = 100 }) 
     }
 
     return (
-        <div className="border-black p-4 w-[350px] h-[450px] rounded-xl bg-red hover:cursor-pointer hover:w-[400px] hover:h-[500px] sha">
+        <div className="border-black p-4 w-[350px] h-[450px] rounded-xl bg-red md:hover:cursor-pointer md:hover:w-[400px] md:hover:h-[500px] ">
             <div className="flex justify-center items-center w-full h-full border-yellow-100">
                 {isDescNull()}
             </div>

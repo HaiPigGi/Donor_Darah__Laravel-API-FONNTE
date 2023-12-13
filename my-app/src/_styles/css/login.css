@@ -28,12 +28,13 @@ body, html {
 
 .rectangle-36 {
   display: flex;
+  justify-content:center;
   background: #ffffff;
   border-radius: 30px;
   width: 80%; 
-  height: 65vh;
-  margin: auto;
+  margin: 100px;
   text-align: center;
+
 }
 
 .wraper {
@@ -42,11 +43,8 @@ body, html {
   align-items: center;
   color: black;
   text-align: center;
-  position: relative;
-  width: 80vw; 
-  max-width: 500px; 
+  width:100%; 
   height: 100%;
-  margin: auto;
   box-sizing: border-box;
 }
 

@@ -9,10 +9,17 @@ import DataDiri from "./DataDiri";
 import DataDiri2 from "./DataDiri2";
 import Alamat from "./Alamat";
 import Verfikasi from "./verifikasi";
-import ErrorMessage from "@/_components/errorMessage";
 import { Modal } from "react-bootstrap";
 import moment from "moment";
 import Loading from "@/_components/Loading/Loading";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useRef } from "react";
+import {
+    ExclamationTriangleIcon,
+    CheckCircleIcon,
+} from "@heroicons/react/24/outline";
+
+
 
 export default function Register() {
     const isBrowser = typeof window !== "undefined";
@@ -20,10 +27,12 @@ export default function Register() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [modalContent, setModalContent] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [userId, setUserId] = useState(null);
+    const cancelButtonRef = useRef(null);
+
 
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
+    const [judul, setJudul] = useState("Registrasi");
     
     const apiUrl = process.env.NEXT_PUBLIC_APP_URL_API;
 
@@ -262,19 +271,24 @@ export default function Register() {
     };
 
     const check = () => {
+        setErrorMessage("");
         if (buttonNext == 0) {
+            console.log(data);
             if (data.nama == "" || data.telepon == "" || data.ktp == "") {
                 setErrorMessage("terdapat data yang belum diisi");
+                setModalIsOpen(true);
             } else {
                 setErrorMessage("");
+                setJudul("Verifikasi");
+                console.log("button next : " + buttonNext);
+                userExist();
             }
-            console.log("button next : " + buttonNext);
-            userExist();
         } else if (buttonNext == 1) {
             if (data.code == "") {
                 setErrorMessage("terdapat data yang belum diisi");
             } else {
                 setErrorMessage("");
+                setJudul("Registrasi");
                 handleButton();
                 verifyCode();
             }
@@ -283,6 +297,7 @@ export default function Register() {
                 setErrorMessage("terdapat data yang belum diisi");
             } else {
                 setErrorMessage("");
+                setJudul("Registrasi");
                 handleButton();
             }
         } else if (buttonNext == 3) {
@@ -292,6 +307,7 @@ export default function Register() {
                 );
             } else {
                 setErrorMessage("");
+                setJudul("Registrasi");
                 handleButton();
                 finalVerifyData();
             }
@@ -412,8 +428,6 @@ export default function Register() {
                 />
             );
         } else if (buttonNext == 1) {
-            document.getElementById("title").classList.remove("block");
-            document.getElementById("title").classList.add("hidden");
             return (
                 <Verfikasi
                     data={data}
@@ -423,8 +437,6 @@ export default function Register() {
                 />
             );
         } else if (buttonNext == 2) {
-            document.getElementById("title").classList.remove("hidden");
-            document.getElementById("title").classList.add("block");
             return (
                 <DataDiri2
                     data={data}
@@ -450,74 +462,154 @@ export default function Register() {
     return (
         <section className="h-screen overflow-hidden relative">
              <div className="my-bg h-full bg-cover bg-center">
-                <div>
+                <div className="">
                     {loading ? (
                         <Loading progress={progress} />
                     ) : (
                         <div>
                             <Navbar itemsColor="text-white" />
-                            <div className="row">
-                                <div className="rectangle-37">
-                                    <div className="wraper text-center relative">
-                                        <h1
-                                            id="title"
-                                            className="text-black font-Title text-4xl md:text-5xl lg:text-6xl xl:text-7xl block absolute top-[4%] md:top-[2%]"
-                                        >
-                                            Register
-                                        </h1>
-                                        <div
-                                           className=" flex justify-center items-center  mx-auto absolute top-[17%]"
-                                            id="pagination"
-                                        >
-                                            <div className="w-14 h-3 bg-red me-2 rounded-full"></div>
-                                            <div className="w-14 h-3  rounded-full border-2 border-red me-2"></div>
-                                            <div className="w-14 h-3  rounded-full border-2 border-red me-2"></div>
-                                            <div className="w-14 h-3  rounded-full border-2 border-red"></div>
-                                        </div>
-                                        <form className="w-full px-5 py-50 font-Subtitle mt-10 md:mt-5 lg:mt-8 xl:mt-10">
-                                            {formRendering()}
-                                            <div className="flex justify-end px-[5rem]">
+                            <div className="row ">
+                                <div className="bg-white h-auto mx-5 md:w-1/2 rounded-3xl">
+                                    <div className=" flex items-center text-center w-auto">
+                                        <form className="w-full px-5 font-Subtitle py-5 grid grid-rows-3">
+                                            <div className="h-auto row-span-3">
+                                                <h1
+                                                    id="title"
+                                                    className="text-black font-Title text-4xl md:text-5xl block"
+                                                >
+                                                    {judul}
+                                                </h1>
+                                                <div
+                                                className=" flex justify-center items-center mx-auto mt-2"
+                                                    id="pagination"
+                                                >
+                                                    <div className="w-14 h-3 bg-red me-2 rounded-full"></div>
+                                                    <div className="w-14 h-3  rounded-full border-2 border-red me-2"></div>
+                                                    <div className="w-14 h-3  rounded-full border-2 border-red me-2"></div>
+                                                    <div className="w-14 h-3  rounded-full border-2 border-red"></div>
+                                                </div>
+                                            </div>
+                                            <div className=" row-span-2">
+                                                {formRendering()}
+                                            </div>
+                                            <div className=" mx-auto row-span-1 mt-5">
                                                 {nextButton()}
                                             </div>
                                         </form>
                                     </div>
-                                    {/* Error message */}
-                                    {errorMessage ? (
-                                        <ErrorMessage
-                                            message={errorMessage}
-                                            kelas="w-full h-auto bg-red text-white absolute left-[-1px] bottom-[-50px] rounded-xl p-2 text-2xl"
-                                        />
-                                    ) : (
-                                        ""
-                                    )}
                                 </div>
                             </div>
                         </div>
                     )}
                 </div>
             </div>
-            {/* Modal for success message */}
-            <Modal
-                show={modalIsOpen}
-                onHide={() => setModalIsOpen(false)}
-                contentLabel="Registration Modal"
-                dialogClassName="custom-modal"
-            >
-                <Modal.Header closeButton>
-                    <Modal.Title>{modalContent}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>Check Your WhatsApp Number To See Verification Code</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <button
-                        onClick={() => setModalIsOpen(false)}
-                        className="custom-close-button" // Add a custom class for styling
+            <Transition.Root show={modalIsOpen} as={Fragment}>
+                <Dialog
+                    as="div"
+                    className="relative z-10"
+                    initialFocus={cancelButtonRef}
+                    onClose={setModalIsOpen}
+                >
+                    <Transition.Child
+                        as={Fragment}
+                        enter="ease-out duration-300"
+                        enterFrom="opacity-0"
+                        enterTo="opacity-100"
+                        leave="ease-in duration-200"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
                     >
-                        Close
-                    </button>
-                </Modal.Footer>
-            </Modal>
+                        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                    </Transition.Child>
+
+                    <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
+                        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                            <Transition.Child
+                                as={Fragment}
+                                enter="ease-out duration-300"
+                                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                                leave="ease-in duration-200"
+                                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                            >
+                                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                                    <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                                        <div className="sm:flex sm:items-start">
+                                            <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                                {/* conditional rendering icon when error and success */}
+                                                {errorMessage ? (
+                                                    <ExclamationTriangleIcon
+                                                        className="h-6 w-6 text-red"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    <CheckCircleIcon
+                                                        className="h-6 w-6 text-green-600"
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
+                                            </div>
+                                            <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                                                <Dialog.Title
+                                                    as="h3"
+                                                    className="text-xl font-semibold leading-6 text-gray-900"
+                                                >
+                                                  {/* conditional rendering title when error and when success */}
+                                                    {errorMessage
+                                                        ? errorMessage
+                                                        : modalContent}
+                                                </Dialog.Title>
+                                                <div className="mt-2">
+                                                    <p className="text-sm text-gray-500">
+                                                      {/* conditional rendering subtitle when error and when success */}
+                                                        {errorMessage
+                                                            ? errorMessage
+                                                            : modalContent}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                                        {errorMessage ? (
+                                            <button
+                                                type="button"
+                                                className="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white bg-red shadow-sm hover:bg-white hover:text-red hover:border-red hover:border-2 sm:ml-3 sm:w-auto"
+                                                onClick={() =>
+                                                    setModalIsOpen(false)
+                                                }
+                                            >
+                                                Oke
+                                            </button>
+                                        ) : (
+                                            <a
+                                                type="button"
+                                                className="inline-flex w-full justify-center rounded-md px-3 py-2 text-sm font-semibold text-white bg-green-600 shadow-sm hover:bg-white hover:text-green-600 hover:border-green-600 hover:border-2 sm:ml-3 sm:w-auto"
+                                                onClick={() =>
+                                                    setModalIsOpen(false)
+                                                }
+                                                
+                                            >
+                                                Okee
+                                            </a>
+                                        )}
+
+                                        <button
+                                            type="button"
+                                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                                            onClick={() => setModalIsOpen(false)}
+                                            ref={cancelButtonRef}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </Dialog.Panel>
+                            </Transition.Child>
+                        </div>
+                    </div>
+                </Dialog>
+            </Transition.Root>
         </section>
     );
 }

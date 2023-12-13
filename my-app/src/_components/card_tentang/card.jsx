@@ -8,11 +8,11 @@ const YourComponent = () => {
                     <div className="relative max-h-125 overflow-hidden">
                         <img
                             className="absolute"
-                            src="/img/b1.JPG"
+                            src="/img/bryan2.jpeg"
                             alt="asu"/>
                         <img
                             className="relative transform duration-500 group-hover:opacity-0"
-                            src="/img/b2.JPG"
+                            src="/img/bryan1.jpeg"
                             alt="io"
                         />
                     </div>
@@ -25,13 +25,22 @@ const YourComponent = () => {
                     </div>
                     <ul className="mt-6 font-semibold text-gray-500">
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">BRYAN</li>
-                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">Backend</li>
+                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">BACKEND</li>
                     </ul>
                     <p className="mt-6 text-xl leading-relaxed text-gray-700">
-                <a href="https://github.com/HaiPigGi" target="_blank" className="underline">
-                    GITHUB
-                </a>
-                </p>
+                        <a
+                            href="https://github.com/HaiPigGi"
+                            target="_blank"
+                            className="underline"
+                            style={{ color: 'rgb(75, 192, 192)', borderColor: 'rgb(75, 192, 192)' }}
+                            onMouseOver={(e) => (e.target.style.color = 'rgb(147, 197, 253)')}
+                            onMouseOut={(e) => (e.target.style.color = 'rgb(75, 192, 192)')}
+                        >
+                            GITHUB - HaiPigGi
+                        </a>
+                    </p>
+
+
 
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
@@ -55,14 +64,23 @@ const YourComponent = () => {
                             </svg>
                         </a>
                     </div>
-                    <ul className="mt-6 font-semibold text-gray-500">
+                    <br/>
+                    <br/>
+                    <br/>
+                    <ul className="mt-10 font-semibold text-gray-500">
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">YOGTAN</li>
-                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">Backend</li>
+                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">BACKEND</li>
                     </ul>
                     <p className="mt-6 text-xl leading-relaxed text-gray-700">
-                <a href="https://github.com/yogtan" target="_blank" className="underline">
-                    GITHUB
-                </a>
+                <a href="https://github.com/yogtan" 
+                        target="_blank" 
+                        className="underline"
+                        style={{ color: 'rgb(75, 192, 192)', borderColor: 'rgb(75, 192, 192)' }}
+                            onMouseOver={(e) => (e.target.style.color = 'rgb(147, 197, 253)')}
+                            onMouseOut={(e) => (e.target.style.color = 'rgb(75, 192, 192)')}>
+                            
+                        GITHUB - yogtan
+                    </a>
                 </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
@@ -71,7 +89,7 @@ const YourComponent = () => {
                     <div className="relative max-h-125 overflow-hidden">
                         <img
                             className="absolute"
-                            src="/img/frans1.jpg"
+                            src="/img/frans2.jpeg"
                             alt="asu"/>
                         <img
                             className="relative transform duration-500 group-hover:opacity-0"
@@ -91,8 +109,13 @@ const YourComponent = () => {
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">DATABASE</li>
                     </ul>
                     <p className="mt-6 text-xl leading-relaxed text-gray-700">
-                <a href="https://github.com/wleowleo" target="_blank" className="underline">
-                    GITHUB
+                <a href="https://github.com/wleowleo" 
+                        target="_blank" 
+                        className="underline"
+                        style={{ color: 'rgb(75, 192, 192)', borderColor: 'rgb(75, 192, 192)' }}
+                            onMouseOver={(e) => (e.target.style.color = 'rgb(147, 197, 253)')}
+                            onMouseOut={(e) => (e.target.style.color = 'rgb(75, 192, 192)')}>
+                    GITHUB - wleowleo
                 </a>
                 </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
@@ -117,13 +140,21 @@ const YourComponent = () => {
                             </svg>
                         </a>
                     </div>
+                    <br/>
+                    <br/>
+                    <br/>
                     <ul className="mt-6 font-semibold text-gray-500">
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">JEFFAN</li>
-                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">Frontend</li>
+                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">FRONTEND</li>
                     </ul>
                     <p className="mt-6 text-xl leading-relaxed text-gray-700">
-                <a href="https://github.com/jheffanD" target="_blank" className="underline">
-                    GITHUB
+                <a href="https://github.com/jheffanD" 
+                target="_blank" 
+                className="underline"
+                style={{ color: 'rgb(75, 192, 192)', borderColor: 'rgb(75, 192, 192)' }}
+                            onMouseOver={(e) => (e.target.style.color = 'rgb(147, 197, 253)')}
+                            onMouseOut={(e) => (e.target.style.color = 'rgb(75, 192, 192)')}>
+                    GITHUB - jheffanD
                 </a>
                 </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
@@ -150,11 +181,16 @@ const YourComponent = () => {
                     </div>
                     <ul className="mt-6 font-semibold text-gray-500">
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">ABDI</li>
-                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">Frontend</li>
+                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">FRONTEND</li>
                     </ul>
                     <p className="mt-6 text-xl leading-relaxed text-gray-700">
-                <a href="https://github.com/abdisavia" target="_blank" className="underline">
-                    GITHUB
+                <a href="https://github.com/abdisavia" 
+                    target="_blank" 
+                    className="underline"
+                    style={{ color: 'rgb(75, 192, 192)', borderColor: 'rgb(75, 192, 192)' }}
+                            onMouseOver={(e) => (e.target.style.color = 'rgb(147, 197, 253)')}
+                            onMouseOut={(e) => (e.target.style.color = 'rgb(75, 192, 192)')}>
+                        GITHUB - abdisavia
                 </a>
                 </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}

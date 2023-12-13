@@ -7,14 +7,14 @@ import Hal1 from "./hal1";
 import Hal2 from "./hal2";
 import { useEffect } from "react";
 import Loading from "@/_components/Loading/Loading";
-import withAuth from "@/_components/Auth/WithAuth";
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
 } from "@heroicons/react/24/outline";
-// import AutoLogout from "@/_components/Auth/AutoLogout";
+import withAuth from "@/_components/Auth/WithAuth.js";
+import AutoLogout from "@/_components/Auth/AutoLogout.js";
 const FormPengajuan = () => {
     const [session, setSession] = useState({});
     const [buttonNext, setButtonNext] = useState(0);
@@ -40,8 +40,30 @@ const FormPengajuan = () => {
         tujuan_pengajuan: "",
     });
 
+    useEffect(() => {
+        const autoLogout = new AutoLogout();
+        // Initiate the automatic logout mechanism
+        autoLogout.checkToken();
 
+        // Simulate a delay (e.g., API request)
+        const delay = setTimeout(() => {
+            setLoading(false);
+        }, 4500);
 
+        // Update progress every 50ms until it reaches 100%
+        const progressInterval = setInterval(() => {
+            setProgress((prevProgress) =>
+                prevProgress < 100 ? prevProgress + 1 : prevProgress,
+            );
+        }, 50);
+
+        // Cleanup the timeout and interval to avoid memory leaks
+        return () => {
+            clearTimeout(delay);
+            clearInterval(progressInterval);
+            autoLogout.clearLogoutTimer(); // Clear the logout timer when the component unmounts
+        };
+    }, []);
 
     useEffect(() => {
         // Simulate a delay (e.g., API request)
@@ -259,4 +281,4 @@ const FormPengajuan = () => {
     );
 };
 
-export default FormPengajuan;
+export default withAuth(FormPengajuan,['user']);

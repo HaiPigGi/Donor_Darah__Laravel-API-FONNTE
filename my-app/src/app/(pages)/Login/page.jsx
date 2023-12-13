@@ -10,7 +10,7 @@ import {
     ExclamationTriangleIcon,
     CheckCircleIcon,
 } from "@heroicons/react/24/outline";
-import { useRouter,Link } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 
 
@@ -115,7 +115,9 @@ export default function Login() {
       console.error("Error getting CSRF token:", error);
     }
   };
+
   const router = useRouter();
+
   const redirectToOtherPage = () => {
     router.push("/Login/OTP");
   };

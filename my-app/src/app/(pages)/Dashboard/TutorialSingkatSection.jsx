@@ -29,13 +29,13 @@ export default function TutorialSingkatSection() {
       <div className="md:container mx-auto my-auto">
         <roleContext.Provider value={category}>
           <roleDispatchContext.Provider value={dispatch}>
-            <div className="flex flex-col md:flex-row md:items-center mb-14">
-              <h1 className="text-xl mb-4 md:mb-0 md:mr-2">
+            <div className="flex gap-4  justify-center items-center mb-4 mt-4">
+              <h1 className="md:text-xl text-md md:mb-0 md:mr-2 font-Subtitle flex items-center">
                 Cara menjadi
               </h1>
               <TutorialSingkatDropdown />
             </div>
-            <div className="flex flex-col md:flex-row justify-between items-center md:h-[30rem]">
+            <div className="flex flex-col md:flex-row gap-4 md:gap-0  justify-between items-center md:h-[30rem] border-2">
               {category.kategori === "Pendonor" ? (
                 <>
                   <Card

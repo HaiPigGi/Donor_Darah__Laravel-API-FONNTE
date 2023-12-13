@@ -36,10 +36,7 @@ export default function Verifikasi({ data, action }) {
   }, [code, action, data]);
 
   return (
-    <>
-      <h1 className="text-black font-Title text-[40px] w-full block left-0 absolute top-[2%]">
-        verifikasi
-      </h1>
+    <div className=" w-full h-full">
       <div className="flex justify-center items-center h-full my-auto">
         <div className="text-center">
           <img
@@ -72,6 +69,6 @@ export default function Verifikasi({ data, action }) {
           </p>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -119,7 +119,6 @@ const FormPengajuan = () => {
                     session_data: session.session_data,
                 },
             });
-            console.log(response);
             setOpenError(true);
 
         } catch (error) {            

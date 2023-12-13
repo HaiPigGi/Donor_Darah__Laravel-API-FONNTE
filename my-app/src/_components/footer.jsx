@@ -1,39 +1,50 @@
 import Image from "next/image";
+import { Typography } from "@material-tailwind/react";
 
 export default function Footer() {
-  return (
-    <footer className="bg-red w-full p-4 md:p-10">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 grid-rows-2 md:grid-cols-2 text-white text-xl">
-          <div className="mb-6 md:mb-0 md:text-left text-center">
-            <h1 className="font-Title text-2xl md:text-4xl mb-2">Dondar</h1>
-            <p>Jl. Paingan maguwoharjo,<br/>depok, sleman, DIY</p>
-            <p className="flex my-2 justify-center md:justify-start items-center ">
-              <Image src="/img/instagram.png" alt="instagram logo" width={20} height={20} className="mr-2" />
-              @abdisavia_
-            </p>
-            <p className="flex my-2 justify-center md:justify-start items-center">
-              <Image src="/img/whatsapp.png" alt="whatsapp logo" width={20} height={20} className="mr-2" />
-              +62895391616312
-            </p>
-            <h1 className="text-xl md:text-3xl font-Title">Resource</h1>
-          </div>
-          <div className="md:text-right text-center">
-            <h1 className="font-Title text-2xl md:text-4xl mb-2">Developers</h1>
-            <ul className="text-base md:text-lg">
-              <li className="font-Title text-xl md:text-2xl">FrontEnd :</li>
-              <li>Jeffan Sulastyo</li>
-              <li>Hyeronemus Abdi</li>
-            </ul>
-            <ul className="text-base md:text-lg">
-              <li className="font-Title text-xl md:text-2xl">BackEnd :</li>
-              <li>Leonardo Bryan</li>
-              <li>Johanes Yogtan</li>
-              <li>Cornelius Fransisco</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
+    return (
+        // <footer className="bg-red w-full p-4 md:p-10">
+        <footer className="w-full bg-white p-4 md:p-10">
+            <div className="flex flex-row flex-wrap items-center justify-center gap-y-6 gap-x-12 bg-white text-center md:justify-between">
+                <img src="/img/favicon.png" alt="logo-ct" className="w-10" />
+                <ul className="flex flex-wrap items-center gap-y-2 gap-x-8">
+                    <li>
+                        <Typography
+                            as="a"
+                            href="/tentang"
+                            color="blue-gray"
+                            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+                        >
+                            About Us
+                        </Typography>
+                    </li>
+                    <li>
+                        <Typography
+                            as="a"
+                            href="#"
+                            color="blue-gray"
+                            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+                        >
+                            Contribute
+                        </Typography>
+                    </li>
+                    <li>
+                        <Typography
+                            as="a"
+                            href="#"
+                            color="blue-gray"
+                            className="font-normal transition-colors hover:text-blue-500 focus:text-blue-500"
+                        >
+                            Contact Us
+                        </Typography>
+                    </li>
+                </ul>
+            </div>
+            <hr className="my-8 border-blue-gray-50" />
+            <Typography color="blue-gray" className="text-center font-normal">
+                &copy; Dondar 2023
+            </Typography>
+        </footer>
+        // </footer>
+    );
 }

@@ -24,7 +24,10 @@
     "dependencies": {
         "@headlessui/react": "^1.7.17",
         "@heroicons/react": "^2.0.18",
+        "@material-tailwind/react": "^2.1.5",
         "laravel-echo": "^1.15.3",
+        "leaflet-defaulticon-compatibility": "^0.1.2",
+        "mdb-react-ui-kit": "^7.0.0",
         "next-router-mock": "^0.9.10",
         "pusher": "^5.2.0",
         "pusher-js": "^8.3.0"

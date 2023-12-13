@@ -27,7 +27,12 @@ const YourComponent = () => {
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">BRYAN</li>
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">Backend</li>
                     </ul>
-                    <p className="mt-6  text-xl leading-relaxed text-gray-700">ISI PENJELASAN</p>
+                    <p className="mt-6 text-xl leading-relaxed text-gray-700">
+                <a href="https://github.com/HaiPigGi" target="_blank" className="underline">
+                    GITHUB
+                </a>
+                </p>
+
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
 
@@ -54,7 +59,11 @@ const YourComponent = () => {
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">YOGTAN</li>
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">Backend</li>
                     </ul>
-                    <p className="mt-6  text-xl leading-relaxed text-gray-700">ISI PENJELASAN</p>
+                    <p className="mt-6 text-xl leading-relaxed text-gray-700">
+                <a href="https://github.com/yogtan" target="_blank" className="underline">
+                    GITHUB
+                </a>
+                </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
 
@@ -62,11 +71,11 @@ const YourComponent = () => {
                     <div className="relative max-h-125 overflow-hidden">
                         <img
                             className="absolute"
-                            src="/img/y1.JPG"
+                            src="/img/frans1.jpg"
                             alt="asu"/>
                         <img
                             className="relative transform duration-500 group-hover:opacity-0"
-                            src="/img/y2.JPG"
+                            src="/img/frans1.jpg"
                             alt="io"
                         />
                     </div>
@@ -79,9 +88,13 @@ const YourComponent = () => {
                     </div>
                     <ul className="mt-6 font-semibold text-gray-500">
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">FRANS</li>
-                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">Backend</li>
+                        <li className="inline mr-3 pb-1 border-b-2 border-green-500">DATABASE</li>
                     </ul>
-                    <p className="mt-6  text-xl leading-relaxed text-gray-700">ISI PENJELASAN</p>
+                    <p className="mt-6 text-xl leading-relaxed text-gray-700">
+                <a href="https://github.com/wleowleo" target="_blank" className="underline">
+                    GITHUB
+                </a>
+                </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
 
@@ -108,7 +121,11 @@ const YourComponent = () => {
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">JEFFAN</li>
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">Frontend</li>
                     </ul>
-                    <p className="mt-6  text-xl leading-relaxed text-gray-700">ISI PENJELASAN</p>
+                    <p className="mt-6 text-xl leading-relaxed text-gray-700">
+                <a href="https://github.com/jheffanD" target="_blank" className="underline">
+                    GITHUB
+                </a>
+                </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
 
@@ -116,11 +133,11 @@ const YourComponent = () => {
                     <div className="relative max-h-125 overflow-hidden">
                         <img
                             className="absolute"
-                            src="/img/j1.JPG"
+                            src="/img/abdi1.jpeg"
                             alt="asu"/>
                         <img
                             className="relative transform duration-500 group-hover:opacity-0"
-                            src="/img/j2.JPG"
+                            src="/img/abdi2.jpeg"
                             alt="io"
                         />
                     </div>
@@ -135,7 +152,11 @@ const YourComponent = () => {
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">ABDI</li>
                         <li className="inline mr-3 pb-1 border-b-2 border-green-500">Frontend</li>
                     </ul>
-                    <p className="mt-6  text-xl leading-relaxed text-gray-700">ISI PENJELASAN</p>
+                    <p className="mt-6 text-xl leading-relaxed text-gray-700">
+                <a href="https://github.com/abdisavia" target="_blank" className="underline">
+                    GITHUB
+                </a>
+                </p>
                     {/* <p className="text-gray-400 mt-10 font-semibold">23rd March, 2021</p> */}
                 </article>
             </section>

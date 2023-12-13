@@ -210,6 +210,7 @@ const Dashboard = (props) => {
                     }
                 });
             setPosts(response.data.posts);
+            console.log("cek data : ",response.data.post);
         } catch (error) {
             console.error("Error fetching posts:", error);
         }

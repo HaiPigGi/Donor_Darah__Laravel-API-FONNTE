@@ -92,7 +92,6 @@ const FormPengajuan = () => {
 
     // for checking is there still null values on object data
     const cekAllFilled = () => {
-        console.log("openError from cekAllFilled : ", openError);
         if (
             data.nama == "" ||
             data.ktp == "" ||
@@ -114,15 +113,19 @@ const FormPengajuan = () => {
     // sending form to backend
     const sendForm = async () => {
         try {
-            await axios.post(`${apiUrl}/api/form/akseptor-send`, data, {
+            const response = await axios.post(`${apiUrl}/api/form/akseptor-send`, data, {
                 headers: {
                     csrf_token: session.csrf_token,
                     session_data: session.session_data,
                 },
             });
             setOpenError(true);
-        } catch (error) {
-            console.log("Error From formPengajuan Page.jsx : ", error);
+
+        } catch (error) {            
+            if(error.response.status === 404){
+                setError("data tidak ada");
+                setOpenError(true);
+            }
         }
     };
 
@@ -252,7 +255,7 @@ const FormPengajuan = () => {
                                                     setOpenError(false)
                                                 }
                                             >
-                                                Deactivate
+                                                Okee
                                             </button>
                                         ) : (
                                             <a
@@ -266,15 +269,6 @@ const FormPengajuan = () => {
                                                 Okee
                                             </a>
                                         )}
-
-                                        <button
-                                            type="button"
-                                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                                            onClick={() => setOpenError(false)}
-                                            ref={cancelButtonRef}
-                                        >
-                                            Cancel
-                                        </button>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

@@ -120,7 +120,7 @@ export default function Otp() {
   };
 
   return (
-    <main>
+    <section className="h-screen overflow-hidden relative">
       <div className="my-bg h-full bg-cover bg-center">
         <div>
           {loading ? (
@@ -269,6 +269,6 @@ export default function Otp() {
           )}
         </div>
       </div>
-    </main>
+    </section>
   );
 }

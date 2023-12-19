@@ -13,10 +13,15 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
+<<<<<<< HEAD
         "mike42/escpos-php": "^4.0",
         "pusher/pusher-php-server": "^7.2",
         "ramsey/uuid": "^4.2",
         "tecnickcom/tcpdf": "^6.6",
+=======
+        "pusher/pusher-php-server": "^7.2",
+        "ramsey/uuid": "^4.2",
+>>>>>>> origin/main
         "tymon/jwt-auth": "^1.0@dev"
     },
     "require-dev": {

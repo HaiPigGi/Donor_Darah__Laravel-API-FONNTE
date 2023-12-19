@@ -52,6 +52,7 @@ class Akseptor extends Controller
                 Log::info("data Validate sehabis kelurahan id", ['data' => $validateData]);
     
             $this->storeAkseptor($request, $validateData);
+<<<<<<< HEAD
             // $findUserIDWithTelepon = akseptor_model::where('telepon', $validateData['telepon'])->orderBy('created_at', 'desc')->firstOrFail();
             // // Mengambil ID dari model yang baru saja dibuat
             // $userID = $findUserIDWithTelepon->id;
@@ -62,6 +63,12 @@ class Akseptor extends Controller
             //     // Handle the 404 error response
             //     return response()->json(['message' => 'Update failed: Golongan Darah Is Not Found or Telepon is Empty'], 404);
             // }
+=======
+            $findUserIDWithTelepon = akseptor_model::where('telepon', $validateData['telepon'])->firstOrFail();
+            // Mengambil ID dari model yang baru saja dibuat
+            $userID = $findUserIDWithTelepon->id;
+            $this->updateDataAkse($request,$userID);
+>>>>>>> origin/main
             Log::info("data Validate", ['data' => $validateData]);
             return response()->json(['message' => 'Verification data is valid']);
         } catch (\Exception $e) {
@@ -69,6 +76,11 @@ class Akseptor extends Controller
         }
     }
 
+<<<<<<< HEAD
+=======
+    
+    
+>>>>>>> origin/main
         private function storeAkseptor(Request $request, array $validateData)
     {
         try {
@@ -225,7 +237,11 @@ class Akseptor extends Controller
              *
              * @param  \Illuminate\Http\Request  $request
              */
+<<<<<<< HEAD
                 protected function updateDataAkse(Request $request, $id)
+=======
+            protected function updateDataAkse(Request $request, $id)
+>>>>>>> origin/main
         {
             try {
                 // Begin a database transaction
@@ -268,7 +284,14 @@ class Akseptor extends Controller
                // Retrieve phone numbers with the same golongan darah
                 $phoneNumbersByGolonganDarah = $this->getUserLocationsByGolonganDarah($golonganDarah);
                 Log::info("cek user dengan golongan darah sama  : " . json_encode($phoneNumbersByGolonganDarah));
+<<<<<<< HEAD
     
+=======
+        
+                if (!$phoneNumbersByGolonganDarah) {
+                    return response()->json(['message' => 'Golongan Darah Is Not Found']);
+                }
+>>>>>>> origin/main
         
                 // Initialize an array to store the results
                 $results = [];
@@ -296,12 +319,17 @@ class Akseptor extends Controller
                     Log::info("Provinsi ID: " . json_encode(['message' => 'provinsi_id is missing or empty']));
                 }
                 Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
+<<<<<<< HEAD
 
                 if (!is_array($phoneNumbersByGolonganDarah)) {
                     Log::info("cek data golongan ternyata kosong: " . json_encode($phoneNumbersByGolonganDarah));
                     return response()->json(['message' => 'Golongan Darah Is Not Found or Telepon is Empty'], 404);
                 }
     
+=======
+        
+        
+>>>>>>> origin/main
                 foreach ($phoneNumbersByGolonganDarah as $userData) {
                     // Check if the telepon key is present in the $userData array
                     if (array_key_exists('telepon', $userData)) {
@@ -320,10 +348,14 @@ class Akseptor extends Controller
                 }
                             // Initialize an array to store matching results
                     $matchingResults = [];
+<<<<<<< HEAD
                     
                     Log::info("cek info result gess : " . json_encode($results));
                     Log::info("ini cek akseptor provinsi nya : " . json_encode($provinsiId));
 
+=======
+        
+>>>>>>> origin/main
                     // Iterate through $results
                     foreach ($results as $result) {
                         // Check if the 'id' in $result matches $provinsiId
@@ -332,6 +364,7 @@ class Akseptor extends Controller
                             $matchingResults[] = $result;
                         }
                     }
+<<<<<<< HEAD
                     
                     if (empty($matchingResults)) {
                     Log::info('Matching Results Not Found: ' . json_encode($matchingResults));
@@ -339,6 +372,11 @@ class Akseptor extends Controller
                 }
                         
                     // Log the matching results
+=======
+        
+                    // Log the matching results
+                    Log::info('Matching Results: ' . json_encode($matchingResults));
+>>>>>>> origin/main
                                 // Initialize an array to store matching telephone numbers
                     $matchingTelephones = [];
         

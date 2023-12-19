@@ -20,6 +20,7 @@ class beritaController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAllDataStore()
+<<<<<<< HEAD
 {
     try {
         // Get all posts
@@ -39,10 +40,30 @@ class beritaController extends Controller
                     'event' => $post->event,
                     'image' => [
                         'url' => asset($imagePath),
+=======
+    {
+        try {
+            // Get all posts
+            $posts = Post::all();
+            Log::info("cek All data post : ".json_encode($posts));
+
+            // Retrieve image details for each post
+            $postsWithImages = $posts->map(function ($post) {
+                $imagePath = 'storage/post/' . $post->image;
+
+                return [
+                    'id'      => $post->id,
+                    'title'   => $post->title,
+                    'content' => $post->content,
+                    'event'   => $post->event,
+                    'image'   => [
+                        'url'  => asset($imagePath),
+>>>>>>> origin/main
                         'path' => $imagePath,
                         'size' => File::size($imagePath),
                     ],
                 ];
+<<<<<<< HEAD
             } else {
                 // Log a warning if the file does not exist
                 Log::warning('Image not found: ' . $imagePath);
@@ -61,6 +82,20 @@ class beritaController extends Controller
         return response()->json(['error' => 'Terjadi kesalahan saat mengambil data.'], 500);
     }
 }
+=======
+            });
+            Log::info("cek All data post : ".json_encode($postsWithImages));
+
+            return response()->json(['posts' => $postsWithImages], 200);
+        } catch (\Exception $e) {
+            // Log the error
+            Log::error('Error getting all posts:', ['error' => $e->getMessage()]);
+
+            // Return a JSON response with an error message
+            return response()->json(['error' => 'Terjadi kesalahan saat mengambil data.'], 500);
+        }
+    }
+>>>>>>> origin/main
     /**
      * Get all posts with image details.
      *

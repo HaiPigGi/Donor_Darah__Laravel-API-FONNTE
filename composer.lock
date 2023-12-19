@@ -4,7 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
+<<<<<<< HEAD
     "content-hash": "3467a3aed797fcdac973bcda41915e46",
+=======
+    "content-hash": "cfee2577ae60184c2c3eaf1d157596ac",
+>>>>>>> origin/main
     "packages": [
         {
             "name": "barryvdh/laravel-cors",
@@ -2309,6 +2313,7 @@
             "time": "2023-10-17T14:13:20+00:00"
         },
         {
+<<<<<<< HEAD
             "name": "mike42/escpos-php",
             "version": "v4.0",
             "source": {
@@ -2424,6 +2429,17 @@
             },
             "dist": {
                 "type": "zip",
+=======
+            "name": "monolog/monolog",
+            "version": "2.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Seldaek/monolog.git",
+                "reference": "437cb3628f4cf6042cc10ae97fc2b8472e48ca1f"
+            },
+            "dist": {
+                "type": "zip",
+>>>>>>> origin/main
                 "url": "https://api.github.com/repos/Seldaek/monolog/zipball/437cb3628f4cf6042cc10ae97fc2b8472e48ca1f",
                 "reference": "437cb3628f4cf6042cc10ae97fc2b8472e48ca1f",
                 "shasum": ""
@@ -6296,6 +6312,7 @@
                 }
             ],
             "time": "2023-09-12T10:09:58+00:00"
+<<<<<<< HEAD
         },
         {
             "name": "tecnickcom/tcpdf",
@@ -6368,6 +6385,8 @@
                 }
             ],
             "time": "2023-09-06T15:09:26+00:00"
+=======
+>>>>>>> origin/main
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

@@ -209,7 +209,24 @@ private function sendVerificationCode($phoneNumber, $verificationCode)
         }
 
         // Define the message and target phone number
+<<<<<<< HEAD
         $message = "Welcome Back 😊\n\n Ini Adalah Kode Verifikasi Kamu\n\n🎁 Kode Verifikasi: $verificationCode\n\ndonordarahbersama.com";
+=======
+        $message = "
+        🌟 Selamat datang kembali! Kami rindu,
+        😊 Dalam suasana ceria dan berbunga.
+        🚀 Bersiaplah, kode verifikasi siap hadir,
+        🌈 Hiasi harimu, oh saudara yang terpilih.
+    
+        🌺 Pantun:
+        📜 Pagi cerah, senyummu bersinar,
+        🎉 Kode verifikasi, tanda kembalimu.
+        💌 Donordarahbersama.com, tempat bakti abadi,
+        🤝 Selamat datang, di keluarga sejati.
+    
+        🎁 Kode Verifikasi: $verificationCode
+    ";
+>>>>>>> origin/main
 
         $target = $phoneNumber;
 

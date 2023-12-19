@@ -1,0 +1,2 @@
+[11-Dec-2023 11:35:04 UTC] PHP Fatal error:  Cannot declare class App\Http\Middleware\Cors, because the name is already in use in /home/donordar/laravel.api/app/Http/Middleware/CorsMiddleware.php on line 7
+[11-Dec-2023 11:35:15 UTC] PHP Fatal error:  Cannot declare class App\Http\Middleware\Cors, because the name is already in use in /home/donordar/laravel.api/app/Http/Middleware/CorsMiddleware.php on line 7

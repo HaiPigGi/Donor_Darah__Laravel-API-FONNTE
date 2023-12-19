@@ -20,39 +20,47 @@ class beritaController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function getAllDataStore()
-    {
-        try {
-            // Get all posts
-            $posts = Post::all();
-            Log::info("cek All data post : ".json_encode($posts));
+{
+    try {
+        // Get all posts
+        $posts = Post::all();
+        Log::info("cek All data post : " . json_encode($posts));
 
-            // Retrieve image details for each post
-            $postsWithImages = $posts->map(function ($post) {
-                $imagePath = 'storage/post/' . $post->image;
+        // Retrieve image details for each post
+        $postsWithImages = $posts->map(function ($post) {
+            $imagePath = 'storage/post/' . $post->image;
 
+            // Check if the file exists before getting the size
+            if (File::exists($imagePath)) {
                 return [
-                    'id'      => $post->id,
-                    'title'   => $post->title,
+                    'id' => $post->id,
+                    'title' => $post->title,
                     'content' => $post->content,
-                    'event'   => $post->event,
-                    'image'   => [
-                        'url'  => asset($imagePath),
+                    'event' => $post->event,
+                    'image' => [
+                        'url' => asset($imagePath),
                         'path' => $imagePath,
                         'size' => File::size($imagePath),
                     ],
                 ];
-            });
-            Log::info("cek All data post : ".json_encode($postsWithImages));
+            } else {
+                // Log a warning if the file does not exist
+                Log::warning('Image not found: ' . $imagePath);
+                return null; // or handle it as needed
+            }
+        })->filter(); // Filter out null values (non-existent images)
 
-            return response()->json(['posts' => $postsWithImages], 200);
-        } catch (\Exception $e) {
-            // Log the error
-            Log::error('Error getting all posts:', ['error' => $e->getMessage()]);
+        Log::info("cek All data post : " . json_encode($postsWithImages));
 
-            // Return a JSON response with an error message
-            return response()->json(['error' => 'Terjadi kesalahan saat mengambil data.'], 500);
-        }
+        return response()->json(['posts' => $postsWithImages], 200);
+    } catch (\Exception $e) {
+        // Log the error
+        Log::error('Error getting all posts:', ['error' => $e->getMessage()]);
+
+        // Return a JSON response with an error message
+        return response()->json(['error' => 'Terjadi kesalahan saat mengambil data.'], 500);
     }
+}
     /**
      * Get all posts with image details.
      *

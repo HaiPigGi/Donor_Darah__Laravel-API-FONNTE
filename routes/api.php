@@ -17,6 +17,9 @@ use App\Http\Controllers\Forum\ChatMessageSend;
 use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\admin\userAdminController;
 use App\Http\Controllers\admin\beritaController;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Artisan;
+use App\Http\Controllers\admin\laporanController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -67,6 +70,9 @@ Route::middleware(['cors', 'web'])->group(function () {
             Route::put('/verify_akseptor/{id}', [verifyAkseptorController::class, 'updateDataAkse']);
             Route::get('/verify_akseptor/{id}/edit', [verifyAkseptorController::class, 'editDataAkse']);
             Route::get('/getUserByGolongan/{golonganDarah}', [verifyAkseptorController::class, 'getUserLocationsByGolonganDarah']);
+            //laporan
+            Route::get('generate-pdf-all-akseptor', [laporanController::class, 'generatePdfAllAkseptor']);
+            Route::get('generate-pdf-verified-akseptor', [laporanController::class, 'generatePdfVerifiedAkseptor']);
         });
 
         //for akseptor
@@ -100,4 +106,11 @@ Route::middleware(['cors', 'web'])->group(function () {
     
 
         Route::get('/admin/getUser',[userAdminController::class,'getAllUser']);
+        
+        Route::get('/storage-link', function () {
+           // Run the storage:link Artisan command
+        Artisan::call('storage:link');
+    
+        return 'Custom storage link created successfully.';
+    });
 });

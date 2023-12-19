@@ -52,10 +52,16 @@ class Akseptor extends Controller
                 Log::info("data Validate sehabis kelurahan id", ['data' => $validateData]);
     
             $this->storeAkseptor($request, $validateData);
-            $findUserIDWithTelepon = akseptor_model::where('telepon', $validateData['telepon'])->firstOrFail();
-            // Mengambil ID dari model yang baru saja dibuat
-            $userID = $findUserIDWithTelepon->id;
-            $this->updateDataAkse($request,$userID);
+            // $findUserIDWithTelepon = akseptor_model::where('telepon', $validateData['telepon'])->orderBy('created_at', 'desc')->firstOrFail();
+            // // Mengambil ID dari model yang baru saja dibuat
+            // $userID = $findUserIDWithTelepon->id;
+            // $updateResponse = $this->updateDataAkse($request, $userID);
+
+            // // Check the status code and handle accordingly
+            // if ($updateResponse->getStatusCode() == 404) {
+            //     // Handle the 404 error response
+            //     return response()->json(['message' => 'Update failed: Golongan Darah Is Not Found or Telepon is Empty'], 404);
+            // }
             Log::info("data Validate", ['data' => $validateData]);
             return response()->json(['message' => 'Verification data is valid']);
         } catch (\Exception $e) {
@@ -63,8 +69,6 @@ class Akseptor extends Controller
         }
     }
 
-    
-    
         private function storeAkseptor(Request $request, array $validateData)
     {
         try {
@@ -221,7 +225,7 @@ class Akseptor extends Controller
              *
              * @param  \Illuminate\Http\Request  $request
              */
-            protected function updateDataAkse(Request $request, $id)
+                protected function updateDataAkse(Request $request, $id)
         {
             try {
                 // Begin a database transaction
@@ -298,8 +302,6 @@ class Akseptor extends Controller
                     return response()->json(['message' => 'Golongan Darah Is Not Found or Telepon is Empty'], 404);
                 }
     
-        
-        
                 foreach ($phoneNumbersByGolonganDarah as $userData) {
                     // Check if the telepon key is present in the $userData array
                     if (array_key_exists('telepon', $userData)) {
@@ -318,7 +320,10 @@ class Akseptor extends Controller
                 }
                             // Initialize an array to store matching results
                     $matchingResults = [];
-        
+                    
+                    Log::info("cek info result gess : " . json_encode($results));
+                    Log::info("ini cek akseptor provinsi nya : " . json_encode($provinsiId));
+
                     // Iterate through $results
                     foreach ($results as $result) {
                         // Check if the 'id' in $result matches $provinsiId
@@ -327,9 +332,13 @@ class Akseptor extends Controller
                             $matchingResults[] = $result;
                         }
                     }
-        
+                    
+                    if (empty($matchingResults)) {
+                    Log::info('Matching Results Not Found: ' . json_encode($matchingResults));
+                    return response()->json(['error' => 'Not Found Provinsi Id'], 404);
+                }
+                        
                     // Log the matching results
-                    Log::info('Matching Results: ' . json_encode($matchingResults));
                                 // Initialize an array to store matching telephone numbers
                     $matchingTelephones = [];
         
@@ -364,6 +373,8 @@ class Akseptor extends Controller
                 return response()->json(['message' => 'Failed to update Akseptor data. Please try again.', 'error' => $e->getMessage()], 500);
             }
         }
+        
+        
         
         private function getUserLocationsByGolonganDarah($golonganDarah)
         {

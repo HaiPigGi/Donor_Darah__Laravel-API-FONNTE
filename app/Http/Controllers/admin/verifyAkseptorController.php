@@ -135,152 +135,165 @@ class verifyAkseptorController extends Controller
         }
 
 
-
-     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     */
-    protected function updateDataAkse(Request $request, $id)
-{
-    try {
-        // Begin a database transaction
-        DB::beginTransaction();
-
-        // Find the Akseptor by ID
-        $akseptor = akseptor_model::find($id);
-
-        Log::info("cek data Akseptor lengkap : " . json_encode($akseptor));
-
-        // Check if the Akseptor is found
-        if (!$akseptor) {
-            return response()->json(['message' => 'Akseptor not found'], 404);
-        }
-        $golonganDarah=$akseptor->golongan_darah;
-        Log::info("cek data Akseptor golongan : " . json_encode($golonganDarah));
-
-      // Extracting relevant information from $akseptor
-        $nama = $akseptor['nama'];
-        $telepon = $akseptor['telepon'];
-        $golonganDarah = $akseptor['golongan_darah'];
-        $jumlahKantong = $akseptor['jumlah_kantong'];
-        $tujuanPengajuan = $akseptor['tujuan_Pengajuan'];
-
-        // Constructing the message
-        $message  = "Hi, My Name Is $nama,\n\n";
-        $message .= "We are in urgent need of blood donors.\n\n";
-        $message .= "If you are available to donate, we would appreciate your help.\n\n";
-        $message .= "Phone Number: $telepon\n";
-        $message .= "Blood Type Needed: $golonganDarah\n";
-        $message .= "Number of Blood Bags Needed: $jumlahKantong\n";
-        $message .= "Reason for Application: $tujuanPengajuan\n\n";
-        $message .= "Your generosity can save lives. Thank you for considering to donate!\n";
-
-
-        // Retrieve golongan darah of the current Akseptor
-        $golonganDarah = $akseptor->golongan_darah;
-        Log::info("cek golongan darah akseptor : " . json_encode($golonganDarah));
-
-       // Retrieve phone numbers with the same golongan darah
-        $phoneNumbersByGolonganDarah = $this->getUserLocationsByGolonganDarah($golonganDarah);
-        Log::info("cek user dengan golongan darah sama  : " . json_encode($phoneNumbersByGolonganDarah));
-
-        if (!$phoneNumbersByGolonganDarah) {
-            return response()->json(['message' => 'Golongan Darah Is Not Found']);
-        }
-
-        // Initialize an array to store the results
-        $results = [];
-        $akseptorKelurahan=$akseptor->kelurahan_id;
-        Log::info("cek kelurahan id akseptor : " . json_encode($akseptorKelurahan));
-        $akseptorID= $this->getUsersByAkseptorKelurahan($akseptorKelurahan);
-        // Check if 'provinsi_id' key is present and non-empty
-        Log::info("User Locations: " . json_encode($akseptorID));
-
-
-        if (empty($akseptorID)) {
-            Log::error('No user locations found.');
-            return ['error' => 'No user locations found.'];
-        }
-
-        if (isset($akseptorID['provinsi_id']) && !empty($akseptorID['provinsi_id'])) {
-            // Extract the first element's 'id' field
-            $provinsiId = $akseptorID['provinsi_id'][0]['id'];
+ /**
+             * Update a newly Message for akseptor.
+             *
+             * @param  \Illuminate\Http\Request  $request
+             */
+                protected function updateDataAkse(Request $request, $id)
+        {
+            try {
+                // Begin a database transaction
+                DB::beginTransaction();
         
-            // Log the provinsi_id
-            Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
-
-        } else {
-            // Log a message indicating that 'provinsi_id' is missing or empty
-            Log::info("Provinsi ID: " . json_encode(['message' => 'provinsi_id is missing or empty']));
-        }
-        Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
-
-
-        foreach ($phoneNumbersByGolonganDarah as $userData) {
-            // Check if the telepon key is present in the $userData array
-            if (array_key_exists('telepon', $userData)) {
-                // Call the getAkeptorProvinsiByTelepon function for each telepon number
-                $result = $this->getAkeptorProvinsiByTelepon($userData['telepon']);
-
-                // Log the result data
-                Log::info('Result for telepon ' . $userData['telepon'] . ': ' . json_encode($result));
-
-                // Append the result to the $results array
-                $results[] = $result;
-            } else {
-                // Log a warning if the telepon key is missing
-                Log::warning('Telepon key is missing in userData: ' . json_encode($userData));
-            }
-        }
-                    // Initialize an array to store matching results
-            $matchingResults = [];
-
-            // Iterate through $results
-            foreach ($results as $result) {
-                // Check if the 'id' in $result matches $provinsiId
-                if (isset($result['id']) && $result['id'] == $provinsiId) {
-                    // Append the matching result to $matchingResults
-                    $matchingResults[] = $result;
+                // Find the Akseptor by ID
+                $akseptor = akseptor_model::find($id);
+        
+                Log::info("cek data Akseptor lengkap : " . json_encode($akseptor));
+        
+                // Check if the Akseptor is found
+                if (!$akseptor) {
+                    return response()->json(['message' => 'Akseptor not found'], 404);
                 }
-            }
-
-            // Log the matching results
-            Log::info('Matching Results: ' . json_encode($matchingResults));
-                        // Initialize an array to store matching telephone numbers
-            $matchingTelephones = [];
-
-            // Iterate through $matchingResults
-            foreach ($matchingResults as $matchingResult) {
-                // Check if the 'telepon' key exists in $matchingResult
-                if (isset($matchingResult['telepon'])) {
-                    // Append the telephone number to $matchingTelephones
-                    $matchingTelephones[] = $matchingResult['telepon'];
+                $golonganDarah=$akseptor->golongan_darah;
+                Log::info("cek data Akseptor golongan : " . json_encode($golonganDarah));
+        
+              // Extracting relevant information from $akseptor
+                $nama = $akseptor['nama'];
+                $telepon = $akseptor['telepon'];
+                $golonganDarah = $akseptor['golongan_darah'];
+                $jumlahKantong = $akseptor['jumlah_kantong'];
+                $tujuanPengajuan = $akseptor['tujuan_Pengajuan'];
+        
+                // Constructing the message
+                $message  = "Hi, My Name Is $nama,\n\n";
+                $message .= "We are in urgent need of blood donors.\n\n";
+                $message .= "If you are available to donate, we would appreciate your help.\n\n";
+                $message .= "Phone Number: $telepon\n";
+                $message .= "Blood Type Needed: $golonganDarah\n";
+                $message .= "Number of Blood Bags Needed: $jumlahKantong\n";
+                $message .= "Reason for Application: $tujuanPengajuan\n\n";
+                $message .= "Your generosity can save lives. Thank you for considering to donate!\n";
+        
+        
+                // Retrieve golongan darah of the current Akseptor
+                $golonganDarah = $akseptor->golongan_darah;
+                Log::info("cek golongan darah akseptor : " . json_encode($golonganDarah));
+        
+               // Retrieve phone numbers with the same golongan darah
+                $phoneNumbersByGolonganDarah = $this->getUserLocationsByGolonganDarah($golonganDarah);
+                Log::info("cek user dengan golongan darah sama  : " . json_encode($phoneNumbersByGolonganDarah));
+    
+        
+                // Initialize an array to store the results
+                $results = [];
+                $akseptorKelurahan=$akseptor->kelurahan_id;
+                Log::info("cek kelurahan id akseptor : " . json_encode($akseptorKelurahan));
+                $akseptorID= $this->getUsersByAkseptorKelurahan($akseptorKelurahan);
+                // Check if 'provinsi_id' key is present and non-empty
+                Log::info("User Locations: " . json_encode($akseptorID));
+        
+        
+                if (empty($akseptorID)) {
+                    Log::error('No user locations found.');
+                    return ['error' => 'No user locations found.'];
                 }
+        
+                if (isset($akseptorID['provinsi_id']) && !empty($akseptorID['provinsi_id'])) {
+                    // Extract the first element's 'id' field
+                    $provinsiId = $akseptorID['provinsi_id'][0]['id'];
+                
+                    // Log the provinsi_id
+                    Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
+        
+                } else {
+                    // Log a message indicating that 'provinsi_id' is missing or empty
+                    Log::info("Provinsi ID: " . json_encode(['message' => 'provinsi_id is missing or empty']));
+                }
+                Log::info("Provinsi ID: " . json_encode(['id' => $provinsiId]));
+
+                if (!is_array($phoneNumbersByGolonganDarah)) {
+                    Log::info("cek data golongan ternyata kosong: " . json_encode($phoneNumbersByGolonganDarah));
+                    return response()->json(['message' => 'Golongan Darah Is Not Found or Telepon is Empty'], 404);
+                }
+    
+                foreach ($phoneNumbersByGolonganDarah as $userData) {
+                    // Check if the telepon key is present in the $userData array
+                    if (array_key_exists('telepon', $userData)) {
+                        // Call the getAkeptorProvinsiByTelepon function for each telepon number
+                        $result = $this->getAkeptorProvinsiByTelepon($userData['telepon']);
+        
+                        // Log the result data
+                        Log::info('Result for telepon ' . $userData['telepon'] . ': ' . json_encode($result));
+        
+                        // Append the result to the $results array
+                        $results[] = $result;
+                    } else {
+                        // Log a warning if the telepon key is missing
+                        Log::warning('Telepon key is missing in userData: ' . json_encode($userData));
+                    }
+                }
+                            // Initialize an array to store matching results
+                    $matchingResults = [];
+                    
+                    Log::info("cek info result gess : " . json_encode($results));
+                    Log::info("ini cek akseptor provinsi nya : " . json_encode($provinsiId));
+
+                    // Iterate through $results
+                    foreach ($results as $result) {
+                        // Check if the 'id' in $result matches $provinsiId
+                        if (isset($result['id']) && $result['id'] == $provinsiId) {
+                            // Append the matching result to $matchingResults
+                            $matchingResults[] = $result;
+                        }
+                    }
+                    
+                    if (empty($matchingResults)) {
+                    Log::info('Matching Results Not Found: ' . json_encode($matchingResults));
+                    return response()->json(['error' => 'Not Found Provinsi Id'], 404);
+                }
+                        
+                    // Log the matching results
+                                // Initialize an array to store matching telephone numbers
+                    $matchingTelephones = [];
+        
+                    // Iterate through $matchingResults
+                    foreach ($matchingResults as $matchingResult) {
+                        // Check if the 'telepon' key exists in $matchingResult
+                        if (isset($matchingResult['telepon'])) {
+                            // Append the telephone number to $matchingTelephones
+                            $matchingTelephones[] = $matchingResult['telepon'];
+                        }
+                    }
+        
+                // Log the matching telephone numbers
+                Log::info('Matching Telephones: ' . json_encode($matchingTelephones));
+        
+                DB::commit();
+                // Update status to "verifikasi" based on the ID
+                $akseptor->status = 'verifikasi';
+                $akseptor->save();
+                
+                $this->sendMessage($matchingTelephones,$message);
+                
+        
+                // Log the successful update
+                Log::info('Akseptor has been updated', [ 'results' => $results]);
+        
+                // Return a JSON response with success message and updated data
+                return response()->json(['message' => 'Akseptor data has been updated', 'data' => $results], 200);
+            } catch (\Exception $e) {
+                // Rollback the database transaction in case of an error
+                DB::rollback();
+        
+                // Log the error
+                Log::error("Error updating Akseptor: " . $e->getMessage());
+        
+                // Return a JSON response with error message and details
+                return response()->json(['message' => 'Failed to update Akseptor data. Please try again.', 'error' => $e->getMessage()], 500);
             }
-
-        // Log the matching telephone numbers
-        Log::info('Matching Telephones: ' . json_encode($matchingTelephones));
-
-        DB::commit();
-        $this->sendMessage($matchingTelephones,$message);
-
-        // Log the successful update
-        Log::info('Akseptor has been updated', [ 'results' => $results]);
-
-        // Return a JSON response with success message and updated data
-        return response()->json(['message' => 'Akseptor data has been updated', 'data' => $results], 200);
-    } catch (\Exception $e) {
-        // Rollback the database transaction in case of an error
-        DB::rollback();
-
-        // Log the error
-        Log::error("Error updating Akseptor: " . $e->getMessage());
-
-        // Return a JSON response with error message and details
-        return response()->json(['message' => 'Failed to update Akseptor data. Please try again.', 'error' => $e->getMessage()], 500);
-    }
-}
+        }
+        
 
 
 

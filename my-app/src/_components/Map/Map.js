@@ -52,8 +52,6 @@ function Map() {
           iconSize={markerSize}
         >
           <Popup>
-            User Name: {userLocation.nama}
-            <br />
             Lat: {userLocation.lat}
             <br />
             Long: {userLocation.long}

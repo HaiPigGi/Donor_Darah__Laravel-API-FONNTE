@@ -6,7 +6,7 @@ import withAuth from "@/_components/Auth/WithAuth";
 import UserDetailsModal from "./UserDetailsModal";
 import AddPostModal from "./AddPostModal";
 import EditPostModal from "./EditPostModal";
-
+import FileSaver from 'file-saver';
 const Dashboard = (props) => {
     const [activeMenu, setActiveMenu] = useState("");
     const [users, setUsers] = useState([]);
@@ -36,6 +36,7 @@ const Dashboard = (props) => {
           getDataAkseptor(storedUserId);
           getAllDataPost(storedUserId);
           getAllUser(storedUserId);
+        //   getLaporanPDF(storedUserId);
       
           // Parse the JWT token without using jwt_decode
           const tokenParts = storedUserId.split('.');
@@ -253,6 +254,60 @@ const Dashboard = (props) => {
         }
     };
 
+    const getLaporanPDF = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/generate-pdf-all-akseptor`, {
+                responseType: 'blob',  // Set responseType to 'blob' to handle binary data
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            // Handle the response
+            const contentDispositionHeader = response.headers['content-disposition'];
+            const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = fileNameRegex.exec(contentDispositionHeader);
+    
+            const fileName = matches && matches[1] ? matches[1] : 'all_akseptors.pdf';
+    
+            // Use FileSaver to save the file
+            FileSaver.saveAs(new Blob([response.data]), fileName);
+    
+            // Optionally, you can show a success message or perform other actions
+            console.log('PDF downloaded successfully');
+        } catch (error) {
+            // Handle errors, e.g., show an error message
+            console.error('Error fetching PDF:', error);
+        }
+    };
+    const getLaporanPDFVerifyUser = async () => {
+        try {
+            const response = await axios.get(`${apiUrl}/api/admin/generate-pdf-verified-akseptor`, {
+                responseType: 'blob',  // Set responseType to 'blob' to handle binary data
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+    
+            // Handle the response
+            const contentDispositionHeader = response.headers['content-disposition'];
+            const fileNameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+            const matches = fileNameRegex.exec(contentDispositionHeader);
+    
+            const fileName = matches && matches[1] ? matches[1] : 'verified_akseptors.pdf';
+    
+            // Use FileSaver to save the file
+            FileSaver.saveAs(new Blob([response.data]), fileName);
+    
+            // Optionally, you can show a success message or perform other actions
+            console.log('PDF downloaded successfully');
+        } catch (error) {
+            // Handle errors, e.g., show an error message
+            console.error('Error fetching PDF:', error);
+        }
+    };
+    
+
     return (
         <div>
             {loading ? (
@@ -294,6 +349,15 @@ const Dashboard = (props) => {
                                 >
                                     Tambah Post
                                 </button>
+                                <a
+                                    href="#"
+                                    onClick={() =>
+                                        setActiveMenu("Laporan")
+                                    }
+                                    className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-500 hover:text-white"
+                                >
+                                    Laporan
+                                </a>
                                 <button
                                     className="text-gray-700 block py-2.5 px-4 rounded transition duration-200 hover:bg-blue-600 hover:text-white"
                                     onClick={handleLogout}
@@ -517,6 +581,27 @@ const Dashboard = (props) => {
                                             <p>Tidak ada post yang tersedia.</p>
                                         )}
                                     </div>
+                                )}
+                                 {activeMenu === "Laporan" && (
+                                   <div>
+                                   <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                                       Laporan
+                                   </h2>
+                                   <button
+                                       className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                                       onClick={getLaporanPDF}
+                                   >
+                                       Generate All Akseptor PDF
+                                   </button>
+                               
+                                   <button
+                                       className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                                       onClick={getLaporanPDFVerifyUser}
+                                   >
+                                       Generate Verified Akseptor PDF
+                                   </button>
+                               </div>
+                               
                                 )}
                             </div>
                         </div>

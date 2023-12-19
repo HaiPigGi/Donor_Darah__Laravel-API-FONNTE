@@ -240,7 +240,7 @@ const FormPengajuan = () => {
                                                       {/* conditional rendering subtitle when error and when success */}
                                                         {error
                                                             ? error
-                                                            : "kebutuhan darah akan dibroadcast ke seluruh pendonor"}
+                                                            : "Terima Kasih Sudah Melakukan Pengajuan Broadcast Donor Darah, Permintaan Anda Akan Kami proses Secepatnya!"}
                                                     </p>
                                                 </div>
                                             </div>
@@ -280,4 +280,4 @@ const FormPengajuan = () => {
     );
 };
 
-export default withAuth(FormPengajuan,['user']);
+export default FormPengajuan;

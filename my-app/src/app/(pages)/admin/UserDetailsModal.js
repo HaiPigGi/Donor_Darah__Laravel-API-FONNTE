@@ -36,12 +36,13 @@ const UserDetailsModal = ({ isOpen, onRequestClose, akseptorDetails }) => {
         }
       });
       // Handle the response as needed
-      console.log('Verification response:', response.data);
+      window.alert('Data Berhasil Di kirim');
       // You can update your state or perform other actions based on the response
     } catch (error) {
-      // Handle errors if the request fails
-      console.error('Error during verification:', error);
-      // You can also update state or perform other actions based on the error
+      if (error.response.status === 404) {
+        // Display an alert if no data is found for broadcasting
+        window.alert('Mohon maaf, tidak ada data yang sesuai untuk di broadcast.');
+      }
     }
   };
 

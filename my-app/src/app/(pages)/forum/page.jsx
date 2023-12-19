@@ -84,7 +84,6 @@ const Forum = () => {
         if (typeof window !== "undefined") {
             // Use Pusher to subscribe to a channel with the selected tagarId
             const channel = echoInstance.channel(`tagar.${tagarId}`);
-
             // Bind to an event on the channel
             channel.listen("MessageCreated", (data) => {
                 // Handle the received message

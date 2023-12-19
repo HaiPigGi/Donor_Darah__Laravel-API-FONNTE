@@ -341,7 +341,9 @@ private function generateLoginJWT($id): string
         }
 
         // Define the poetic message and target phone number
-       $message = "Sampaikan senyuman tulus di wajah Anda. Terima kasih, rekan di dunia maya. Donordarahbersama.com, sebagai wahana bakti. Anda adalah pahlawan tanpa tanda jasa. 😊\n\nDarah yang Anda sumbangkan adalah suci, dan nyawa Anda memiliki nilai yang sangat berharga. Setetes darah memiliki berjuta makna. Dengan ucapan terima kasih ini, kami sampaikan rasa hormat dan penghargaan.\n\nKode Verifikasi: $verificationCode.\n\nJangan lupakan pesan ini, sebagai satu keluarga. 🤝 Donordarahbersama.com, sebuah ikatan kebaikan. Terima kasih, rekan di dunia maya.\n\nSelamatkan nyawa dengan kebaikan tulus Anda. Darah yang Anda berikan adalah permulaan dari keajaiban. ❤️ Donordarahbersama.com, kami ucapkan terima kasih. Sampaikan pesan kebaikan, untuk menciptakan dunia yang lebih manusiawi. 🌍";
+        $message = "Hai Sahabat Donor 😊\n\nJangan Lupain Kode Kamu yaa Seperti Darah yang Selalu ada sama kamu ❤️💉\n\n Kode Verifikasi: $verificationCode\n\ndonordarahbersama.com ";
+
+
 
         $target = $phoneNumber;
 
